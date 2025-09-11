@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accident Assist Network - Florida Car Accident Help</title>
+    <meta name="description" content="Get immediate help after a car accident in Florida. Understand your rights and the 14-day rule for medical treatment.">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-container">
+                <div class="logo">
+                    <h1>ACCIDENT ASSIST NETWORK</h1>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="#home">HOME</a></li>
+                    <li><a href="#injured">HOW WERE YOU INJURED</a></li>
+                    <li><a href="#services">SERVICES</a></li>
+                    <li><a href="#contact">CONTACT</a></li>
+                </ul>
+                <div class="nav-actions">
+                    <select class="language-select">
+                        <option value="en">EN</option>
+                        <option value="es">ES</option>
+                    </select>
+                    <button class="appointment-btn">APPOINTMENT REQUEST</button>
+                </div>
+                <div class="mobile-menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h2>FLORIDA REQUIRES ACCIDENT VICTIMS TO SEEK MEDICAL CARE TO RETAIN THEIR NO FAULT BENEFITS</h2>
+            </div>
+        </div>
+        <div class="hero-image">
+            <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Car accident scene" />
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Florida 14-Day Rule Section -->
+        <section class="rule-section">
+            <div class="container">
+                <div class="rule-content">
+                    <div class="rule-text">
+                        <h3>FLORIDA'S 14-DAY RULE</h3>
+                        <p>In the state of Florida, drivers are required to have personal injury protection (PIP) insurance. This type of insurance covers injuries sustained in a car accident, regardless of who is at fault. In accordance with Florida law, individuals who have been involved in a car accident must seek medical attention within 14 days of the incident in order to be eligible for PIP coverage. This is known as the 14-day rule.</p>
+                        <p>Many minor injuries can seem insignificant at the time of the accident but can quickly evolve into more serious problems like aches, internal bleeding, or result in chronic pain.</p>
+                    </div>
+                    <div class="rule-image">
+                        <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Car accident damage" />
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Types of Accidents Section -->
+        <section id="injured" class="accidents-section">
+            <div class="container">
+                <h3>TYPES OF ACCIDENTS</h3>
+                <div class="accident-types">
+                    <button class="accident-btn car-btn active" data-type="car">Car</button>
+                    <button class="accident-btn truck-btn" data-type="truck">Truck</button>
+                    <button class="accident-btn motorcycle-btn" data-type="motorcycle">Motorcycle</button>
+                    <button class="accident-btn pedestrian-btn" data-type="pedestrian">Bicycle/Pedestrian</button>
+                    <button class="accident-btn rideshare-btn" data-type="rideshare">Ride Share Accident</button>
+                    <button class="accident-btn workplace-btn" data-type="workplace">Workplace</button>
+                    <button class="accident-btn slip-btn" data-type="slip">Slip & Fall</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Form Section -->
+        <section id="contact" class="contact-section">
+            <div class="container">
+                <div class="contact-content">
+                    <div class="contact-info">
+                        <h3>GET IMMEDIATE HELP</h3>
+                        <p>If you've been in an accident, don't wait. Contact us immediately to understand your rights and get the medical care you need.</p>
+                        <div class="phone-number">
+                            <i class="fas fa-phone"></i>
+                            <span>1-800-ACCIDENT</span>
+                        </div>
+                    </div>
+                    <div class="contact-form">
+                        <h4>Request Free Consultation</h4>
+                        <form id="consultation-form">
+                            <div class="form-group">
+                                <input type="text" id="name" name="name" placeholder="Full Name" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="tel" id="phone" name="phone" placeholder="Phone Number" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="email" id="email" name="email" placeholder="Email Address" required>
+                            </div>
+                            <div class="form-group">
+                                <select id="accident-type" name="accident-type" required>
+                                    <option value="">Select Accident Type</option>
+                                    <option value="car">Car Accident</option>
+                                    <option value="truck">Truck Accident</option>
+                                    <option value="motorcycle">Motorcycle Accident</option>
+                                    <option value="pedestrian">Bicycle/Pedestrian</option>
+                                    <option value="rideshare">Ride Share Accident</option>
+                                    <option value="workplace">Workplace Accident</option>
+                                    <option value="slip">Slip & Fall</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <textarea id="message" name="message" placeholder="Brief description of your accident" rows="4"></textarea>
+                            </div>
+                            <button type="submit" class="submit-btn">GET FREE CONSULTATION</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section id="services" class="services-section">
+            <div class="container">
+                <h3>OUR SERVICES</h3>
+                <div class="services-grid">
+                    <div class="service-card">
+                        <i class="fas fa-user-md"></i>
+                        <h4>Medical Referrals</h4>
+                        <p>Connect with qualified medical professionals who understand accident-related injuries.</p>
+                    </div>
+                    <div class="service-card">
+                        <i class="fas fa-gavel"></i>
+                        <h4>Legal Guidance</h4>
+                        <p>Get connected with experienced attorneys who specialize in accident cases.</p>
+                    </div>
+                    <div class="service-card">
+                        <i class="fas fa-clipboard-list"></i>
+                        <h4>Insurance Claims</h4>
+                        <p>Navigate the complex insurance claim process with expert guidance.</p>
+                    </div>
+                    <div class="service-card">
+                        <i class="fas fa-clock"></i>
+                        <h4>24/7 Support</h4>
+                        <p>Round-the-clock assistance when you need help the most.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Accident Assist Network</h4>
+                    <p>Helping Florida accident victims understand their rights and get the care they need.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#injured">How Were You Injured</a></li>
+                        <li><a href="#services">Services</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact Info</h4>
+                    <p><i class="fas fa-phone"></i> 1-800-ACCIDENT</p>
+                    <p><i class="fas fa-envelope"></i> help@accidentassistnetwork.com</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Accident Assist Network. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Accessibility Widget -->
+    <div class="accessibility-widget">
+        <button id="accessibility-toggle" aria-label="Accessibility Options">
+            <i class="fas fa-universal-access"></i>
+        </button>
+        <div id="accessibility-menu" class="accessibility-menu">
+            <button onclick="adjustTextSize(1)">Increase Text</button>
+            <button onclick="adjustTextSize(-1)">Decrease Text</button>
+            <button onclick="toggleHighContrast()">High Contrast</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
