@@ -20,8 +20,9 @@ body {
 
 /* Color Variables */
 :root {
-    --primary-pink: #DF1883;
-    --primary-teal: #1EB7A3;
+    --primary-navy: #1e3a5f;
+    --primary-teal: #00a693;
+    --accent-teal: #4ecdc4;
     --dark-gray: #333;
     --light-gray: #f8f9fa;
     --white: #ffffff;
@@ -30,7 +31,7 @@ body {
 
 /* Header Styles */
 .header {
-    background: var(--primary-pink);
+    background: var(--primary-navy);
     color: var(--white);
     position: fixed;
     top: 0;
@@ -38,6 +39,101 @@ body {
     right: 0;
     z-index: 1000;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+/* Logo Styles */
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.logo-icon .shield {
+    width: 60px;
+    height: 65px;
+    background: linear-gradient(135deg, var(--primary-navy) 0%, var(--primary-teal) 100%);
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.logo-icon .shield .fa-heart {
+    color: var(--white);
+    font-size: 1.2rem;
+    position: absolute;
+    top: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.logo-icon .shield .info-icon {
+    color: var(--white);
+    font-size: 1.5rem;
+    font-weight: bold;
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-style: italic;
+}
+
+.logo-text h1 {
+    font-size: 1.2rem;
+    font-weight: 800;
+    line-height: 1.1;
+    color: var(--primary-teal);
+    text-transform: capitalize;
+}
+
+.contact-info .phone-header {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--white);
+}
+
+/* Hero Additions */
+.hero-subtitle {
+    font-size: 1.3rem;
+    color: var(--text-dark);
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+}
+
+.hero-services {
+    display: flex;
+    gap: 2rem;
+    font-size: 1.1rem;
+    color: var(--text-dark);
+    font-weight: 600;
+}
+
+.hero-services span {
+    background: var(--primary-teal);
+    color: var(--white);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+}
+
+/* Advisor Info Styles */
+.advisor-info {
+    margin-top: 2rem;
+    text-align: center;
+}
+
+.advisor-info h4 {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--primary-navy);
+    margin-bottom: 0.5rem;
+}
+
+.advisor-info p {
+    font-size: 1.1rem;
+    color: var(--text-dark);
+    font-weight: 500;
 }
 
 .nav-container {
@@ -89,13 +185,13 @@ body {
 }
 
 .language-select option {
-    background: var(--primary-pink);
+    background: var(--primary-teal);
     color: var(--white);
 }
 
 .appointment-btn {
-    background: var(--white);
-    color: var(--primary-pink);
+    background: var(--primary-teal);
+    color: var(--white);
     border: none;
     padding: 0.8rem 1.5rem;
     border-radius: 25px;
@@ -137,9 +233,9 @@ body {
 .hero-text h2 {
     font-size: 2.8rem;
     font-weight: 800;
-    color: var(--primary-pink);
+    color: var(--primary-navy);
     line-height: 1.2;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
     max-width: 600px;
     text-transform: uppercase;
 }
@@ -174,7 +270,7 @@ body {
 .rule-text h3 {
     font-size: 2.2rem;
     font-weight: 800;
-    color: var(--primary-pink);
+    color: var(--primary-navy);
     margin-bottom: 2rem;
     text-transform: uppercase;
 }
@@ -204,7 +300,7 @@ body {
 .accidents-section h3 {
     font-size: 2.2rem;
     font-weight: 800;
-    color: var(--primary-pink);
+    color: var(--primary-navy);
     margin-bottom: 3rem;
     text-transform: uppercase;
 }
@@ -233,16 +329,16 @@ body {
 
 .accident-btn:hover,
 .accident-btn.active {
-    background: var(--primary-pink);
+    background: var(--primary-navy);
     transform: translateY(-3px);
-    box-shadow: 0 5px 20px rgba(223, 24, 131, 0.3);
+    box-shadow: 0 5px 20px rgba(30, 58, 95, 0.3);
 }
 
 .truck-btn,
 .motorcycle-btn,
 .pedestrian-btn,
 .rideshare-btn {
-    background: var(--primary-pink);
+    background: var(--primary-navy);
 }
 
 .workplace-btn,
@@ -266,7 +362,7 @@ body {
 .contact-info h3 {
     font-size: 2.2rem;
     font-weight: 800;
-    color: var(--primary-pink);
+    color: var(--primary-navy);
     margin-bottom: 2rem;
     text-transform: uppercase;
 }
@@ -284,12 +380,12 @@ body {
     gap: 1rem;
     font-size: 2rem;
     font-weight: 800;
-    color: var(--primary-pink);
+    color: var(--primary-navy);
     margin-top: 2rem;
 }
 
 .phone-number i {
-    background: var(--primary-pink);
+    background: var(--primary-teal);
     color: var(--white);
     padding: 1rem;
     border-radius: 50%;
@@ -331,12 +427,12 @@ body {
 .form-group select:focus,
 .form-group textarea:focus {
     outline: none;
-    border-color: var(--primary-pink);
+    border-color: var(--primary-teal);
 }
 
 .submit-btn {
     width: 100%;
-    background: var(--primary-pink);
+    background: var(--primary-teal);
     color: var(--white);
     border: none;
     padding: 1.2rem;
@@ -349,9 +445,9 @@ body {
 }
 
 .submit-btn:hover {
-    background: #c41471;
+    background: #008a7a;
     transform: translateY(-2px);
-    box-shadow: 0 5px 20px rgba(223, 24, 131, 0.3);
+    box-shadow: 0 5px 20px rgba(0, 166, 147, 0.3);
 }
 
 /* Services Section */
@@ -363,7 +459,7 @@ body {
 .services-section h3 {
     font-size: 2.2rem;
     font-weight: 800;
-    color: var(--primary-pink);
+    color: var(--primary-navy);
     text-align: center;
     margin-bottom: 3rem;
     text-transform: uppercase;
@@ -384,6 +480,11 @@ body {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
+.service-card.featured {
+    border: 3px solid var(--primary-teal);
+    background: linear-gradient(135deg, var(--white) 0%, #f0fffe 100%);
+}
+
 .service-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 10px 40px rgba(0,0,0,0.15);
@@ -391,7 +492,7 @@ body {
 
 .service-card i {
     font-size: 3rem;
-    color: var(--primary-pink);
+    color: var(--primary-teal);
     margin-bottom: 1.5rem;
 }
 
@@ -425,7 +526,7 @@ body {
     font-size: 1.3rem;
     font-weight: 700;
     margin-bottom: 1.5rem;
-    color: var(--primary-pink);
+    color: var(--primary-teal);
 }
 
 .footer-section ul {
@@ -443,7 +544,7 @@ body {
 }
 
 .footer-section a:hover {
-    color: var(--primary-pink);
+    color: var(--primary-teal);
 }
 
 .footer-section p {
@@ -469,14 +570,14 @@ body {
 }
 
 #accessibility-toggle {
-    background: var(--primary-pink);
+    background: var(--primary-teal);
     color: var(--white);
     border: none;
     padding: 1rem;
     border-radius: 50%;
     font-size: 1.2rem;
     cursor: pointer;
-    box-shadow: 0 4px 15px rgba(223, 24, 131, 0.3);
+    box-shadow: 0 4px 15px rgba(0, 166, 147, 0.3);
     transition: transform 0.3s ease;
 }
 
@@ -513,7 +614,7 @@ body {
 }
 
 .accessibility-menu button:hover {
-    background: var(--primary-pink);
+    background: var(--primary-teal);
     color: var(--white);
 }
 

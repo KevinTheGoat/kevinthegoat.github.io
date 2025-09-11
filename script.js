@@ -122,7 +122,7 @@ document.addEventListener('DOMContentLoaded', function() {
         form.innerHTML = `
             <div class="success-message" style="text-align: center; padding: 2rem;">
                 <i class="fas fa-check-circle" style="font-size: 3rem; color: var(--primary-teal); margin-bottom: 1rem;"></i>
-                <h3 style="color: var(--primary-pink); margin-bottom: 1rem;">Thank You!</h3>
+                <h3 style="color: var(--primary-navy); margin-bottom: 1rem;">Thank You!</h3>
                 <p style="margin-bottom: 2rem;">We've received your consultation request. Our team will contact you within 24 hours.</p>
                 <button type="button" class="submit-btn" onclick="location.reload()">Submit Another Request</button>
             </div>
@@ -207,10 +207,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const header = document.querySelector('.header');
     window.addEventListener('scroll', function() {
         if (window.scrollY > 50) {
-            header.style.background = 'rgba(223, 24, 131, 0.95)';
+            header.style.background = 'rgba(30, 58, 95, 0.95)';
             header.style.backdropFilter = 'blur(10px)';
         } else {
-            header.style.background = 'var(--primary-pink)';
+            header.style.background = 'var(--primary-navy)';
             header.style.backdropFilter = 'none';
         }
     });
@@ -284,8 +284,8 @@ window.addEventListener('resize', function() {
 
 // Emergency Contact Function
 function callEmergency() {
-    if (confirm('This will attempt to dial 1-800-ACCIDENT. Continue?')) {
-        window.location.href = 'tel:1-800-ACCIDENT';
+    if (confirm('This will attempt to dial (305) 537-6764. Continue?')) {
+        window.location.href = 'tel:305-537-6764';
     }
 }
 
