@@ -84,11 +84,19 @@ document.addEventListener('DOMContentLoaded', function() {
             const name = formData.get('name');
             const phone = formData.get('phone');
             const email = formData.get('email');
+            const accidentDate = formData.get('accident-date');
             const accidentType = formData.get('accident-type');
-            
+            const helpNeeded = formData.getAll('help-needed');
+
             // Validation
-            if (!name || !phone || !email || !accidentType) {
+            if (!name || !phone || !email || !accidentDate || !accidentType) {
                 alert('Please fill in all required fields.');
+                return;
+            }
+
+            // Check if at least one help type is selected
+            if (helpNeeded.length === 0) {
+                alert('Please select at least one type of help needed.');
                 return;
             }
             
@@ -207,11 +215,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const header = document.querySelector('.header');
     window.addEventListener('scroll', function() {
         if (window.scrollY > 50) {
-            header.style.background = 'rgba(30, 58, 95, 0.95)';
+            header.style.background = 'rgba(248, 249, 250, 0.95)';
             header.style.backdropFilter = 'blur(10px)';
+            header.style.borderBottom = '1px solid rgba(0, 166, 147, 0.3)';
         } else {
-            header.style.background = 'var(--primary-navy)';
+            header.style.background = 'var(--light-gray)';
             header.style.backdropFilter = 'none';
+            header.style.borderBottom = '1px solid rgba(0, 166, 147, 0.2)';
         }
     });
 
@@ -286,6 +296,33 @@ window.addEventListener('resize', function() {
 function callEmergency() {
     if (confirm('This will attempt to dial (305) 537-6764. Continue?')) {
         window.location.href = 'tel:305-537-6764';
+    }
+}
+
+// Hero CTA Functions
+function scrollToContact() {
+    const contactSection = document.getElementById('contact');
+    if (contactSection) {
+        const headerHeight = document.querySelector('.header').offsetHeight;
+        const targetPosition = contactSection.offsetTop - headerHeight;
+
+        window.scrollTo({
+            top: targetPosition,
+            behavior: 'smooth'
+        });
+    }
+}
+
+function scrollToSection(sectionId) {
+    const section = document.getElementById(sectionId);
+    if (section) {
+        const headerHeight = document.querySelector('.header').offsetHeight;
+        const targetPosition = section.offsetTop - headerHeight;
+
+        window.scrollTo({
+            top: targetPosition,
+            behavior: 'smooth'
+        });
     }
 }
 
