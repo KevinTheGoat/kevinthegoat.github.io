@@ -77,8 +77,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const consultationForm = document.getElementById('consultation-form');
     if (consultationForm) {
         consultationForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
             // Basic form validation
             const formData = new FormData(this);
             const name = formData.get('name');
@@ -91,34 +89,35 @@ document.addEventListener('DOMContentLoaded', function() {
             // Validation
             if (!name || !phone || !email || !accidentDate || !accidentType) {
                 alert('Please fill in all required fields.');
+                e.preventDefault();
                 return;
             }
 
             // Check if at least one help type is selected
             if (helpNeeded.length === 0) {
                 alert('Please select at least one type of help needed.');
+                e.preventDefault();
                 return;
             }
-            
+
             // Phone number validation
             const phoneRegex = /^[\d\s\-\(\)\+]{10,}$/;
             if (!phoneRegex.test(phone)) {
                 alert('Please enter a valid phone number.');
+                e.preventDefault();
                 return;
             }
-            
+
             // Email validation
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(email)) {
                 alert('Please enter a valid email address.');
+                e.preventDefault();
                 return;
             }
-            
-            // If validation passes, show success message
-            showFormSuccess();
-            
-            // In a real application, you would send this data to your server
-            console.log('Form submitted:', Object.fromEntries(formData));
+
+            // If validation passes, form will submit to Formspree
+            // No need to prevent default - let the form submit naturally
         });
     }
 
@@ -378,17 +377,23 @@ document.addEventListener('keydown', function(e) {
 document.addEventListener('DOMContentLoaded', function() {
     const submitBtn = document.querySelector('.submit-btn');
     const form = document.getElementById('consultation-form');
-    
+
     if (form && submitBtn) {
         form.addEventListener('submit', function() {
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> PROCESSING...';
-            submitBtn.disabled = true;
-            
-            // Re-enable button after 3 seconds (simulating form processing)
-            setTimeout(() => {
-                submitBtn.innerHTML = 'GET FREE CONSULTATION';
-                submitBtn.disabled = false;
-            }, 3000);
+            // Only show loading if form validation passes
+            const formData = new FormData(form);
+            const name = formData.get('name');
+            const phone = formData.get('phone');
+            const email = formData.get('email');
+            const accidentDate = formData.get('accident-date');
+            const accidentType = formData.get('accident-type');
+            const helpNeeded = formData.getAll('help-needed');
+
+            // Basic validation check
+            if (name && phone && email && accidentDate && accidentType && helpNeeded.length > 0) {
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> SENDING...';
+                submitBtn.disabled = true;
+            }
         });
     }
 });
