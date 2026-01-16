@@ -3,12 +3,10 @@ import { Icon } from '@iconify/react'
 import { gsap } from 'gsap'
 
 const products = [
-  { id: 1, name: 'Midnight Chronograph', price: 2499, category: 'Watches', image: 'ph:watch-bold' },
-  { id: 2, name: 'Obsidian Leather Bag', price: 899, category: 'Bags', image: 'ph:bag-bold' },
-  { id: 3, name: 'Diamond Pavé Ring', price: 3299, category: 'Jewelry', image: 'ph:diamond-bold' },
-  { id: 4, name: 'Silk Evening Scarf', price: 449, category: 'Accessories', image: 'ph:scarf-bold' },
-  { id: 5, name: 'Gold Cuff Bracelet', price: 1299, category: 'Jewelry', image: 'ph:circles-three-bold' },
-  { id: 6, name: 'Cashmere Coat', price: 2199, category: 'Apparel', image: 'ph:coat-hanger-bold' },
+  { id: 1, name: 'Royal Gold Chronograph', price: 12499, category: 'Watches', image: '/images/luxcart/gold-watch-set.png' },
+  { id: 2, name: 'Heritage Leather Kelly', price: 8999, category: 'Bags', image: '/images/luxcart/leather-handbag.png' },
+  { id: 3, name: 'Solitaire Diamond Ring', price: 15299, category: 'Jewelry', image: '/images/luxcart/diamond-ring.png' },
+  { id: 4, name: 'Emerald Diamond Bracelet', price: 24999, category: 'Jewelry', image: '/images/luxcart/emerald-bracelet.png' },
 ]
 
 export default function EcommerceSite({ theme }) {
@@ -72,20 +70,20 @@ export default function EcommerceSite({ theme }) {
               View All <Icon icon="ph:arrow-right" className="w-4 h-4" />
             </button>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 gap-8">
             {products.map((product) => (
               <div
                 key={product.id}
                 className="ecom-product group cursor-pointer"
               >
                 <div
-                  className="aspect-square rounded-lg mb-4 flex items-center justify-center transition-all duration-500 group-hover:scale-[1.02]"
+                  className="aspect-square rounded-lg mb-4 overflow-hidden transition-all duration-500 group-hover:scale-[1.02]"
                   style={{ backgroundColor: theme.surface }}
                 >
-                  <Icon
-                    icon={product.image}
-                    className="w-24 h-24 transition-transform duration-500 group-hover:scale-110"
-                    style={{ color: theme.accent }}
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                   />
                 </div>
                 <p className="text-xs tracking-widest uppercase mb-2" style={{ color: theme.muted }}>
