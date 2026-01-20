@@ -56,21 +56,20 @@ export default function Navigation() {
 
   useEffect(() => {
     if (isOpen && menuRef.current) {
-      gsap.set(menuRef.current, { willChange: 'clip-path' })
-      gsap.fromTo(
-        menuRef.current,
-        { clipPath: 'circle(0% at calc(100% - 40px) 40px)' },
-        {
-          clipPath: 'circle(150% at calc(100% - 40px) 40px)',
-          duration: 0.5,
-          ease: 'power2.out',
-          onComplete: () => gsap.set(menuRef.current, { willChange: 'auto' })
-        }
-      )
+      // Use transform-based animation for better mobile performance
+      gsap.set(menuRef.current, {
+        visibility: 'visible',
+        opacity: 0,
+      })
+      gsap.to(menuRef.current, {
+        opacity: 1,
+        duration: 0.3,
+        ease: 'power2.out',
+      })
       gsap.fromTo(
         menuRef.current.querySelectorAll('.nav-item'),
-        { y: 30, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.4, stagger: 0.06, ease: 'power2.out', delay: 0.15 }
+        { y: 20, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.3, stagger: 0.05, ease: 'power2.out', delay: 0.1 }
       )
     }
   }, [isOpen])
@@ -448,7 +447,13 @@ export default function Navigation() {
             <div
               ref={menuRef}
               className="fixed inset-0 z-40 lg:hidden flex flex-col items-center justify-center"
-              style={{ backgroundColor: theme.surface, backfaceVisibility: 'hidden' }}
+              style={{
+                backgroundColor: theme.surface,
+                backfaceVisibility: 'hidden',
+                WebkitBackfaceVisibility: 'hidden',
+                transform: 'translateZ(0)',
+                WebkitTransform: 'translateZ(0)',
+              }}
             >
               <div className="flex flex-col items-center gap-4">
                 {navLinks.map((link) => (

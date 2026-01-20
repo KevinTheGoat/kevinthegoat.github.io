@@ -135,7 +135,7 @@ export default function Contact() {
           <h1 className="font-display font-bold text-display-lg mb-6">
             Get in <span className="gradient-text">Touch</span>
           </h1>
-          <p className="text-xl mb-6" style={{ color: theme.muted }}>
+          <p className="text-lg sm:text-xl mb-6" style={{ color: theme.muted }}>
             Have a project in mind or just want to chat? I'd love to hear from you.
             Let's create something amazing together.
           </p>
@@ -143,19 +143,19 @@ export default function Contact() {
           {/* Email Contact - Integrated */}
           <a
             href="mailto:kevinmoreau@kevco.co"
-            className="contact-card inline-flex items-center gap-4 px-6 py-4 rounded-2xl transition-all duration-300 hover:scale-[1.02]"
+            className="contact-card flex items-center gap-3 sm:gap-4 px-4 sm:px-6 py-4 rounded-2xl transition-all duration-300 hover:scale-[1.02] w-full sm:w-auto"
             style={{
               backgroundColor: theme.surface,
               border: `1px solid ${theme.border}`,
             }}
           >
             <div
-              className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
+              className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center flex-shrink-0"
               style={{ background: `linear-gradient(135deg, ${theme.accent}25, ${theme.accentAlt}25)` }}
             >
               <Icon
                 icon="ph:envelope-bold"
-                className="w-6 h-6"
+                className="w-5 h-5 sm:w-6 sm:h-6"
                 style={{
                   background: `linear-gradient(135deg, ${theme.accent}, ${theme.accentAlt})`,
                   WebkitBackgroundClip: 'text',
@@ -163,11 +163,11 @@ export default function Contact() {
                 }}
               />
             </div>
-            <div>
+            <div className="min-w-0 flex-1">
               <div className="text-sm mb-1" style={{ color: theme.muted }}>Email me at</div>
-              <div className="font-semibold" style={{ color: theme.accent }}>kevinmoreau@kevco.co</div>
+              <div className="font-semibold text-sm sm:text-base truncate" style={{ color: theme.accent }}>kevinmoreau@kevco.co</div>
             </div>
-            <Icon icon="ph:arrow-right-bold" className="w-5 h-5 ml-2" style={{ color: theme.muted }} />
+            <Icon icon="ph:arrow-right-bold" className="w-5 h-5 flex-shrink-0" style={{ color: theme.muted }} />
           </a>
         </div>
 
@@ -175,7 +175,7 @@ export default function Contact() {
         <div className="grid lg:grid-cols-2 gap-12">
           {/* Contact Form */}
           <div
-            className="contact-form p-8 rounded-3xl"
+            className="contact-form p-5 sm:p-8 rounded-2xl sm:rounded-3xl"
             style={{
               backgroundColor: theme.surface,
               border: `1px solid ${theme.border}`,

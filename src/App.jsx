@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, lazy, Suspense } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState, lazy, Suspense } from 'react'
 import { Routes, Route, useLocation, useNavigate } from 'react-router-dom'
 import { gsap } from 'gsap'
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin'
@@ -58,6 +58,11 @@ export default function App() {
     }
   }, [navigate])
 
+  // Scroll to top on route change - useLayoutEffect for immediate execution
+  useLayoutEffect(() => {
+    window.scrollTo(0, 0)
+  }, [location.pathname])
+
   // Page transition animation with exit
   useEffect(() => {
     // Skip animation on initial load
@@ -79,7 +84,6 @@ export default function App() {
     })
 
     prevPathRef.current = location.pathname
-    window.scrollTo(0, 0)
 
     return () => ctx.revert()
   }, [location.pathname])
