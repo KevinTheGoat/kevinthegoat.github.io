@@ -3,6 +3,7 @@ import { Icon } from '@iconify/react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useTheme } from '../context/ThemeContext'
+import SEO from '../components/SEO'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -25,7 +26,7 @@ const projects = [
       'A comprehensive accident assistance platform that connects users with legal and medical professionals through an intelligent matching system.',
     url: 'https://accidentassistnetwork.com/',
     tags: ['Web App', 'Healthcare', 'Legal Tech', 'Platform'],
-    category: 'Web App',
+    category: 'Web',
     gradient: 'from-emerald-600 via-teal-600 to-cyan-700',
     features: ['User Dashboard', 'Provider Matching', 'Case Management', 'Secure Portal'],
   },
@@ -42,7 +43,7 @@ const projects = [
   },
 ]
 
-const categories = ['All', 'Web', 'Web App']
+const categories = ['All', 'Web']
 
 export default function Projects() {
   const { theme } = useTheme()
@@ -86,7 +87,14 @@ export default function Projects() {
   }, [activeCategory])
 
   return (
-    <div ref={pageRef} className="min-h-screen pt-32 pb-24 px-6">
+    <>
+      <SEO
+        title="Featured Projects | KevCo - Web Development Portfolio"
+        description="View my best web development work including Stuttgart International Collision, Accident Assist Network, and Monexus Logistics. Professional websites and web applications built with React and modern technologies."
+        keywords="web development portfolio, React projects, business websites, web applications, professional web design, Stuttgart International Collision, Accident Assist Network, logistics platform"
+        canonicalPath="/projects"
+      />
+      <div ref={pageRef} className="min-h-screen pt-32 pb-24 px-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="projects-header max-w-3xl mb-12">
@@ -253,5 +261,6 @@ export default function Projects() {
         </div>
       </div>
     </div>
+    </>
   )
 }

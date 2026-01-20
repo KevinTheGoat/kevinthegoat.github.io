@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { Icon } from '@iconify/react'
 import { gsap } from 'gsap'
+import DemoFooter from '../DemoFooter'
 
 const projects = [
   { name: 'Nova Brand Identity', category: 'Branding', year: '2024' },
@@ -208,6 +209,8 @@ export default function AgencySite({ theme }) {
           </button>
         </div>
       </section>
+
+      <DemoFooter theme={theme} />
     </div>
   )
 }

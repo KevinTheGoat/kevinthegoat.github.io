@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Icon } from '@iconify/react'
 import { gsap } from 'gsap'
 import { useTheme } from '../context/ThemeContext'
+import SEO from '../components/SEO'
 
 const contactMethods = [
   {
@@ -10,20 +11,6 @@ const contactMethods = [
     value: 'kevinmoreau@kevco.co',
     href: 'mailto:kevinmoreau@kevco.co',
     description: 'Best for project inquiries',
-  },
-  {
-    icon: 'mdi:github',
-    title: 'GitHub',
-    value: '@KevinTheGoat',
-    href: 'https://github.com/KevinTheGoat',
-    description: 'Check out my code',
-  },
-  {
-    icon: 'mdi:linkedin',
-    title: 'LinkedIn',
-    value: 'Connect with me',
-    href: '#',
-    description: 'Professional network',
   },
 ]
 
@@ -62,6 +49,7 @@ export default function Contact() {
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
+  const [error, setError] = useState(false)
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -96,15 +84,44 @@ export default function Contact() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setIsSubmitting(true)
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 1500))
-    setIsSubmitting(false)
-    setSubmitted(true)
-    setFormData({ name: '', email: '', project: '', message: '' })
+    setError(false)
+
+    try {
+      const response = await fetch('https://formspree.io/f/mgoolpye', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          project: formData.project,
+          message: formData.message,
+        }),
+      })
+
+      if (response.ok) {
+        setSubmitted(true)
+        setFormData({ name: '', email: '', project: '', message: '' })
+      } else {
+        setError(true)
+      }
+    } catch (err) {
+      setError(true)
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
-    <div ref={pageRef} className="min-h-screen pt-32 pb-24 px-6">
+    <>
+      <SEO
+        title="Contact KevCo | Get in Touch for Your Next Project"
+        description="Ready to start your web, mobile, or desktop app project? Contact Kevin at kevinmoreau@kevco.co for professional development services. Based in the Bahamas, serving clients worldwide."
+        keywords="contact developer, hire web developer, hire mobile app developer, freelance developer Bahamas, custom software development, project inquiry, web development services"
+        canonicalPath="/contact"
+      />
+      <div ref={pageRef} className="min-h-screen pt-32 pb-24 px-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="contact-header max-w-3xl mb-16">
@@ -117,41 +134,32 @@ export default function Contact() {
           <h1 className="font-display font-bold text-display-lg mb-6">
             Get in <span style={{ color: theme.accent }}>Touch</span>
           </h1>
-          <p className="text-xl" style={{ color: theme.muted }}>
+          <p className="text-xl mb-6" style={{ color: theme.muted }}>
             Have a project in mind or just want to chat? I'd love to hear from you.
             Let's create something amazing together.
           </p>
-        </div>
 
-        {/* Contact Methods */}
-        <div className="grid md:grid-cols-3 gap-6 mb-16">
-          {contactMethods.map((method) => (
-            <a
-              key={method.title}
-              href={method.href}
-              target={method.href.startsWith('http') ? '_blank' : undefined}
-              rel={method.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-              className="contact-card group p-6 rounded-2xl transition-all duration-500 card-hover"
-              style={{
-                backgroundColor: theme.surface,
-                border: `1px solid ${theme.border}`,
-              }}
+          {/* Email Contact - Integrated */}
+          <a
+            href="mailto:kevinmoreau@kevco.co"
+            className="contact-card inline-flex items-center gap-4 px-6 py-4 rounded-2xl transition-all duration-300 hover:scale-[1.02]"
+            style={{
+              backgroundColor: theme.surface,
+              border: `1px solid ${theme.border}`,
+            }}
+          >
+            <div
+              className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
+              style={{ backgroundColor: `${theme.accent}20` }}
             >
-              <div
-                className="w-14 h-14 rounded-xl flex items-center justify-center mb-4 transition-transform duration-300 group-hover:scale-110"
-                style={{ backgroundColor: `${theme.accent}20` }}
-              >
-                <Icon icon={method.icon} className="w-7 h-7" style={{ color: theme.accent }} />
-              </div>
-              <h3 className="font-display font-semibold text-lg mb-1">{method.title}</h3>
-              <p className="font-medium mb-1" style={{ color: theme.accent }}>
-                {method.value}
-              </p>
-              <p className="text-sm" style={{ color: theme.muted }}>
-                {method.description}
-              </p>
-            </a>
-          ))}
+              <Icon icon="ph:envelope-bold" className="w-6 h-6" style={{ color: theme.accent }} />
+            </div>
+            <div>
+              <div className="text-sm mb-1" style={{ color: theme.muted }}>Email me at</div>
+              <div className="font-semibold" style={{ color: theme.accent }}>kevinmoreau@kevco.co</div>
+            </div>
+            <Icon icon="ph:arrow-right-bold" className="w-5 h-5 ml-2" style={{ color: theme.muted }} />
+          </a>
         </div>
 
         {/* Main Content Grid */}
@@ -187,7 +195,19 @@ export default function Contact() {
                 </button>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-5">
+              <>
+                {error && (
+                  <div
+                    className="mb-5 p-4 rounded-xl flex items-center gap-3"
+                    style={{ backgroundColor: '#ef444420', border: '1px solid #ef4444' }}
+                  >
+                    <Icon icon="ph:warning-circle-bold" className="w-5 h-5 flex-shrink-0" style={{ color: '#ef4444' }} />
+                    <p className="text-sm" style={{ color: '#ef4444' }}>
+                      Failed to send message. Please try again or email me directly.
+                    </p>
+                  </div>
+                )}
+                <form onSubmit={handleSubmit} className="space-y-5">
                 <div className="grid md:grid-cols-2 gap-5">
                   <div>
                     <label className="block text-sm font-medium mb-2" style={{ color: theme.muted }}>
@@ -290,6 +310,7 @@ export default function Contact() {
                   )}
                 </button>
               </form>
+              </>
             )}
           </div>
 
@@ -353,5 +374,6 @@ export default function Contact() {
         </div>
       </div>
     </div>
+    </>
   )
 }

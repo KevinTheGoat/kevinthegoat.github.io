@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { Icon } from '@iconify/react'
 import { gsap } from 'gsap'
+import DemoFooter from '../DemoFooter'
 
 const products = [
   { id: 1, name: 'Royal Gold Chronograph', price: 12499, category: 'Watches', image: '/images/luxcart/gold-watch-set.png' },
@@ -120,6 +121,8 @@ export default function EcommerceSite({ theme }) {
           </div>
         </div>
       </section>
+
+      <DemoFooter theme={theme} />
     </div>
   )
 }

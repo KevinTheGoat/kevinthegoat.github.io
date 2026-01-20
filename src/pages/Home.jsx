@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { Icon } from '@iconify/react'
 import { gsap } from 'gsap'
 import { useTheme } from '../context/ThemeContext'
+import SEO from '../components/SEO'
 
 const stats = [
   { value: '8+', label: 'Years Experience' },
@@ -99,8 +100,14 @@ export default function Home() {
   }
 
   return (
-    <div ref={heroRef}>
-      {/* Hero Section */}
+    <>
+      <SEO
+        title="KevCo | Professional Web, Mobile & Desktop Development"
+        description="Expert full-stack developer specializing in React, React Native, and Electron. Building premium web applications, mobile apps, and desktop software. Based in the Bahamas, serving clients worldwide."
+        canonicalPath="/"
+      />
+      <div ref={heroRef}>
+        {/* Hero Section */}
       <section className="min-h-screen flex flex-col justify-center px-6 pt-24 pb-16 relative overflow-hidden">
         <div className="max-w-7xl mx-auto w-full">
           {/* Main Hero Content */}
@@ -319,5 +326,6 @@ export default function Home() {
         </div>
       </footer>
     </div>
+    </>
   )
 }

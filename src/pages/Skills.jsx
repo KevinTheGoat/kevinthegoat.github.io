@@ -3,6 +3,7 @@ import { Icon } from '@iconify/react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useTheme } from '../context/ThemeContext'
+import SEO from '../components/SEO'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -136,7 +137,14 @@ export default function Skills() {
   }, [])
 
   return (
-    <div ref={pageRef} className="min-h-screen pt-32 pb-24 px-6">
+    <>
+      <SEO
+        title="Skills & Technologies | KevCo - Full-Stack Development Expertise"
+        description="Expert in React, React Native, Electron, Node.js, and modern web technologies. Frontend, mobile, desktop, backend development, and UI/UX design skills. View my comprehensive technical expertise."
+        keywords="React developer, React Native, Electron developer, Node.js, full stack skills, frontend development, mobile development, desktop apps, backend APIs, UI/UX design, TypeScript, Tailwind CSS, GSAP animations"
+        canonicalPath="/skills"
+      />
+      <div ref={pageRef} className="min-h-screen pt-32 pb-24 px-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="skills-header max-w-3xl mb-20">
@@ -251,5 +259,6 @@ export default function Skills() {
         </div>
       </div>
     </div>
+    </>
   )
 }

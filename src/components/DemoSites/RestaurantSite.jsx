@@ -1,12 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
 import { Icon } from '@iconify/react'
 import { gsap } from 'gsap'
+import DemoFooter from '../DemoFooter'
 
 const menuItems = [
-  { name: 'Truffle Risotto', description: 'Arborio rice, black truffle, parmesan', price: 38, category: 'Mains' },
-  { name: 'Wagyu Carpaccio', description: 'A5 wagyu, capers, aged balsamic', price: 45, category: 'Starters' },
-  { name: 'Lobster Thermidor', description: 'Maine lobster, cognac cream, gruyère', price: 68, category: 'Mains' },
-  { name: 'Chocolate Soufflé', description: 'Valrhona chocolate, crème anglaise', price: 18, category: 'Desserts' },
+  { name: 'Truffle Risotto', description: 'Arborio rice, black truffle, parmesan', price: 38, category: 'Mains', image: '/images/restaurant/truffle-risotto.png' },
+  { name: 'Wagyu Carpaccio', description: 'A5 wagyu, capers, aged balsamic', price: 45, category: 'Starters', image: '/images/restaurant/beef-carpaccio.png' },
+  { name: 'Lobster Thermidor', description: 'Maine lobster, cognac cream, gruyère', price: 68, category: 'Mains', image: '/images/restaurant/lobster-thermidor.png' },
+  { name: 'Chocolate Soufflé', description: 'Valrhona chocolate, crème anglaise', price: 18, category: 'Desserts', image: '/images/restaurant/chocolate-lava-cake.png' },
 ]
 
 export default function RestaurantSite({ theme }) {
@@ -121,24 +122,15 @@ export default function RestaurantSite({ theme }) {
               .map((item, i) => (
                 <div
                   key={item.name}
-                  className="resto-menu-item flex items-center justify-between p-6 rounded-2xl transition-all duration-300 hover:scale-[1.02]"
+                  className="resto-menu-item group flex items-center justify-between p-6 rounded-2xl transition-all duration-300 hover:scale-[1.01] overflow-hidden"
                   style={{ backgroundColor: theme.elevated }}
                 >
                   <div className="flex items-center gap-6">
-                    <div
-                      className="w-16 h-16 rounded-xl flex items-center justify-center"
-                      style={{ backgroundColor: theme.accent + '20' }}
-                    >
-                      <Icon
-                        icon={
-                          item.category === 'Starters'
-                            ? 'ph:bowl-food-bold'
-                            : item.category === 'Desserts'
-                            ? 'ph:cookie-bold'
-                            : 'ph:fork-knife-bold'
-                        }
-                        className="w-8 h-8"
-                        style={{ color: theme.accent }}
+                    <div className="w-24 h-24 rounded-xl overflow-hidden flex-shrink-0">
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                       />
                     </div>
                     <div>
@@ -146,7 +138,7 @@ export default function RestaurantSite({ theme }) {
                       <p className="text-sm" style={{ color: theme.muted }}>{item.description}</p>
                     </div>
                   </div>
-                  <div className="text-2xl font-serif" style={{ color: theme.accent }}>
+                  <div className="text-2xl font-serif flex-shrink-0 ml-4" style={{ color: theme.accent }}>
                     ${item.price}
                   </div>
                 </div>
@@ -185,6 +177,8 @@ export default function RestaurantSite({ theme }) {
           </div>
         </div>
       </section>
+
+      <DemoFooter theme={theme} />
     </div>
   )
 }

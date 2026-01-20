@@ -6,6 +6,7 @@ import { useDemo, demoSites } from '../context/DemoContext'
 import { EcommerceSite, SaasSite, RestaurantSite, FitnessSite, AgencySite } from '../components/DemoSites'
 import MobileAppMockup from '../components/Mockups/MobileAppMockup'
 import DesktopAppMockup from '../components/Mockups/DesktopAppMockup'
+import SEO from '../components/SEO'
 
 // Map demo IDs to components
 const demoComponents = {
@@ -59,7 +60,14 @@ export default function Demos() {
   ]
 
   return (
-    <div ref={pageRef} className="min-h-screen pt-32 pb-24 px-6">
+    <>
+      <SEO
+        title="Interactive Demos | KevCo - Live Web, Mobile & Desktop App Showcases"
+        description="Experience fully interactive demo websites, mobile app mockups, and desktop applications. Explore e-commerce sites, SaaS platforms, fitness apps, restaurants, and agency sites built with React, React Native, and Electron."
+        keywords="interactive demos, web development demos, mobile app mockups, desktop app demos, React demos, e-commerce demo, SaaS demo, fitness app, restaurant website, agency portfolio"
+        canonicalPath="/demos"
+      />
+      <div ref={pageRef} className="min-h-screen pt-32 pb-24 px-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="demo-header max-w-3xl mb-16">
@@ -232,5 +240,6 @@ export default function Demos() {
         </div>
       </div>
     </div>
+    </>
   )
 }

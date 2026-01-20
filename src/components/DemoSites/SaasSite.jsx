@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { Icon } from '@iconify/react'
 import { gsap } from 'gsap'
+import DemoFooter from '../DemoFooter'
 
 const stats = [
   { label: 'Total Revenue', value: '$84,254', change: '+12.5%', icon: 'ph:currency-dollar-bold' },
@@ -211,6 +212,8 @@ export default function SaasSite({ theme }) {
           </div>
         </main>
       </div>
+
+      <DemoFooter theme={theme} />
     </div>
   )
 }

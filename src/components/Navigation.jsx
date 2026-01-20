@@ -75,27 +75,48 @@ export default function Navigation() {
     }
   }, [isOpen])
 
-  // Animate dropdown
+  // Origami Unfold Animation
   useEffect(() => {
-    if (demoDropdownOpen) {
-      const targetRef = isInDemoMode ? demoDropdownRef.current : dropdownRef.current
-      if (targetRef) {
-        const dropdownElement = targetRef.querySelector('.dropdown-menu') || targetRef.lastElementChild
-        if (dropdownElement) {
-          gsap.fromTo(
-            dropdownElement,
-            { opacity: 0, y: -10, scale: 0.95 },
-            { opacity: 1, y: 0, scale: 1, duration: 0.3, ease: 'power3.out' }
-          )
-          gsap.fromTo(
-            dropdownElement.querySelectorAll('.dropdown-item'),
-            { x: -20, opacity: 0 },
-            { x: 0, opacity: 1, duration: 0.3, stagger: 0.05, ease: 'power3.out', delay: 0.1 }
-          )
+    if (demoDropdownOpen && dropdownRef.current) {
+      const dropdown = dropdownRef.current.querySelector('.desktop-dropdown')
+      const items = dropdown?.querySelectorAll('.dropdown-item')
+      const header = dropdown?.querySelector('.dropdown-header')
+
+      if (dropdown && items) {
+        // Add class to trigger shadow animation
+        dropdown.classList.add('unfolding')
+
+        const tl = gsap.timeline()
+
+        // Container unfolds like opening a lid
+        tl.to(dropdown, {
+          rotateX: 0,
+          duration: 0.45,
+          ease: 'power2.out'
+        })
+
+        // Header unfolds first (top panel)
+        if (header) {
+          tl.to(header, {
+            opacity: 1,
+            rotateX: 0,
+            duration: 0.35,
+            ease: 'power2.inOut'
+          }, 0.1)
         }
+
+        // Items unfold sequentially - starts while header is still unfolding for continuous flow
+        items.forEach((item, i) => {
+          tl.to(item, {
+            opacity: 1,
+            rotateX: 0,
+            duration: 0.4,
+            ease: 'power2.inOut'
+          }, 0.25 + (i * 0.08))
+        })
       }
     }
-  }, [demoDropdownOpen, isInDemoMode])
+  }, [demoDropdownOpen])
 
   const handleDemoClick = (demoId) => {
     enterDemo(demoId)
@@ -207,6 +228,35 @@ export default function Navigation() {
                         )}
                       </button>
                     ))}
+
+                    {/* View All Demos Button */}
+                    <div
+                      className="border-t mt-2 pt-2"
+                      style={{ borderColor: activeDemo.theme.border }}
+                    >
+                      <button
+                        onClick={() => {
+                          exitDemo()
+                          navigate('/demos')
+                          setDemoDropdownOpen(false)
+                        }}
+                        className="dropdown-item w-full flex items-center gap-3 px-4 py-3 transition-all duration-300 hover:bg-white/5"
+                      >
+                        <Icon
+                          icon="ph:grid-four-bold"
+                          className="w-5 h-5"
+                          style={{ color: activeDemo.theme.accent }}
+                        />
+                        <span className="font-medium" style={{ color: activeDemo.theme.text }}>
+                          View All Demos
+                        </span>
+                        <Icon
+                          icon="ph:arrow-right-bold"
+                          className="w-4 h-4 ml-auto"
+                          style={{ color: activeDemo.theme.muted }}
+                        />
+                      </button>
+                    </div>
                   </div>
                 )}
               </div>
@@ -243,15 +293,14 @@ export default function Navigation() {
                 to="/"
                 className="relative z-50 flex items-center gap-2 group"
               >
-                <div
-                  className="w-10 h-10 rounded-xl flex items-center justify-center font-display font-bold text-lg transition-transform duration-300 group-hover:scale-110"
-                  style={{ backgroundColor: theme.accent, color: theme.bg }}
-                >
-                  K
+                <div className="px-4 py-2 rounded-xl glass transition-all duration-300 group-hover:bg-white/10">
+                  <img
+                    src="/images/kevco-logo.png"
+                    alt="KevCo"
+                    className="h-10 md:h-12 transition-transform duration-300 group-hover:scale-105"
+                    style={{ filter: 'drop-shadow(0 0 8px rgba(197, 160, 89, 0.3))' }}
+                  />
                 </div>
-                <span className="font-display font-bold text-xl hidden sm:block">
-                  Kev<span style={{ color: theme.accent }}>Co</span>
-                </span>
               </NavLink>
 
               {/* Desktop Links */}
@@ -279,13 +328,13 @@ export default function Navigation() {
 
                         {demoDropdownOpen && (
                           <div
-                            className="absolute top-full left-1/2 -translate-x-1/2 mt-4 w-80 rounded-2xl overflow-hidden shadow-2xl"
+                            className="desktop-dropdown absolute top-full left-1/2 -translate-x-1/2 mt-4 w-80 rounded-2xl overflow-hidden shadow-2xl"
                             style={{
                               backgroundColor: theme.surface,
                               border: `1px solid ${theme.border}`,
                             }}
                           >
-                            <div className="p-4 border-b" style={{ borderColor: theme.border }}>
+                            <div className="dropdown-header p-4 border-b" style={{ borderColor: theme.border }}>
                               <h3 className="font-display font-semibold text-sm" style={{ color: theme.muted }}>
                                 Interactive Demo Sites
                               </h3>

@@ -4,14 +4,19 @@ import { gsap } from 'gsap'
 
 const desktopApps = [
   {
-    name: 'CodeForge IDE',
-    category: 'Development',
-    theme: { bg: '#1e1e2e', surface: '#313244', accent: '#89b4fa', text: '#cdd6f4', muted: '#6c7086' },
+    name: 'TaskFlow Pro',
+    category: 'Project Management',
+    theme: { bg: '#0f172a', surface: '#1e293b', accent: '#3b82f6', text: '#f8fafc', muted: '#94a3b8' },
+  },
+  {
+    name: 'NoteSphere',
+    category: 'Note-Taking & Knowledge',
+    theme: { bg: '#18181b', surface: '#27272a', accent: '#a855f7', text: '#fafafa', muted: '#a1a1aa' },
   },
   {
     name: 'MediaStudio Pro',
     category: 'Video Editing',
-    theme: { bg: '#0f0f0f', surface: '#1a1a1a', accent: '#a855f7', text: '#fafafa', muted: '#737373' },
+    theme: { bg: '#0f0f0f', surface: '#1a1a1a', accent: '#10b981', text: '#fafafa', muted: '#737373' },
   },
 ]
 
@@ -70,75 +75,225 @@ export default function DesktopAppMockup({ theme }) {
               </div>
 
               {/* App Content */}
-              {app.name === 'CodeForge IDE' ? (
+              {app.name === 'TaskFlow Pro' ? (
                 <div className="flex h-96">
                   {/* Sidebar */}
                   <div className="w-56 p-4 border-r" style={{ borderColor: app.theme.surface }}>
-                    <div className="flex items-center gap-2 mb-4">
-                      <Icon icon="ph:folder-bold" className="w-4 h-4" style={{ color: app.theme.accent }} />
-                      <span className="text-sm font-medium" style={{ color: app.theme.text }}>Project Files</span>
-                    </div>
-                    <div className="space-y-1 pl-2">
-                      {['src/', '├── components/', '│   ├── App.jsx', '│   └── Header.jsx', '├── styles/', '│   └── main.css', '└── index.js'].map((file, idx) => (
+                    <div className="text-xs font-medium mb-4" style={{ color: app.theme.text }}>Workspaces</div>
+                    <div className="space-y-2">
+                      {[
+                        { icon: 'ph:briefcase-bold', name: 'Marketing Campaign', active: true },
+                        { icon: 'ph:code-bold', name: 'Website Redesign', active: false },
+                        { icon: 'ph:users-bold', name: 'Team Onboarding', active: false },
+                      ].map((workspace) => (
                         <div
-                          key={idx}
-                          className="text-xs font-mono py-1 px-2 rounded"
+                          key={workspace.name}
+                          className="flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer"
                           style={{
-                            color: file.includes('.jsx') ? app.theme.accent : app.theme.muted,
-                            backgroundColor: idx === 2 ? app.theme.accent + '20' : 'transparent',
+                            backgroundColor: workspace.active ? app.theme.accent + '20' : 'transparent',
+                            color: workspace.active ? app.theme.accent : app.theme.muted,
                           }}
                         >
-                          {file}
+                          <Icon icon={workspace.icon} className="w-4 h-4" />
+                          <span className="text-xs truncate">{workspace.name}</span>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="mt-6 pt-6 border-t" style={{ borderColor: app.theme.surface }}>
+                      <div className="text-xs font-medium mb-3" style={{ color: app.theme.text }}>Team</div>
+                      <div className="flex -space-x-2">
+                        {[1, 2, 3, 4].map((member) => (
+                          <div
+                            key={member}
+                            className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ring-2"
+                            style={{
+                              backgroundColor: app.theme.accent,
+                              color: app.theme.bg,
+                              ringColor: app.theme.bg,
+                            }}
+                          >
+                            {member}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Main Board */}
+                  <div className="flex-1 p-4 overflow-x-auto">
+                    <div className="flex gap-4 h-full">
+                      {['To Do', 'In Progress', 'Review', 'Done'].map((column, colIdx) => (
+                        <div key={column} className="flex-shrink-0 w-56">
+                          <div className="flex items-center justify-between mb-3">
+                            <div className="flex items-center gap-2">
+                              <div
+                                className="w-2 h-2 rounded-full"
+                                style={{
+                                  backgroundColor:
+                                    colIdx === 0 ? '#94a3b8' : colIdx === 1 ? app.theme.accent : colIdx === 2 ? '#f59e0b' : '#22c55e',
+                                }}
+                              />
+                              <span className="text-xs font-medium" style={{ color: app.theme.text }}>
+                                {column}
+                              </span>
+                            </div>
+                            <span className="text-xs" style={{ color: app.theme.muted }}>
+                              {colIdx === 0 ? 5 : colIdx === 1 ? 3 : colIdx === 2 ? 2 : 8}
+                            </span>
+                          </div>
+                          <div className="space-y-2">
+                            {(colIdx === 0 ? [1, 2] : colIdx === 1 ? [1] : colIdx === 2 ? [1] : [1, 2]).map((card) => (
+                              <div
+                                key={card}
+                                className="p-3 rounded-lg cursor-pointer hover:brightness-110 transition-all"
+                                style={{ backgroundColor: app.theme.surface }}
+                              >
+                                <div className="text-xs font-medium mb-2" style={{ color: app.theme.text }}>
+                                  {colIdx === 0 && card === 1 && 'Design landing page'}
+                                  {colIdx === 0 && card === 2 && 'User research'}
+                                  {colIdx === 1 && 'Build API endpoints'}
+                                  {colIdx === 2 && 'Code review session'}
+                                  {colIdx === 3 && card === 1 && 'Set up database'}
+                                  {colIdx === 3 && card === 2 && 'Write documentation'}
+                                </div>
+                                <div className="flex items-center justify-between">
+                                  <div className="flex gap-1">
+                                    <span
+                                      className="text-xs px-2 py-0.5 rounded"
+                                      style={{
+                                        backgroundColor: app.theme.accent + '30',
+                                        color: app.theme.accent,
+                                      }}
+                                    >
+                                      High
+                                    </span>
+                                  </div>
+                                  <Icon icon="ph:clock-bold" className="w-3 h-3" style={{ color: app.theme.muted }} />
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ) : app.name === 'NoteSphere' ? (
+                <div className="flex h-96">
+                  {/* Notebook Sidebar */}
+                  <div className="w-56 p-4 border-r" style={{ borderColor: app.theme.surface }}>
+                    <div className="flex items-center justify-between mb-4">
+                      <span className="text-xs font-medium" style={{ color: app.theme.text }}>Notebooks</span>
+                      <Icon icon="ph:plus-bold" className="w-4 h-4 cursor-pointer" style={{ color: app.theme.accent }} />
+                    </div>
+                    <div className="space-y-1">
+                      {[
+                        { icon: 'ph:note-bold', name: 'Personal Notes', count: 24, active: false },
+                        { icon: 'ph:briefcase-bold', name: 'Work', count: 18, active: true },
+                        { icon: 'ph:book-bold', name: 'Learning', count: 31, active: false },
+                        { icon: 'ph:star-bold', name: 'Favorites', count: 12, active: false },
+                      ].map((notebook) => (
+                        <div
+                          key={notebook.name}
+                          className="flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer"
+                          style={{
+                            backgroundColor: notebook.active ? app.theme.accent + '20' : 'transparent',
+                            color: notebook.active ? app.theme.accent : app.theme.text,
+                          }}
+                        >
+                          <div className="flex items-center gap-2">
+                            <Icon icon={notebook.icon} className="w-4 h-4" />
+                            <span className="text-xs">{notebook.name}</span>
+                          </div>
+                          <span className="text-xs" style={{ color: app.theme.muted }}>{notebook.count}</span>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="mt-6 pt-4 border-t" style={{ borderColor: app.theme.surface }}>
+                      <div className="text-xs font-medium mb-3" style={{ color: app.theme.text }}>Tags</div>
+                      <div className="flex flex-wrap gap-1">
+                        {['Ideas', 'Todo', 'Important'].map((tag) => (
+                          <span
+                            key={tag}
+                            className="text-xs px-2 py-1 rounded-full"
+                            style={{
+                              backgroundColor: app.theme.surface,
+                              color: app.theme.muted,
+                            }}
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Notes List */}
+                  <div className="w-64 border-r" style={{ borderColor: app.theme.surface }}>
+                    <div className="p-4 border-b" style={{ borderColor: app.theme.surface }}>
+                      <div className="flex items-center gap-2 px-3 py-2 rounded-lg" style={{ backgroundColor: app.theme.surface }}>
+                        <Icon icon="ph:magnifying-glass-bold" className="w-4 h-4" style={{ color: app.theme.muted }} />
+                        <input
+                          type="text"
+                          placeholder="Search notes..."
+                          className="flex-1 bg-transparent text-xs outline-none"
+                          style={{ color: app.theme.text }}
+                        />
+                      </div>
+                    </div>
+                    <div className="overflow-y-auto">
+                      {[
+                        { title: 'Project Requirements', preview: 'List of features needed for the new dashboard...', time: '2h ago', active: true },
+                        { title: 'Meeting Notes', preview: 'Discussed Q4 roadmap and team goals...', time: '5h ago', active: false },
+                        { title: 'Design Ideas', preview: 'Exploring new color schemes and typography...', time: '1d ago', active: false },
+                      ].map((note) => (
+                        <div
+                          key={note.title}
+                          className="p-4 border-b cursor-pointer hover:bg-white/5 transition-colors"
+                          style={{
+                            borderColor: app.theme.surface,
+                            backgroundColor: note.active ? app.theme.surface : 'transparent',
+                          }}
+                        >
+                          <div className="font-medium text-sm mb-1" style={{ color: app.theme.text }}>{note.title}</div>
+                          <div className="text-xs mb-2 line-clamp-2" style={{ color: app.theme.muted }}>{note.preview}</div>
+                          <div className="text-xs" style={{ color: app.theme.muted }}>{note.time}</div>
                         </div>
                       ))}
                     </div>
                   </div>
 
                   {/* Editor */}
-                  <div className="flex-1 p-4">
-                    <div className="flex items-center gap-4 mb-4">
-                      {['App.jsx', 'Header.jsx', 'styles.css'].map((tab, idx) => (
-                        <span
-                          key={tab}
-                          className="text-xs px-3 py-1 rounded"
-                          style={{
-                            backgroundColor: idx === 0 ? app.theme.surface : 'transparent',
-                            color: idx === 0 ? app.theme.text : app.theme.muted,
-                          }}
+                  <div className="flex-1 flex flex-col">
+                    <div className="flex items-center gap-2 p-4 border-b" style={{ borderColor: app.theme.surface }}>
+                      {['ph:text-bolder', 'ph:text-italic', 'ph:text-underline', 'ph:list-bullets', 'ph:list-numbers', 'ph:code'].map((icon) => (
+                        <button
+                          key={icon}
+                          className="w-8 h-8 rounded flex items-center justify-center hover:bg-white/5 transition-colors"
                         >
-                          {tab}
-                        </span>
+                          <Icon icon={icon} className="w-4 h-4" style={{ color: app.theme.muted }} />
+                        </button>
                       ))}
                     </div>
-                    <div className="font-mono text-xs space-y-1">
-                      {[
-                        { num: 1, code: 'import React from "react"', color: app.theme.accent },
-                        { num: 2, code: 'import { Header } from "./Header"', color: app.theme.accent },
-                        { num: 3, code: '', color: app.theme.muted },
-                        { num: 4, code: 'export default function App() {', color: '#f472b6' },
-                        { num: 5, code: '  return (', color: app.theme.text },
-                        { num: 6, code: '    <div className="app">', color: '#22d3ee' },
-                        { num: 7, code: '      <Header />', color: '#22d3ee' },
-                        { num: 8, code: '      <main>Hello World</main>', color: '#22d3ee' },
-                        { num: 9, code: '    </div>', color: '#22d3ee' },
-                        { num: 10, code: '  )', color: app.theme.text },
-                        { num: 11, code: '}', color: '#f472b6' },
-                      ].map((line) => (
-                        <div key={line.num} className="flex">
-                          <span className="w-8 text-right mr-4" style={{ color: app.theme.muted }}>{line.num}</span>
-                          <span style={{ color: line.color }}>{line.code}</span>
+                    <div className="flex-1 p-6">
+                      <h2 className="text-xl font-bold mb-4" style={{ color: app.theme.text }}>Project Requirements</h2>
+                      <div className="space-y-3 text-sm" style={{ color: app.theme.text }}>
+                        <p style={{ color: app.theme.muted }}>Last edited 2 hours ago</p>
+                        <div className="space-y-2">
+                          <div className="flex items-start gap-2">
+                            <Icon icon="ph:check-square-bold" className="w-5 h-5 mt-0.5" style={{ color: app.theme.accent }} />
+                            <span>User authentication system</span>
+                          </div>
+                          <div className="flex items-start gap-2">
+                            <Icon icon="ph:square-bold" className="w-5 h-5 mt-0.5" style={{ color: app.theme.muted }} />
+                            <span>Dashboard analytics</span>
+                          </div>
+                          <div className="flex items-start gap-2">
+                            <Icon icon="ph:square-bold" className="w-5 h-5 mt-0.5" style={{ color: app.theme.muted }} />
+                            <span>Real-time notifications</span>
+                          </div>
                         </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Right Panel */}
-                  <div className="w-48 p-4 border-l" style={{ borderColor: app.theme.surface }}>
-                    <div className="text-xs font-medium mb-3" style={{ color: app.theme.text }}>Terminal</div>
-                    <div className="font-mono text-xs space-y-1" style={{ color: app.theme.muted }}>
-                      <div>{'>'} npm run dev</div>
-                      <div style={{ color: '#22c55e' }}>✓ Ready in 234ms</div>
-                      <div>Local: http://localhost:3000</div>
+                      </div>
                     </div>
                   </div>
                 </div>
