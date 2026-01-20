@@ -139,8 +139,9 @@ function applyTheme(theme, animate = false) {
   const root = document.documentElement
 
   if (animate) {
-    // Add transition class for smooth color changes
-    root.style.setProperty('--theme-transition', '0.5s')
+    // Add transition class to body for smooth color changes
+    // This only applies transitions during theme change, not globally
+    document.body.classList.add('theme-transitioning')
   }
 
   root.style.setProperty('--bg', theme.bg)
@@ -154,9 +155,9 @@ function applyTheme(theme, animate = false) {
   root.style.setProperty('--border', theme.border)
 
   if (animate) {
-    // Remove transition after animation completes
+    // Remove transition class after animation completes
     setTimeout(() => {
-      root.style.setProperty('--theme-transition', '0s')
+      document.body.classList.remove('theme-transitioning')
     }, 500)
   }
 }

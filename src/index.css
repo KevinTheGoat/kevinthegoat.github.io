@@ -45,6 +45,20 @@
     border: 1px solid rgba(255, 255, 255, 0.05);
   }
 
+  /* Reduce blur on mobile for better performance */
+  @media (max-width: 1023px) {
+    .glass {
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+  }
+
+  /* No blur version for interactive elements on mobile */
+  .glass-light {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
   .glass-strong {
     background: rgba(255, 255, 255, 0.08);
     backdrop-filter: blur(40px);
@@ -336,21 +350,20 @@
   --text: #F5F5DC;
   --muted: #B8A480;
   --border: #3d3525;
-  --theme-transition: 0s;
 }
 
-/* Smooth theme transitions */
-body,
-body * {
+/* Theme transitions - only applied during theme change via class */
+body.theme-transitioning,
+body.theme-transitioning * {
   transition:
-    background-color var(--theme-transition) ease,
-    border-color var(--theme-transition) ease,
-    color var(--theme-transition) ease;
+    background-color 0.5s ease,
+    border-color 0.5s ease,
+    color 0.5s ease !important;
 }
 
-/* Fix gradient text rendering - exclude from transitions that break it */
-.gradient-text,
-.stat-value {
+/* Exclude gradient text from theme transitions */
+body.theme-transitioning .gradient-text,
+body.theme-transitioning .stat-value {
   transition: none !important;
 }
 
