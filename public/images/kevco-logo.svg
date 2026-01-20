@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 480 100" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Gold gradient for K icon and letters -->
+    <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#D4AF37"/>
+      <stop offset="50%" style="stop-color:#C5A059"/>
+      <stop offset="100%" style="stop-color:#B8960C"/>
+    </linearGradient>
+  </defs>
+
+  <!-- K Icon (geometric design with brackets) -->
+  <g id="k-icon" transform="translate(5, 5)">
+    <!-- Outer bracket top-left -->
+    <path d="M0 0 L0 15 L5 15 L5 5 L15 5 L15 0 Z" fill="url(#goldGradient)"/>
+    <!-- Outer bracket bottom-left -->
+    <path d="M0 90 L0 75 L5 75 L5 85 L15 85 L15 90 Z" fill="url(#goldGradient)"/>
+    
+    <!-- Main K shape -->
+    <path d="M20 8 L20 82 L35 82 L35 52 L58 82 L78 82 L50 48 L75 15 L55 15 L35 42 L35 8 Z" fill="url(#goldGradient)"/>
+    
+    <!-- Inner small K accent -->
+    <path d="M42 22 L42 35 L52 22 Z" fill="#B8960C"/>
+  </g>
+
+  <!-- Text: K (gold) -->
+  <text id="letter-K" x="105" y="78" font-family="Montserrat, Arial Black, sans-serif" font-weight="900" font-size="75" fill="url(#goldGradient)">K</text>
+
+  <!-- Text: ev (black) -->
+  <text id="letters-ev" x="155" y="78" font-family="Montserrat, Arial Black, sans-serif" font-weight="900" font-size="75" fill="#1a1a1a">ev</text>
+
+  <!-- Text: C (gold) -->
+  <text id="letter-C" x="270" y="78" font-family="Montserrat, Arial Black, sans-serif" font-weight="900" font-size="75" fill="url(#goldGradient)">C</text>
+
+  <!-- Text: o (black) -->
+  <text id="letter-o" x="330" y="78" font-family="Montserrat, Arial Black, sans-serif" font-weight="900" font-size="75" fill="#1a1a1a">o</text>
+</svg>

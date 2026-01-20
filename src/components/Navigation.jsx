@@ -295,7 +295,7 @@ export default function Navigation() {
               >
                 <div className="px-4 py-2 rounded-xl glass transition-all duration-300 group-hover:bg-white/10">
                   <img
-                    src="/images/kevco-logo.png"
+                    src="/images/kevco-logo4.svg"
                     alt="KevCo"
                     className="h-10 md:h-12 transition-transform duration-300 group-hover:scale-105"
                     style={{ filter: 'drop-shadow(0 0 8px rgba(197, 160, 89, 0.3))' }}
@@ -394,19 +394,19 @@ export default function Navigation() {
               {/* Right side: Theme switcher + Mobile menu button */}
               <div className="flex items-center gap-3">
                 {/* Theme Switcher */}
-                <div className="hidden sm:flex items-center gap-1 p-1.5 rounded-xl glass">
+                <div className="hidden sm:grid grid-cols-5 gap-1 p-1.5 rounded-xl glass">
                   {Object.entries(themes).map(([key, t]) => (
                     <button
                       key={key}
                       onClick={() => setTheme(key)}
-                      className={`w-7 h-7 rounded-lg transition-all duration-300 flex items-center justify-center ${
-                        themeKey === key ? 'scale-110 ring-2 ring-white/20' : 'opacity-50 hover:opacity-100'
+                      className={`w-6 h-6 rounded-md transition-all duration-300 flex items-center justify-center ${
+                        themeKey === key ? 'scale-110 ring-2 ring-white/30' : 'opacity-50 hover:opacity-100'
                       }`}
                       style={{ backgroundColor: t.accent }}
                       title={t.name}
                     >
                       {themeKey === key && (
-                        <Icon icon="ph:check-bold" className="w-3.5 h-3.5" style={{ color: t.bg }} />
+                        <Icon icon="ph:check-bold" className="w-3 h-3" style={{ color: t.bg }} />
                       )}
                     </button>
                   ))}
@@ -468,18 +468,19 @@ export default function Navigation() {
                 ))}
 
                 {/* Mobile Theme Switcher */}
-                <div className="nav-item flex items-center gap-2 mt-8 p-2 rounded-xl glass">
+                <div className="nav-item grid grid-cols-5 gap-2 mt-8 p-3 rounded-xl glass">
                   {Object.entries(themes).map(([key, t]) => (
                     <button
                       key={key}
                       onClick={() => setTheme(key)}
-                      className={`w-12 h-12 rounded-xl transition-all duration-300 flex items-center justify-center ${
-                        themeKey === key ? 'scale-110 ring-2 ring-white/20' : 'opacity-50'
+                      className={`w-10 h-10 rounded-lg transition-all duration-300 flex items-center justify-center ${
+                        themeKey === key ? 'scale-110 ring-2 ring-white/30' : 'opacity-50'
                       }`}
                       style={{ backgroundColor: t.accent }}
+                      title={t.name}
                     >
                       {themeKey === key && (
-                        <Icon icon="ph:check-bold" className="w-5 h-5" style={{ color: t.bg }} />
+                        <Icon icon="ph:check-bold" className="w-4 h-4" style={{ color: t.bg }} />
                       )}
                     </button>
                   ))}

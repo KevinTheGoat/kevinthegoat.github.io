@@ -1,23 +1,53 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState, lazy, Suspense } from 'react'
 import { Routes, Route, useLocation, useNavigate } from 'react-router-dom'
 import { gsap } from 'gsap'
+import { ScrollToPlugin } from 'gsap/ScrollToPlugin'
 import { Icon } from '@iconify/react'
 import { useTheme } from './context/ThemeContext'
 import { useDemo } from './context/DemoContext'
 import Navigation from './components/Navigation'
+import ScrollProgress from './components/ScrollProgress'
+import BackToTop from './components/BackToTop'
+import CustomCursor from './components/CustomCursor'
+import IntroAnimation from './components/IntroAnimation'
 import Home from './pages/Home'
 import Skills from './pages/Skills'
 import Projects from './pages/Projects'
-import Demos from './pages/Demos'
 import Contact from './pages/Contact'
+import NotFound from './pages/NotFound'
+
+// Lazy load Demos page for better performance
+const Demos = lazy(() => import('./pages/Demos'))
+
+gsap.registerPlugin(ScrollToPlugin)
+
+// Check if this is the first visit
+const INTRO_STORAGE_KEY = 'kevco_intro_seen'
 
 export default function App() {
-  const { theme } = useTheme()
+  const { theme, isTransitioning: isThemeTransitioning } = useTheme()
   const { isTransitioning, transitionDemo, activeDemo, isInDemoMode } = useDemo()
   const location = useLocation()
   const navigate = useNavigate()
   const pageRef = useRef(null)
   const transitionRef = useRef(null)
+  const [isExiting, setIsExiting] = useState(false)
+  const prevPathRef = useRef(location.pathname)
+
+  // Intro animation state - only show on first visit
+  const [showIntro, setShowIntro] = useState(() => {
+    // Check if we've already shown the intro
+    if (typeof window !== 'undefined') {
+      return !localStorage.getItem(INTRO_STORAGE_KEY)
+    }
+    return false
+  })
+
+  const handleIntroComplete = () => {
+    setShowIntro(false)
+    // Mark as seen so it doesn't show again
+    localStorage.setItem(INTRO_STORAGE_KEY, 'true')
+  }
 
   // Handle redirect from 404.html (GitHub Pages SPA routing)
   useEffect(() => {
@@ -28,15 +58,28 @@ export default function App() {
     }
   }, [navigate])
 
-  // Page transition animation
+  // Page transition animation with exit
   useEffect(() => {
+    // Skip animation on initial load
+    if (prevPathRef.current === location.pathname) return
+
     const ctx = gsap.context(() => {
+      // Enter animation
       gsap.fromTo(
         pageRef.current,
-        { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          ease: 'power3.out',
+          clearProps: 'all'
+        }
       )
     })
+
+    prevPathRef.current = location.pathname
+    window.scrollTo(0, 0)
 
     return () => ctx.revert()
   }, [location.pathname])
@@ -135,19 +178,51 @@ export default function App() {
         </div>
       )}
 
+      {/* Scroll Progress Indicator */}
+      <ScrollProgress />
+
+      {/* Custom Cursor */}
+      <CustomCursor />
+
       {/* Navigation */}
       <Navigation />
 
       {/* Main content with page transitions */}
       <main ref={pageRef} className="page-transition relative z-10">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/skills" element={<Skills />} />
-          <Route path="/projects" element={<Projects />} />
-          <Route path="/demos" element={<Demos />} />
-          <Route path="/contact" element={<Contact />} />
-        </Routes>
+        <Suspense
+          fallback={
+            <div className="min-h-screen flex items-center justify-center">
+              <div className="flex gap-2">
+                {[0, 1, 2].map((i) => (
+                  <div
+                    key={i}
+                    className="w-3 h-3 rounded-full animate-pulse"
+                    style={{
+                      backgroundColor: currentTheme.accent,
+                      animationDelay: `${i * 0.15}s`,
+                    }}
+                  />
+                ))}
+              </div>
+            </div>
+          }
+        >
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/skills" element={<Skills />} />
+            <Route path="/projects" element={<Projects />} />
+            <Route path="/demos" element={<Demos />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Suspense>
       </main>
+
+      {/* Back to Top Button */}
+      <BackToTop />
+
+      {/* Intro Animation - only on first visit */}
+      {showIntro && <IntroAnimation onComplete={handleIntroComplete} />}
     </div>
   )
 }

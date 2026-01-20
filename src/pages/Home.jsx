@@ -2,8 +2,13 @@ import { useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { Icon } from '@iconify/react'
 import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useTheme } from '../context/ThemeContext'
 import SEO from '../components/SEO'
+import Footer from '../components/Footer'
+import AnimatedCounter from '../components/AnimatedCounter'
+
+gsap.registerPlugin(ScrollTrigger)
 
 const stats = [
   { value: '8+', label: 'Years Experience' },
@@ -40,6 +45,7 @@ export default function Home() {
   const titleRef = useRef(null)
   const statsRef = useRef(null)
   const servicesRef = useRef(null)
+  const shapesRef = useRef(null)
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -72,7 +78,7 @@ export default function Home() {
         { y: 0, opacity: 1, duration: 0.6, stagger: 0.1, delay: 1, ease: 'power3.out' }
       )
 
-      // Services animation
+      // Services animation with ScrollTrigger
       gsap.fromTo(
         servicesRef.current?.children,
         { y: 60, opacity: 0 },
@@ -81,20 +87,45 @@ export default function Home() {
           opacity: 1,
           duration: 0.8,
           stagger: 0.1,
-          delay: 1.2,
           ease: 'power3.out',
+          scrollTrigger: {
+            trigger: servicesRef.current,
+            start: 'top 80%',
+          }
         }
       )
+
+      // Parallax effect for hero shapes
+      if (shapesRef.current) {
+        const shapes = shapesRef.current.querySelectorAll('.parallax-shape')
+        shapes.forEach((shape, index) => {
+          gsap.to(shape, {
+            y: (index + 1) * -100,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: heroRef.current,
+              start: 'top top',
+              end: 'bottom top',
+              scrub: 1,
+            },
+          })
+        })
+      }
     }, heroRef)
 
     return () => ctx.revert()
   }, [])
 
-  // Split text into chars
+  // Split text into chars, keeping words together
   const splitText = (text) => {
-    return text.split('').map((char, i) => (
-      <span key={i} className="char inline-block" style={{ transformStyle: 'preserve-3d' }}>
-        {char === ' ' ? '\u00A0' : char}
+    return text.split(' ').map((word, wordIndex) => (
+      <span key={wordIndex} className="inline-block whitespace-nowrap">
+        {word.split('').map((char, charIndex) => (
+          <span key={charIndex} className="char inline-block" style={{ transformStyle: 'preserve-3d' }}>
+            {char}
+          </span>
+        ))}
+        {wordIndex < text.split(' ').length - 1 && <span className="char inline-block">&nbsp;</span>}
       </span>
     ))
   }
@@ -128,10 +159,15 @@ export default function Home() {
               {/* Title */}
               <h1
                 ref={titleRef}
-                className="font-display font-bold text-display-xl mb-6 perspective-1000"
+                className="font-display font-bold text-display-lg mb-6 perspective-1000"
               >
-                <span className="block">{splitText('Digital')}</span>
-                <span className="block gradient-text">{splitText('Craftsman')}</span>
+                <span className="block">{splitText('Digital Design')}</span>
+                <span className="block" style={{
+                  background: `linear-gradient(135deg, var(--accent), var(--accent-alt))`,
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text',
+                }}>{splitText('& Solutions')}</span>
               </h1>
 
               {/* Subtitle */}
@@ -151,7 +187,10 @@ export default function Home() {
                 <Link
                   to="/projects"
                   className="group inline-flex items-center gap-3 px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 hover:scale-105"
-                  style={{ backgroundColor: theme.accent, color: theme.bg }}
+                  style={{
+                    background: `linear-gradient(135deg, ${theme.accent}, ${theme.accentAlt})`,
+                    color: theme.bg
+                  }}
                 >
                   View Work
                   <Icon
@@ -161,34 +200,38 @@ export default function Home() {
                 </Link>
                 <Link
                   to="/contact"
-                  className="inline-flex items-center gap-3 px-8 py-4 rounded-xl font-semibold text-lg border-2 transition-all duration-300 hover:scale-105"
-                  style={{ borderColor: theme.border, color: theme.text }}
+                  className="inline-flex items-center gap-3 px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 hover:scale-105 relative overflow-hidden"
+                  style={{
+                    background: `linear-gradient(${theme.bg}, ${theme.bg}) padding-box, linear-gradient(135deg, ${theme.accent}60, ${theme.accentAlt}60) border-box`,
+                    border: '2px solid transparent',
+                    color: theme.text
+                  }}
                 >
-                  <Icon icon="ph:envelope-bold" className="w-5 h-5" />
+                  <Icon icon="ph:envelope-bold" className="w-5 h-5" style={{ color: theme.accent }} />
                   Get in Touch
                 </Link>
               </div>
             </div>
 
-            {/* Right: Visual element */}
-            <div className="hero-fade hidden lg:flex justify-center items-center">
+            {/* Right: Visual element with parallax */}
+            <div ref={shapesRef} className="hero-fade hidden lg:flex justify-center items-center">
               <div className="relative">
-                {/* Animated geometric shape */}
+                {/* Animated geometric shape with parallax */}
                 <div
-                  className="w-80 h-80 rounded-3xl rotate-12 animate-float"
+                  className="parallax-shape w-80 h-80 rounded-3xl rotate-12 animate-float"
                   style={{
                     background: `linear-gradient(135deg, ${theme.accent}40, ${theme.accentAlt}40)`,
                     backdropFilter: 'blur(40px)',
                   }}
                 />
                 <div
-                  className="absolute inset-8 rounded-2xl -rotate-6 animate-float"
+                  className="parallax-shape absolute inset-8 rounded-2xl -rotate-6 animate-float"
                   style={{
                     background: `linear-gradient(225deg, ${theme.accent}60, ${theme.accentAlt}60)`,
                     animationDelay: '-2s',
                   }}
                 />
-                <div className="absolute inset-0 flex items-center justify-center">
+                <div className="parallax-shape absolute inset-0 flex items-center justify-center">
                   <Icon
                     icon="ph:code-bold"
                     className="w-32 h-32"
@@ -199,20 +242,33 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Stats */}
+          {/* Stats with Animated Counters */}
           <div
             ref={statsRef}
-            className="grid grid-cols-3 gap-8 mt-20 pt-12 border-t"
+            className="grid grid-cols-3 gap-8 mt-20 pt-12 border-t relative"
             style={{ borderColor: theme.border }}
           >
-            {stats.map((stat) => (
+            {/* Gradient border overlay */}
+            <div
+              className="absolute top-0 left-0 right-0 h-[2px]"
+              style={{
+                background: `linear-gradient(90deg, ${theme.accent}, ${theme.accentAlt}, ${theme.accent})`,
+                opacity: 0.6
+              }}
+            />
+            {stats.map((stat, index) => (
               <div key={stat.label} className="text-center lg:text-left">
-                <div
-                  className="font-display font-bold text-4xl lg:text-5xl mb-2"
-                  style={{ color: theme.accent }}
-                >
-                  {stat.value}
-                </div>
+                <AnimatedCounter
+                  value={stat.value}
+                  duration={2}
+                  className="font-display font-bold text-4xl lg:text-5xl mb-2 stat-value"
+                  style={{
+                    background: `linear-gradient(135deg, ${theme.accent}, ${theme.accentAlt})`,
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    backgroundClip: 'text',
+                  }}
+                />
                 <div style={{ color: theme.muted }}>{stat.label}</div>
               </div>
             ))}
@@ -229,7 +285,7 @@ export default function Home() {
           <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between mb-16">
             <div>
               <h2 className="font-display font-bold text-display-md mb-4">
-                What I <span style={{ color: theme.accent }}>Build</span>
+                What I <span className="gradient-text">Build</span>
               </h2>
               <p className="text-lg max-w-xl" style={{ color: theme.muted }}>
                 Full-stack solutions tailored to your needs, from concept to deployment.
@@ -238,10 +294,14 @@ export default function Home() {
             <Link
               to="/skills"
               className="mt-6 lg:mt-0 inline-flex items-center gap-2 link-underline font-medium"
-              style={{ color: theme.accent }}
+              style={{
+                background: `linear-gradient(135deg, ${theme.accent}, ${theme.accentAlt})`,
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+              }}
             >
               View all skills
-              <Icon icon="ph:arrow-right-bold" className="w-4 h-4" />
+              <Icon icon="ph:arrow-right-bold" className="w-4 h-4" style={{ color: theme.accent }} />
             </Link>
           </div>
 
@@ -256,13 +316,19 @@ export default function Home() {
                 }}
               >
                 <div
-                  className="w-14 h-14 rounded-xl flex items-center justify-center mb-6 transition-transform duration-300 group-hover:scale-110"
-                  style={{ backgroundColor: `${theme.accent}20` }}
+                  className="w-14 h-14 rounded-xl flex items-center justify-center mb-6 transition-all duration-300 group-hover:scale-110"
+                  style={{
+                    background: `linear-gradient(135deg, ${theme.accent}25, ${theme.accentAlt}25)`,
+                  }}
                 >
                   <Icon
                     icon={service.icon}
                     className="w-7 h-7"
-                    style={{ color: theme.accent }}
+                    style={{
+                      background: `linear-gradient(135deg, ${theme.accent}, ${theme.accentAlt})`,
+                      WebkitBackgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent',
+                    }}
                   />
                 </div>
                 <h3 className="font-display font-semibold text-xl mb-3">
@@ -288,7 +354,10 @@ export default function Home() {
           <Link
             to="/contact"
             className="inline-flex items-center gap-3 px-10 py-5 rounded-xl font-semibold text-xl transition-all duration-300 hover:scale-105"
-            style={{ backgroundColor: theme.accent, color: theme.bg }}
+            style={{
+              background: `linear-gradient(135deg, ${theme.accent}, ${theme.accentAlt})`,
+              color: theme.bg
+            }}
           >
             Start a Project
             <Icon icon="ph:rocket-launch-bold" className="w-6 h-6" />
@@ -297,34 +366,7 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer
-        className="py-8 px-6 border-t"
-        style={{ borderColor: theme.border }}
-      >
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-          <p style={{ color: theme.muted }}>
-            &copy; {new Date().getFullYear()} KevCo. All rights reserved.
-          </p>
-          <div className="flex items-center gap-6">
-            <a
-              href="https://github.com/KevinTheGoat"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="transition-colors duration-300 hover:opacity-80"
-              style={{ color: theme.muted }}
-            >
-              <Icon icon="mdi:github" className="w-6 h-6" />
-            </a>
-            <a
-              href="mailto:kevinmoreau@kevco.co"
-              className="transition-colors duration-300 hover:opacity-80"
-              style={{ color: theme.muted }}
-            >
-              <Icon icon="ph:envelope-bold" className="w-6 h-6" />
-            </a>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
     </>
   )

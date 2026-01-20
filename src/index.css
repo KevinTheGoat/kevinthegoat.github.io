@@ -60,6 +60,14 @@
     background-clip: text;
   }
 
+  /* Stat values with gradient - needs special handling */
+  .stat-value {
+    display: inline-block;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+  }
+
   /* Magnetic button base */
   .magnetic-btn {
     position: relative;
@@ -328,4 +336,38 @@
   --text: #F5F5DC;
   --muted: #B8A480;
   --border: #3d3525;
+  --theme-transition: 0s;
+}
+
+/* Smooth theme transitions */
+body,
+body * {
+  transition:
+    background-color var(--theme-transition) ease,
+    border-color var(--theme-transition) ease,
+    color var(--theme-transition) ease;
+}
+
+/* Fix gradient text rendering - exclude from transitions that break it */
+.gradient-text,
+.stat-value {
+  transition: none !important;
+}
+
+/* Disable cursor on touch devices */
+@media (hover: none) {
+  * {
+    cursor: auto !important;
+  }
+}
+
+/* Hide default cursor on desktop when custom cursor is active */
+@media (hover: hover) {
+  body {
+    cursor: none;
+  }
+
+  a, button, input, textarea, select, [role="button"] {
+    cursor: none;
+  }
 }

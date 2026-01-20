@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from 'react'
+import { createContext, useContext, useState, useEffect, useCallback } from 'react'
 
 const ThemeContext = createContext()
 
@@ -55,10 +55,94 @@ export const themes = {
     muted: '#a8a29e',
     border: '#44403c',
   },
+  ocean: {
+    id: 'ocean',
+    name: 'Ocean',
+    bg: '#0a1628',
+    surface: '#0f1d32',
+    elevated: '#162a46',
+    accent: '#38bdf8',
+    accentAlt: '#06b6d4',
+    accentRgb: '56, 189, 248',
+    text: '#e0f2fe',
+    muted: '#7dd3fc',
+    border: '#1e3a5f',
+  },
+  rose: {
+    id: 'rose',
+    name: 'Rose',
+    bg: '#1a0a10',
+    surface: '#2a1018',
+    elevated: '#3d1a25',
+    accent: '#f472b6',
+    accentAlt: '#a855f7',
+    accentRgb: '244, 114, 182',
+    text: '#fdf2f8',
+    muted: '#f9a8d4',
+    border: '#4a2030',
+  },
+  forest: {
+    id: 'forest',
+    name: 'Forest',
+    bg: '#0a1410',
+    surface: '#0f1f18',
+    elevated: '#162e22',
+    accent: '#4ade80',
+    accentAlt: '#facc15',
+    accentRgb: '74, 222, 128',
+    text: '#ecfdf5',
+    muted: '#86efac',
+    border: '#1a3d2a',
+  },
+  lavender: {
+    id: 'lavender',
+    name: 'Lavender',
+    bg: '#0f0a1a',
+    surface: '#1a1028',
+    elevated: '#261a3d',
+    accent: '#a78bfa',
+    accentAlt: '#f472b6',
+    accentRgb: '167, 139, 250',
+    text: '#f5f3ff',
+    muted: '#c4b5fd',
+    border: '#3b2d5c',
+  },
+  sunset: {
+    id: 'sunset',
+    name: 'Sunset',
+    bg: '#1a0a0a',
+    surface: '#2a1010',
+    elevated: '#3d1818',
+    accent: '#fb923c',
+    accentAlt: '#f43f5e',
+    accentRgb: '251, 146, 60',
+    text: '#fff7ed',
+    muted: '#fdba74',
+    border: '#4a2020',
+  },
+  midnight: {
+    id: 'midnight',
+    name: 'Midnight',
+    bg: '#020617',
+    surface: '#0f172a',
+    elevated: '#1e293b',
+    accent: '#818cf8',
+    accentAlt: '#ec4899',
+    accentRgb: '129, 140, 248',
+    text: '#e2e8f0',
+    muted: '#94a3b8',
+    border: '#334155',
+  },
 }
 
-function applyTheme(theme) {
+function applyTheme(theme, animate = false) {
   const root = document.documentElement
+
+  if (animate) {
+    // Add transition class for smooth color changes
+    root.style.setProperty('--theme-transition', '0.5s')
+  }
+
   root.style.setProperty('--bg', theme.bg)
   root.style.setProperty('--surface', theme.surface)
   root.style.setProperty('--elevated', theme.elevated)
@@ -68,39 +152,52 @@ function applyTheme(theme) {
   root.style.setProperty('--text', theme.text)
   root.style.setProperty('--muted', theme.muted)
   root.style.setProperty('--border', theme.border)
+
+  if (animate) {
+    // Remove transition after animation completes
+    setTimeout(() => {
+      root.style.setProperty('--theme-transition', '0s')
+    }, 500)
+  }
 }
 
 export function ThemeProvider({ children }) {
   const [themeKey, setThemeKey] = useState('dark')
+  const [isTransitioning, setIsTransitioning] = useState(false)
   const theme = themes[themeKey]
 
   useEffect(() => {
     const saved = localStorage.getItem('kevco-theme')
     if (saved && themes[saved]) {
       setThemeKey(saved)
+      applyTheme(themes[saved], false)
+    } else {
+      applyTheme(theme, false)
     }
   }, [])
 
-  useEffect(() => {
-    localStorage.setItem('kevco-theme', themeKey)
-    applyTheme(theme)
-  }, [themeKey, theme])
-
-  const setTheme = (key) => {
-    if (themes[key]) {
+  const setTheme = useCallback((key) => {
+    if (themes[key] && key !== themeKey) {
+      setIsTransitioning(true)
+      localStorage.setItem('kevco-theme', key)
+      applyTheme(themes[key], true)
       setThemeKey(key)
-    }
-  }
 
-  const cycleTheme = () => {
+      setTimeout(() => {
+        setIsTransitioning(false)
+      }, 500)
+    }
+  }, [themeKey])
+
+  const cycleTheme = useCallback(() => {
     const keys = Object.keys(themes)
     const currentIndex = keys.indexOf(themeKey)
     const nextIndex = (currentIndex + 1) % keys.length
-    setThemeKey(keys[nextIndex])
-  }
+    setTheme(keys[nextIndex])
+  }, [themeKey, setTheme])
 
   return (
-    <ThemeContext.Provider value={{ theme, themeKey, setTheme, cycleTheme, themes }}>
+    <ThemeContext.Provider value={{ theme, themeKey, setTheme, cycleTheme, themes, isTransitioning }}>
       {children}
     </ThemeContext.Provider>
   )

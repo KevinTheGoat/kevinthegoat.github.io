@@ -4,6 +4,7 @@ import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useTheme } from '../context/ThemeContext'
 import SEO from '../components/SEO'
+import Footer from '../components/Footer'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -157,7 +158,7 @@ export default function Skills() {
             </span>
           </div>
           <h1 className="font-display font-bold text-display-lg mb-6">
-            Skills & <span style={{ color: theme.accent }}>Technologies</span>
+            Skills & <span className="gradient-text">Technologies</span>
           </h1>
           <p className="text-xl" style={{ color: theme.muted }}>
             A comprehensive toolkit for building modern digital products across all platforms.
@@ -181,12 +182,16 @@ export default function Skills() {
               <div className="flex items-start gap-4 mb-6">
                 <div
                   className="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0"
-                  style={{ backgroundColor: `${theme.accent}20` }}
+                  style={{ background: `linear-gradient(135deg, ${theme.accent}25, ${theme.accentAlt}25)` }}
                 >
                   <Icon
                     icon={category.icon}
                     className="w-7 h-7"
-                    style={{ color: theme.accent }}
+                    style={{
+                      background: `linear-gradient(135deg, ${theme.accent}, ${theme.accentAlt})`,
+                      WebkitBackgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent',
+                    }}
                   />
                 </div>
                 <div>
@@ -251,7 +256,10 @@ export default function Skills() {
           <a
             href="/contact"
             className="inline-flex items-center gap-3 px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 hover:scale-105"
-            style={{ backgroundColor: theme.accent, color: theme.bg }}
+            style={{
+              background: `linear-gradient(135deg, ${theme.accent}, ${theme.accentAlt})`,
+              color: theme.bg
+            }}
           >
             Get in Touch
             <Icon icon="ph:arrow-right-bold" className="w-5 h-5" />
@@ -259,6 +267,9 @@ export default function Skills() {
         </div>
       </div>
     </div>
+
+    {/* Footer */}
+    <Footer />
     </>
   )
 }

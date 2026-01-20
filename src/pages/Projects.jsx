@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { Icon } from '@iconify/react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useTheme } from '../context/ThemeContext'
 import SEO from '../components/SEO'
+import Footer from '../components/Footer'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -105,7 +107,7 @@ export default function Projects() {
             </span>
           </div>
           <h1 className="font-display font-bold text-display-lg mb-6">
-            Selected <span style={{ color: theme.accent }}>Projects</span>
+            Selected <span className="gradient-text">Projects</span>
           </h1>
           <p className="text-xl" style={{ color: theme.muted }}>
             A showcase of my best work across web applications and platforms.
@@ -226,7 +228,7 @@ export default function Projects() {
                       key={tag}
                       className="px-3 py-1 text-sm rounded-full font-medium"
                       style={{
-                        backgroundColor: `${theme.accent}20`,
+                        background: `linear-gradient(135deg, ${theme.accent}20, ${theme.accentAlt}20)`,
                         color: theme.accent,
                       }}
                     >
@@ -242,25 +244,25 @@ export default function Projects() {
         {/* More Projects CTA */}
         <div className="mt-16 text-center">
           <p className="text-lg mb-6" style={{ color: theme.muted }}>
-            Want to see more of my work?
+            Interested in working together?
           </p>
-          <a
-            href="https://github.com/KevinTheGoat"
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            to="/contact"
             className="inline-flex items-center gap-3 px-8 py-4 rounded-xl font-semibold transition-all duration-300 hover:scale-105"
             style={{
-              backgroundColor: theme.surface,
-              color: theme.text,
-              border: `1px solid ${theme.border}`,
+              background: `linear-gradient(135deg, ${theme.accent}, ${theme.accentAlt})`,
+              color: theme.bg,
             }}
           >
-            <Icon icon="mdi:github" className="w-6 h-6" />
-            View GitHub Profile
-          </a>
+            <Icon icon="ph:envelope-bold" className="w-6 h-6" />
+            Get in Touch
+          </Link>
         </div>
       </div>
     </div>
+
+    {/* Footer */}
+    <Footer />
     </>
   )
 }

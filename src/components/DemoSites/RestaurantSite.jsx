@@ -4,10 +4,10 @@ import { gsap } from 'gsap'
 import DemoFooter from '../DemoFooter'
 
 const menuItems = [
-  { name: 'Truffle Risotto', description: 'Arborio rice, black truffle, parmesan', price: 38, category: 'Mains', image: '/images/restaurant/truffle-risotto.png' },
-  { name: 'Wagyu Carpaccio', description: 'A5 wagyu, capers, aged balsamic', price: 45, category: 'Starters', image: '/images/restaurant/beef-carpaccio.png' },
-  { name: 'Lobster Thermidor', description: 'Maine lobster, cognac cream, gruyère', price: 68, category: 'Mains', image: '/images/restaurant/lobster-thermidor.png' },
-  { name: 'Chocolate Soufflé', description: 'Valrhona chocolate, crème anglaise', price: 18, category: 'Desserts', image: '/images/restaurant/chocolate-lava-cake.png' },
+  { name: 'Truffle Risotto', description: 'Arborio rice, black truffle, parmesan', price: 38, category: 'Mains', image: '/images/restaurant/truffle-risotto.jpg' },
+  { name: 'Wagyu Carpaccio', description: 'A5 wagyu, capers, aged balsamic', price: 45, category: 'Starters', image: '/images/restaurant/beef-carpaccio.jpg' },
+  { name: 'Lobster Thermidor', description: 'Maine lobster, cognac cream, gruyère', price: 68, category: 'Mains', image: '/images/restaurant/lobster-thermidor.jpg' },
+  { name: 'Chocolate Soufflé', description: 'Valrhona chocolate, crème anglaise', price: 18, category: 'Desserts', image: '/images/restaurant/chocolate-lava-cake.jpg' },
 ]
 
 export default function RestaurantSite({ theme }) {

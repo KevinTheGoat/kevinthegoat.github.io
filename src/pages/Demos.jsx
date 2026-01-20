@@ -7,6 +7,7 @@ import { EcommerceSite, SaasSite, RestaurantSite, FitnessSite, AgencySite } from
 import MobileAppMockup from '../components/Mockups/MobileAppMockup'
 import DesktopAppMockup from '../components/Mockups/DesktopAppMockup'
 import SEO from '../components/SEO'
+import Footer from '../components/Footer'
 
 // Map demo IDs to components
 const demoComponents = {
@@ -78,7 +79,7 @@ export default function Demos() {
             </span>
           </div>
           <h1 className="font-display font-bold text-display-lg mb-6">
-            Live <span style={{ color: theme.accent }}>Demos</span>
+            Live <span className="gradient-text">Demos</span>
           </h1>
           <p className="text-xl" style={{ color: theme.muted }}>
             Explore fully interactive demo sites, mobile app mockups, and desktop applications.
@@ -230,9 +231,20 @@ export default function Demos() {
               <div
                 key={tech.label}
                 className="flex items-center gap-3 px-5 py-3 rounded-xl transition-all duration-300 hover:scale-105"
-                style={{ backgroundColor: theme.elevated, border: `1px solid ${theme.border}` }}
+                style={{
+                  background: `linear-gradient(135deg, ${theme.elevated}, ${theme.surface})`,
+                  border: `1px solid ${theme.border}`
+                }}
               >
-                <Icon icon={tech.icon} className="w-6 h-6" style={{ color: theme.accent }} />
+                <Icon
+                  icon={tech.icon}
+                  className="w-6 h-6"
+                  style={{
+                    background: `linear-gradient(135deg, ${theme.accent}, ${theme.accentAlt})`,
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                  }}
+                />
                 <span className="font-medium">{tech.label}</span>
               </div>
             ))}
@@ -240,6 +252,9 @@ export default function Demos() {
         </div>
       </div>
     </div>
+
+    {/* Footer */}
+    <Footer />
     </>
   )
 }

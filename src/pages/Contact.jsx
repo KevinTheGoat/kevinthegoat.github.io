@@ -3,6 +3,7 @@ import { Icon } from '@iconify/react'
 import { gsap } from 'gsap'
 import { useTheme } from '../context/ThemeContext'
 import SEO from '../components/SEO'
+import Footer from '../components/Footer'
 
 const contactMethods = [
   {
@@ -132,7 +133,7 @@ export default function Contact() {
             </span>
           </div>
           <h1 className="font-display font-bold text-display-lg mb-6">
-            Get in <span style={{ color: theme.accent }}>Touch</span>
+            Get in <span className="gradient-text">Touch</span>
           </h1>
           <p className="text-xl mb-6" style={{ color: theme.muted }}>
             Have a project in mind or just want to chat? I'd love to hear from you.
@@ -150,9 +151,17 @@ export default function Contact() {
           >
             <div
               className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
-              style={{ backgroundColor: `${theme.accent}20` }}
+              style={{ background: `linear-gradient(135deg, ${theme.accent}25, ${theme.accentAlt}25)` }}
             >
-              <Icon icon="ph:envelope-bold" className="w-6 h-6" style={{ color: theme.accent }} />
+              <Icon
+                icon="ph:envelope-bold"
+                className="w-6 h-6"
+                style={{
+                  background: `linear-gradient(135deg, ${theme.accent}, ${theme.accentAlt})`,
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                }}
+              />
             </div>
             <div>
               <div className="text-sm mb-1" style={{ color: theme.muted }}>Email me at</div>
@@ -295,7 +304,7 @@ export default function Contact() {
                   type="submit"
                   disabled={isSubmitting}
                   className="w-full py-4 rounded-xl font-semibold text-lg transition-all duration-300 hover:scale-[1.02] disabled:opacity-50 flex items-center justify-center gap-3"
-                  style={{ backgroundColor: theme.accent, color: theme.bg }}
+                  style={{ background: `linear-gradient(135deg, ${theme.accent}, ${theme.accentAlt})`, color: theme.bg }}
                 >
                   {isSubmitting ? (
                     <>
@@ -317,7 +326,7 @@ export default function Contact() {
           {/* FAQ Section */}
           <div className="faq-section">
             <h2 className="font-display font-bold text-2xl mb-6">
-              Frequently Asked <span style={{ color: theme.accent }}>Questions</span>
+              Frequently Asked <span className="gradient-text">Questions</span>
             </h2>
 
             <div className="space-y-4">
@@ -374,6 +383,9 @@ export default function Contact() {
         </div>
       </div>
     </div>
+
+    {/* Footer */}
+    <Footer />
     </>
   )
 }

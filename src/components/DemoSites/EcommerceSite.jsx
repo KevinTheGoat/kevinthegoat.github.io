@@ -4,10 +4,10 @@ import { gsap } from 'gsap'
 import DemoFooter from '../DemoFooter'
 
 const products = [
-  { id: 1, name: 'Royal Gold Chronograph', price: 12499, category: 'Watches', image: '/images/luxcart/gold-watch-set.png' },
-  { id: 2, name: 'Heritage Leather Kelly', price: 8999, category: 'Bags', image: '/images/luxcart/leather-handbag.png' },
-  { id: 3, name: 'Solitaire Diamond Ring', price: 15299, category: 'Jewelry', image: '/images/luxcart/diamond-ring.png' },
-  { id: 4, name: 'Emerald Diamond Bracelet', price: 24999, category: 'Jewelry', image: '/images/luxcart/emerald-bracelet.png' },
+  { id: 1, name: 'Royal Gold Chronograph', price: 12499, category: 'Watches', image: '/images/luxcart/gold-watch-set.jpg' },
+  { id: 2, name: 'Heritage Leather Kelly', price: 8999, category: 'Bags', image: '/images/luxcart/leather-handbag.jpg' },
+  { id: 3, name: 'Solitaire Diamond Ring', price: 15299, category: 'Jewelry', image: '/images/luxcart/diamond-ring.jpg' },
+  { id: 4, name: 'Emerald Diamond Bracelet', price: 24999, category: 'Jewelry', image: '/images/luxcart/emerald-bracelet.jpg' },
 ]
 
 export default function EcommerceSite({ theme }) {
