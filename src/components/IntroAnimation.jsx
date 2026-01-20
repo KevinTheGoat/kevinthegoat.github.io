@@ -1,472 +1,203 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { gsap } from 'gsap'
 
-const GOLD_COLORS = [
-  { r: 197, g: 160, b: 89 },   // #C5A059
-  { r: 219, g: 193, b: 132 },  // #DBC184
-  { r: 184, g: 147, b: 74 },   // #B8934A
-  { r: 229, g: 212, b: 161 },  // #E5D4A1
-  { r: 168, g: 137, b: 61 },   // #A8893D
-]
-const PARTICLE_COUNT = 180
-const EMBER_COUNT = 50
-
-// Helper to create rgba string
-const rgba = (color, alpha) => `rgba(${color.r}, ${color.g}, ${color.b}, ${alpha})`
-const rgb = (color) => `rgb(${color.r}, ${color.g}, ${color.b})`
+const LOGO_TARGET_SELECTOR = '[data-intro-logo-target]'
 
 export default function IntroAnimation({ onComplete }) {
   const containerRef = useRef(null)
-  const canvasRef = useRef(null)
-  const logoRef = useRef(null)
-  const textRef = useRef(null)
-  const particlesRef = useRef([])
-  const embersRef = useRef([])
-  const animationRef = useRef(null)
-  const [phase, setPhase] = useState('particles') // particles -> reveal -> transition
+  const logoSvgRef = useRef(null)
+  const timelineRef = useRef(null)
 
   useEffect(() => {
-    const canvas = canvasRef.current
-    const ctx = canvas.getContext('2d')
-    let width = window.innerWidth
-    let height = window.innerHeight
+    const container = containerRef.current
+    const logoSvg = logoSvgRef.current
 
-    // Set canvas size with device pixel ratio for crisp rendering
-    const dpr = window.devicePixelRatio || 1
-    canvas.width = width * dpr
-    canvas.height = height * dpr
-    canvas.style.width = width + 'px'
-    canvas.style.height = height + 'px'
-    ctx.scale(dpr, dpr)
+    if (!container || !logoSvg) return
 
-    const centerX = width / 2
-    const centerY = height / 2
-    const scale = Math.min(width, height) * 0.003
+    // Get the actual navbar logo element
+    const navbarLogo = document.querySelector(LOGO_TARGET_SELECTOR)
+    const navbarLogoImg = navbarLogo?.querySelector('img')
 
-    // Create K shape target points
-    const kShapePoints = generateKShapePoints(centerX, centerY, scale)
+    // Get all the paths for the logo
+    const kIcon = logoSvg.querySelector('#k-icon-main')
+    const letterK = logoSvg.querySelector('#letter-K')
+    const letterE = logoSvg.querySelector('#letter-e')
+    const letterV = logoSvg.querySelector('#letter-v')
+    const letterC = logoSvg.querySelector('#letter-C')
+    const letterO = logoSvg.querySelector('#letter-o')
 
-    // Initialize particles scattered around the screen
-    particlesRef.current = Array.from({ length: PARTICLE_COUNT }, (_, i) => {
-      const targetPoint = kShapePoints[i % kShapePoints.length]
-      const angle = Math.random() * Math.PI * 2
-      const distance = 200 + Math.random() * Math.max(width, height) * 0.6
+    const allPaths = [kIcon, letterK, letterE, letterV, letterC, letterO]
 
-      return {
-        x: centerX + Math.cos(angle) * distance,
-        y: centerY + Math.sin(angle) * distance,
-        targetX: targetPoint.x + (Math.random() - 0.5) * 15,
-        targetY: targetPoint.y + (Math.random() - 0.5) * 15,
-        size: Math.random() * 3 + 2,
-        color: GOLD_COLORS[Math.floor(Math.random() * GOLD_COLORS.length)],
-        velocity: { x: 0, y: 0 },
-        delay: Math.random() * 0.3,
-        glow: Math.random() * 0.5 + 0.5,
-        trail: [],
-        angle: angle,
-        orbitSpeed: (Math.random() - 0.5) * 0.02,
+    // Setup paths for outline animation
+    allPaths.forEach(path => {
+      if (path) {
+        const length = path.getTotalLength()
+        path.style.strokeDasharray = length
+        path.style.strokeDashoffset = length
+        path.style.stroke = '#C5A059'
+        path.style.strokeWidth = '2'
+        path.style.fill = 'transparent'
       }
     })
 
-    // Initialize embers (floating sparks)
-    embersRef.current = Array.from({ length: EMBER_COUNT }, () => ({
-      x: Math.random() * width,
-      y: height + Math.random() * 100,
-      size: Math.random() * 2 + 1,
-      speed: Math.random() * 1.5 + 0.5,
-      wobble: Math.random() * Math.PI * 2,
-      wobbleSpeed: Math.random() * 0.03 + 0.01,
-      opacity: Math.random() * 0.6 + 0.2,
-      color: GOLD_COLORS[Math.floor(Math.random() * GOLD_COLORS.length)],
-    }))
-
-    let startTime = Date.now()
-    const totalDuration = 3400 // Animation duration before logo reveal
-
-    const animate = () => {
-      const elapsed = Date.now() - startTime
-      const progress = Math.min(elapsed / totalDuration, 1)
-
-      // Clear with subtle motion blur effect
-      ctx.fillStyle = 'rgba(10, 10, 10, 0.15)'
-      ctx.fillRect(0, 0, width, height)
-
-      // Full clear every few frames to prevent buildup
-      if (Math.random() < 0.05) {
-        ctx.fillStyle = '#0a0a0a'
-        ctx.fillRect(0, 0, width, height)
-      }
-
-      // Draw embers (background)
-      drawEmbers(ctx, width, height, progress)
-
-      if (progress < 0.35) {
-        // Phase 1: Swirling particles
-        drawSwirlPhase(ctx, progress / 0.35, centerX, centerY)
-      } else if (progress < 0.75) {
-        // Phase 2: Coalesce into K shape
-        drawCoalescePhase(ctx, (progress - 0.35) / 0.4, centerX, centerY)
-      } else if (progress < 1) {
-        // Phase 3: Solidify with glow pulse
-        drawSolidifyPhase(ctx, (progress - 0.75) / 0.25, centerX, centerY)
-      } else {
-        // Animation complete, show logo
-        setPhase('reveal')
-        return
-      }
-
-      animationRef.current = requestAnimationFrame(animate)
+    // Hide navbar logo initially
+    if (navbarLogoImg) {
+      gsap.set(navbarLogoImg, { opacity: 0 })
     }
 
-    const drawSwirlPhase = (ctx, progress, cx, cy) => {
-      particlesRef.current.forEach((p) => {
-        // Swirling orbit motion
-        p.angle += p.orbitSpeed * (1 + progress)
-        const dist = Math.hypot(p.x - cx, p.y - cy)
-        const targetDist = dist * (1 - progress * 0.3)
-
-        p.x = cx + Math.cos(p.angle) * targetDist + (Math.random() - 0.5) * 3
-        p.y = cy + Math.sin(p.angle) * targetDist + (Math.random() - 0.5) * 3
-
-        // Store trail
-        p.trail.push({ x: p.x, y: p.y })
-        if (p.trail.length > 6) p.trail.shift()
-
-        // Draw trail
-        p.trail.forEach((t, i) => {
-          const alpha = (i / p.trail.length) * 0.4
-          ctx.beginPath()
-          ctx.arc(t.x, t.y, p.size * 0.4, 0, Math.PI * 2)
-          ctx.fillStyle = rgba(p.color, alpha)
-          ctx.fill()
-        })
-
-        // Draw particle with glow
-        drawGlowingParticle(ctx, p.x, p.y, p.size, p.color, p.glow)
-      })
-    }
-
-    const drawCoalescePhase = (ctx, progress, cx, cy) => {
-      const easeProgress = easeOutQuart(progress)
-
-      particlesRef.current.forEach((p) => {
-        // Move towards target position
-        const dx = p.targetX - p.x
-        const dy = p.targetY - p.y
-
-        p.x += dx * easeProgress * 0.12
-        p.y += dy * easeProgress * 0.12
-
-        // Reduce trail
-        p.trail.push({ x: p.x, y: p.y })
-        if (p.trail.length > 4) p.trail.shift()
-
-        // Draw fading trail
-        p.trail.forEach((t, i) => {
-          const alpha = (i / p.trail.length) * 0.2 * (1 - progress * 0.7)
-          ctx.beginPath()
-          ctx.arc(t.x, t.y, p.size * 0.3, 0, Math.PI * 2)
-          ctx.fillStyle = rgba(p.color, alpha)
-          ctx.fill()
-        })
-
-        // Glow decreases as particles solidify
-        const glowIntensity = p.glow * (1 - progress * 0.4)
-        drawGlowingParticle(ctx, p.x, p.y, p.size, p.color, glowIntensity)
-      })
-
-      // Molten drip effect
-      if (progress > 0.6) {
-        const dripProgress = (progress - 0.6) / 0.4
-        for (let i = 0; i < 5; i++) {
-          const dripX = cx + (Math.random() - 0.5) * 80
-          const dripY = cy + 60 + dripProgress * 40 + Math.random() * 30
-          const dripSize = (1 - dripProgress) * 2.5
-
-          if (dripSize > 0.5) {
-            ctx.beginPath()
-            ctx.arc(dripX, dripY, dripSize, 0, Math.PI * 2)
-            ctx.fillStyle = rgba(GOLD_COLORS[0], 0.4 * (1 - dripProgress))
-            ctx.fill()
-          }
-        }
+    const getNavbarPosition = () => {
+      if (!navbarLogo) {
+        return { x: 120, y: 50 }
+      }
+      const rect = navbarLogo.getBoundingClientRect()
+      return {
+        x: rect.left + rect.width / 2,
+        y: rect.top + rect.height / 2,
       }
     }
 
-    const drawSolidifyPhase = (ctx, progress, cx, cy) => {
-      // Pulsing glow effect
-      const pulse = Math.sin(progress * Math.PI * 6) * 0.2 + 0.8
+    const tl = gsap.timeline({
+      onComplete: () => onComplete?.()
+    })
+    timelineRef.current = tl
 
-      particlesRef.current.forEach((p) => {
-        // Final position lock
-        const lockProgress = Math.min(progress * 2, 1)
-        p.x = p.x + (p.targetX - p.x) * lockProgress * 0.3
-        p.y = p.y + (p.targetY - p.y) * lockProgress * 0.3
+    // Show logo
+    tl.set(logoSvg, { opacity: 1 })
 
-        drawGlowingParticle(ctx, p.x, p.y, p.size * pulse, p.color, p.glow * pulse)
-      })
-
-      // Bright flash near the end
-      if (progress > 0.7) {
-        const flashAlpha = (progress - 0.7) / 0.3 * 0.4
-        ctx.fillStyle = `rgba(219, 193, 132, ${flashAlpha})`
-        ctx.fillRect(0, 0, width, height)
+    // Phase 1: Draw outlines simultaneously
+    allPaths.forEach((path, i) => {
+      if (path) {
+        tl.to(path, {
+          strokeDashoffset: 0,
+          duration: 1.2,
+          ease: 'power2.inOut',
+        }, 0.1 + (i * 0.1)) // Slight stagger
       }
+    })
+
+    // Phase 2: Fill in the SVG after outline completes
+    const fillStartTime = 1.5
+    allPaths.forEach((path, i) => {
+      if (path) {
+        const isGold = path.id === 'k-icon-main' || path.id === 'letter-K' || path.id === 'letter-C'
+        tl.to(path, {
+          fill: isGold ? '#C5A059' : '#1a1a1a',
+          stroke: 'transparent',
+          duration: 0.4,
+          ease: 'power2.out',
+        }, fillStartTime + (i * 0.05))
+      }
+    })
+
+    // Phase 3: Move to navbar position
+    const moveStartTime = fillStartTime + 0.6
+    const navPos = getNavbarPosition()
+    const centerX = window.innerWidth / 2
+    const centerY = window.innerHeight / 2
+
+    // Calculate scale and position for navbar
+    const targetScale = 0.08 // Scale down significantly
+    const targetX = navPos.x - centerX
+    const targetY = navPos.y - centerY
+
+    tl.to(logoSvg, {
+      x: targetX,
+      y: targetY,
+      scale: targetScale,
+      duration: 0.8,
+      ease: 'power3.inOut',
+    }, moveStartTime)
+
+    // Fade out the animated logo as it reaches navbar
+    tl.to(logoSvg, {
+      opacity: 0,
+      duration: 0.2,
+    }, moveStartTime + 0.6)
+
+    // Fade in navbar logo
+    if (navbarLogoImg) {
+      tl.to(navbarLogoImg, {
+        opacity: 1,
+        duration: 0.3,
+        ease: 'power2.out'
+      }, moveStartTime + 0.65)
     }
 
-    const drawGlowingParticle = (ctx, x, y, size, color, glowIntensity) => {
-      // Outer glow
-      const gradient = ctx.createRadialGradient(x, y, 0, x, y, size * 3)
-      gradient.addColorStop(0, rgba(color, 0.8 * glowIntensity))
-      gradient.addColorStop(0.4, rgba(color, 0.3 * glowIntensity))
-      gradient.addColorStop(1, rgba(color, 0))
-
-      ctx.beginPath()
-      ctx.arc(x, y, size * 3, 0, Math.PI * 2)
-      ctx.fillStyle = gradient
-      ctx.fill()
-
-      // Core
-      ctx.beginPath()
-      ctx.arc(x, y, size, 0, Math.PI * 2)
-      ctx.fillStyle = rgb(color)
-      ctx.fill()
-
-      // Bright center
-      ctx.beginPath()
-      ctx.arc(x, y, size * 0.4, 0, Math.PI * 2)
-      ctx.fillStyle = rgba({ r: 255, g: 240, b: 200 }, 0.6)
-      ctx.fill()
-    }
-
-    const drawEmbers = (ctx, w, h, progress) => {
-      embersRef.current.forEach((ember) => {
-        ember.y -= ember.speed
-        ember.wobble += ember.wobbleSpeed
-        ember.x += Math.sin(ember.wobble) * 0.3
-
-        if (ember.y < -10) {
-          ember.y = h + 10
-          ember.x = Math.random() * w
-        }
-
-        const fadeOut = progress > 0.8 ? 1 - (progress - 0.8) / 0.2 : 1
-        const alpha = ember.opacity * fadeOut
-
-        // Small glow
-        const gradient = ctx.createRadialGradient(ember.x, ember.y, 0, ember.x, ember.y, ember.size * 4)
-        gradient.addColorStop(0, rgba(ember.color, alpha * 0.5))
-        gradient.addColorStop(1, rgba(ember.color, 0))
-        ctx.beginPath()
-        ctx.arc(ember.x, ember.y, ember.size * 4, 0, Math.PI * 2)
-        ctx.fillStyle = gradient
-        ctx.fill()
-
-        // Core
-        ctx.beginPath()
-        ctx.arc(ember.x, ember.y, ember.size, 0, Math.PI * 2)
-        ctx.fillStyle = rgba(ember.color, alpha)
-        ctx.fill()
-      })
-    }
-
-    // Start animation
-    // Initial full clear
-    ctx.fillStyle = '#0a0a0a'
-    ctx.fillRect(0, 0, width, height)
-    animate()
-
-    const handleResize = () => {
-      width = window.innerWidth
-      height = window.innerHeight
-      const dpr = window.devicePixelRatio || 1
-      canvas.width = width * dpr
-      canvas.height = height * dpr
-      canvas.style.width = width + 'px'
-      canvas.style.height = height + 'px'
-      ctx.scale(dpr, dpr)
-    }
-
-    window.addEventListener('resize', handleResize)
+    // Fade out container
+    tl.to(container, {
+      opacity: 0,
+      duration: 0.3,
+      ease: 'power2.in'
+    }, moveStartTime + 0.8)
 
     return () => {
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current)
+      tl.kill()
+      if (navbarLogoImg) {
+        gsap.set(navbarLogoImg, { opacity: 1 })
       }
-      window.removeEventListener('resize', handleResize)
     }
-  }, [])
+  }, [onComplete])
 
-  // Handle logo reveal and transition
-  useEffect(() => {
-    if (phase === 'reveal' && logoRef.current && textRef.current) {
-      const tl = gsap.timeline({
-        onComplete: () => {
-          setTimeout(() => setPhase('transition'), 400)
-        }
-      })
-
-      // Logo appears with golden flash
-      tl.fromTo(
-        logoRef.current,
-        { scale: 1.2, opacity: 0, filter: 'brightness(3) blur(20px)' },
-        { scale: 1, opacity: 1, filter: 'brightness(1) blur(0px)', duration: 0.6, ease: 'power2.out' }
-      )
-
-      // Text reveals with stagger
-      tl.fromTo(
-        textRef.current,
-        { y: 20, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.5, ease: 'power2.out' },
-        '-=0.3'
-      )
+  const handleSkip = () => {
+    if (timelineRef.current) {
+      timelineRef.current.kill()
     }
-  }, [phase])
-
-  // Handle final transition to nav
-  useEffect(() => {
-    if (phase === 'transition' && containerRef.current && logoRef.current) {
-      const tl = gsap.timeline({
-        onComplete: () => onComplete?.()
-      })
-
-      // Fade out text first
-      tl.to(textRef.current, {
-        opacity: 0,
-        y: -15,
-        duration: 0.25,
-        ease: 'power2.in'
-      })
-
-      // Logo shrinks and moves to top-left nav position
-      tl.to(
-        logoRef.current,
-        {
-          x: -window.innerWidth / 2 + 100,
-          y: -window.innerHeight / 2 + 50,
-          scale: 0.25,
-          opacity: 0.8,
-          duration: 0.5,
-          ease: 'power3.inOut'
-        },
-        '-=0.1'
-      )
-
-      // Fade out entire container
-      tl.to(
-        containerRef.current,
-        {
-          opacity: 0,
-          duration: 0.3,
-          ease: 'power2.in'
-        },
-        '-=0.2'
-      )
+    // Make sure navbar logo is visible
+    const navbarLogoImg = document.querySelector(`${LOGO_TARGET_SELECTOR} img`)
+    if (navbarLogoImg) {
+      gsap.set(navbarLogoImg, { opacity: 1 })
     }
-  }, [phase, onComplete])
+    onComplete?.()
+  }
 
   return (
     <div
       ref={containerRef}
-      className="fixed inset-0 z-[200] flex flex-col items-center justify-center overflow-hidden"
+      className="fixed inset-0 z-[200] flex items-center justify-center overflow-hidden"
       style={{ backgroundColor: '#0a0a0a' }}
     >
-      {/* Particle Canvas */}
-      <canvas
-        ref={canvasRef}
-        className="absolute inset-0 transition-opacity duration-500"
-        style={{ opacity: phase === 'particles' ? 1 : 0 }}
-      />
+      {/* Center Logo */}
+      <svg
+        ref={logoSvgRef}
+        viewBox="0 0 947 241"
+        style={{ width: '400px', height: 'auto', opacity: 0 }}
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <g>
+          <path
+            d="m 593.48567,192.44694 c -1.08543,-1.7802 -1.9752,-3.614 -1.97725,-4.0751 -0.002,-0.461 -1.369,-3.7879 -3.03766,-7.39301 -1.66866,-3.60514 -5.05745,-11.49538 -7.53064,-17.53387 -2.47319,-6.03848 -5.33002,-12.8366 -6.34851,-15.10694 -2.29022,-5.10519 -5.55851,-12.71847 -16.08406,-37.46686 -9.75453,-22.935541 -10.46517,-21.289071 9.03714,-20.937991 17.9565,0.32325 14.91201,-2.10585 23.53392,18.776971 3.06557,7.425 6.18005,14.85 6.92106,16.5 0.74102,1.65 2.47335,5.925 3.84962,9.5 4.45591,11.57461 8.49593,20.44685 9.45637,20.76699 0.51597,0.17199 7.13605,-14.21772 14.71128,-31.97714 7.57524,-17.75942 14.27144,-32.620461 14.88045,-33.024531 1.92302,-1.27593 30.60729,-0.91811 30.60729,0.3818 0,0.97267 -6.70295,17.146491 -12.99364,31.352881 -0.97417,2.2 -3.22332,7.375 -4.99809,11.5 -1.77478,4.125 -3.83222,8.85 -4.57209,10.5 -0.73987,1.65 -2.29933,5.475 -3.46546,8.5 -1.16614,3.025 -4.36633,10.675 -7.11155,17 -2.74521,6.325 -6.14672,14.2 -7.5589,17.5 -3.81403,8.9126 -2.61966,8.4062 -19.90811,8.4418 -15.43765,0.032 -15.43765,0.032 -17.41117,-3.205 z"
+            id="letter-v"
+          />
+          <path
+            d="m 298.74814,194.89514 c -0.99382,-0.6415 -1.2029,-16.16572 -1,-74.24806 l 0.25654,-73.436941 h 17.5 17.5 l 0.5,31.83847 0.5,31.838471 5.85621,-6.19516 c 3.22091,-3.40734 8.12256,-8.734651 10.89255,-11.838471 2.76999,-3.10382 7.78972,-8.56831 11.15497,-12.14331 3.36524,-3.575 11.90678,-12.6875 18.98119,-20.25 l 12.86257,-13.75 h 18.70959 c 10.29027,0 18.98724,0.27765 19.32659,0.617 0.6295,0.62951 -16.23092,19.60879 -43.84439,49.35433 -16.53521,17.811911 -19.15648,9.156111 17.60813,58.144441 8.00108,10.66133 16.66929,22.30923 19.26269,25.88423 2.5934,3.575 5.87496,7.9401 7.29236,9.7002 4.04013,5.0171 3.10807,5.2998 -17.47035,5.2998 -22.53145,0 -17.13024,3.8346 -42.60834,-30.25 -18.60643,-24.8917 -22.47841,-29.52923 -22.54289,-27 -0.0105,0.4125 -3.60115,4.50741 -7.97919,9.09981 l -7.96008,8.34981 -0.2708,19.65019 -0.27081,19.65019 -16.5,0.2481 c -9.075,0.1364 -17.06544,-0.117 -17.75654,-0.5631 z"
+            id="letter-K"
+          />
+          <path
+            d="m 870.84917,195.72884 c -54.02487,-11.4686 -58.67336,-87.58611 -6.34449,-103.888971 42.64837,-13.28694 80.38658,10.594571 80.38658,50.870271 0,37.26738 -33.8982,61.5406 -74.04209,53.0187 z m 25.83012,-26.87922 c 27.1112,-11.62122 19.12238,-54.09556 -10.17461,-54.09556 -16.0863,0 -26.32249,10.8794 -26.30326,27.95608 0.0233,20.71296 18.40625,33.88588 36.47787,26.13948 z"
+            id="letter-o"
+          />
+          <path
+            d="m 480.50468,195.70074 c -56.7741,-9.7677 -62.17536,-90.67859 -7,-104.860071 41.18667,-10.58603 74.99725,13.313141 73.78703,52.156731 l -0.28703,9.21274 h -39.74996 c -21.86248,0 -39.74998,0.35543 -39.75,0.78984 -8.5e-4,16.6112 34.83792,24.03571 51.91407,11.06344 5.46589,-4.15229 4.09563,-4.71432 13.83727,5.67553 9.17531,9.78583 9.18167,9.82555 2.43826,15.22889 -12.23774,9.8058 -34.92882,14.2186 -55.18964,10.7329 z m 35.00034,-64.78044 c -0.002,-8.17702 -13.50096,-18.21016 -24.50034,-18.21016 -10.81575,0 -25.51302,11.0889 -25.49957,19.2391 2.4e-4,0.1435 11.25039,0.2609 25.00034,0.2609 19.74525,0 24.99984,-0.27111 24.99957,-1.28984 z"
+            id="letter-e"
+          />
+          <path
+            d="m 747.50468,196.73864 c -90.05182,-9.7223 -92.98947,-136.960601 -3.5,-151.595441 26.28764,-4.299 50.38369,2.39443 70,19.44469 6.48282,5.63479 6.623,5.1805 -5.05641,16.38536 -13.01591,12.48705 -11.3253,11.9614 -18.20723,5.66111 -35.88638,-32.85338 -89.50872,3.31584 -74.17294,50.030961 10.05328,30.6238 49.69973,41.21075 72.61284,19.3901 8.9962,-8.56727 6.80486,-8.88644 18.75844,2.73211 12.48408,12.13416 12.46496,12.03439 3.8153,19.90716 -15.58808,14.18805 -39.01798,20.76805 -64.25,18.04395 z"
+            id="letter-C"
+          />
+          <path
+            id="k-icon-main"
+            d="M 3.5039062 1.6875 L 3.5039062 56.699219 C 3.5039064 86.955599 3.7987521 111.71094 4.1582031 111.71094 C 4.5176551 111.71094 9.9176556 106.67271 16.158203 100.51562 L 27.503906 89.320312 L 27.503906 57.515625 L 27.503906 25.710938 L 43.003906 25.710938 L 58.503906 25.710938 L 58.503906 55.035156 L 58.503906 84.361328 L 31.003906 111.91211 L 3.5039062 139.46484 L 3.5039062 189.58789 L 3.5039062 239.71094 L 42.990234 239.71094 L 82.476562 239.71094 L 82.740234 207.76562 L 83.003906 175.82227 L 115.23438 207.76562 L 147.46484 239.71094 L 200.98438 239.71094 C 242.79576 239.71094 254.50391 239.43971 254.50391 238.47461 C 254.50391 237.79521 227.84141 210.56773 195.25391 177.96875 C 162.66641 145.36973 136.00391 118.26506 136.00391 117.73633 C 136.00391 117.2076 161.31641 91.405326 192.25391 60.398438 C 223.19141 29.391547 248.50391 3.5030875 248.50391 2.8671875 C 248.50391 2.0066575 234.80248 1.7109375 194.92188 1.7109375 L 141.33984 1.7109375 L 111.9375 30.966797 L 82.533203 60.224609 L 82.269531 31.216797 L 82.003906 2.2109375 L 42.753906 1.9492188 L 3.5039062 1.6875 z M 151.04492 25.710938 L 171.98633 25.710938 L 192.92969 25.710938 L 125.7168 92.9375 L 58.503906 160.16406 L 58.503906 187.4375 L 58.503906 214.71094 L 53.660156 214.71094 C 50.995715 214.71094 44.020715 215.00273 38.160156 215.36133 L 27.503906 216.01367 L 27.503906 182.93164 L 27.503906 149.85156 L 89.275391 87.78125 L 151.04492 25.710938 z M 117.87891 134.71094 C 117.95457 134.71094 136.11206 152.82755 158.22852 174.9707 L 198.43945 215.23047 L 177.72266 215.24609 L 157.00391 215.26172 L 127.27734 185.73633 C 110.92733 169.49703 97.652334 155.88568 97.777344 155.48828 C 97.969624 154.87706 117.47985 134.71094 117.87891 134.71094 z "
+          />
+        </g>
+      </svg>
 
-      {/* Ambient glow effect */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background: 'radial-gradient(circle at 50% 50%, rgba(197, 160, 89, 0.08) 0%, transparent 60%)',
-          opacity: phase === 'particles' ? 1 : 0,
-          transition: 'opacity 0.5s'
-        }}
-      />
-
-      {/* Logo Container */}
-      {(phase === 'reveal' || phase === 'transition') && (
-        <div className="relative z-10 flex flex-col items-center">
-          <div
-            ref={logoRef}
-            className="relative"
-            style={{ filter: 'drop-shadow(0 0 40px rgba(197, 160, 89, 0.6))' }}
-          >
-            <img
-              src="/images/kevco-logo4.svg"
-              alt="KevCo"
-              className="h-36 md:h-52"
-            />
-          </div>
-
-          <p
-            ref={textRef}
-            className="mt-8 text-sm md:text-base tracking-[0.4em] uppercase font-light"
-            style={{ color: '#C5A059' }}
-          >
-            Digital Craftsman
-          </p>
-        </div>
-      )}
-
-      {/* Skip button */}
       <button
-        onClick={onComplete}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 text-xs tracking-widest uppercase opacity-30 hover:opacity-60 transition-opacity duration-300"
+        onClick={handleSkip}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 text-xs tracking-widest uppercase opacity-40 hover:opacity-70 transition-opacity duration-300"
         style={{ color: '#C5A059' }}
       >
-        Click to skip
+        Skip intro
       </button>
     </div>
   )
-}
-
-// Generate points that form a K shape
-function generateKShapePoints(cx, cy, scale) {
-  const points = []
-  const s = scale * 50
-
-  // Vertical bar of K (left side)
-  for (let i = 0; i < 35; i++) {
-    points.push({
-      x: cx - s * 1.5 + (Math.random() - 0.5) * s * 0.25,
-      y: cy - s * 2 + (i / 35) * s * 4
-    })
-  }
-
-  // Upper diagonal (going up-right)
-  for (let i = 0; i < 25; i++) {
-    const t = i / 25
-    points.push({
-      x: cx - s * 1.3 + t * s * 2,
-      y: cy - t * s * 2
-    })
-  }
-
-  // Lower diagonal (going down-right)
-  for (let i = 0; i < 25; i++) {
-    const t = i / 25
-    points.push({
-      x: cx - s * 1.3 + t * s * 2,
-      y: cy + t * s * 2
-    })
-  }
-
-  // Add some fill points inside the K
-  for (let i = 0; i < 20; i++) {
-    points.push({
-      x: cx - s * 1.2 + Math.random() * s * 0.5,
-      y: cy + (Math.random() - 0.5) * s * 3
-    })
-  }
-
-  return points
-}
-
-function easeOutQuart(t) {
-  return 1 - Math.pow(1 - t, 4)
 }
