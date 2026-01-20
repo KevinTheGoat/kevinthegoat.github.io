@@ -39,6 +39,26 @@ export default function Navigation() {
     setDemoDropdownOpen(false)
   }, [location.pathname])
 
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    const scrollY = window.scrollY
+    if (isOpen) {
+      document.body.classList.add('menu-open')
+      document.body.style.top = `-${scrollY}px`
+    } else {
+      document.body.classList.remove('menu-open')
+      const top = document.body.style.top
+      document.body.style.top = ''
+      if (top) {
+        window.scrollTo(0, parseInt(top || '0') * -1)
+      }
+    }
+    return () => {
+      document.body.classList.remove('menu-open')
+      document.body.style.top = ''
+    }
+  }, [isOpen])
+
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -292,7 +312,10 @@ export default function Navigation() {
                 to="/"
                 className="relative z-50 flex items-center gap-2 group"
               >
-                <div className="px-4 py-2 rounded-xl glass transition-all duration-300 group-hover:bg-white/10">
+                <div
+                  data-intro-logo-target
+                  className="px-4 py-2 rounded-xl glass transition-all duration-300 group-hover:bg-white/10"
+                >
                   <img
                     src="/images/kevco-logo4.svg"
                     alt="KevCo"
@@ -416,25 +439,32 @@ export default function Navigation() {
                   onClick={() => setIsOpen(!isOpen)}
                   className="lg:hidden relative z-50 w-12 h-12 rounded-xl flex items-center justify-center glass"
                   aria-label="Toggle menu"
+                  style={{ WebkitTapHighlightColor: 'transparent' }}
                 >
                   <div className="w-5 h-4 flex flex-col justify-between">
                     <span
-                      className={`block h-0.5 rounded-full transition-all duration-300 ${
-                        isOpen ? 'rotate-45 translate-y-[7px]' : ''
-                      }`}
-                      style={{ backgroundColor: theme.text }}
+                      className="block h-0.5 rounded-full origin-center"
+                      style={{
+                        backgroundColor: theme.text,
+                        transition: 'transform 0.25s ease-out',
+                        transform: isOpen ? 'translateY(7px) rotate(45deg)' : 'translateY(0) rotate(0)',
+                      }}
                     />
                     <span
-                      className={`block h-0.5 rounded-full transition-all duration-300 ${
-                        isOpen ? 'opacity-0 scale-0' : ''
-                      }`}
-                      style={{ backgroundColor: theme.text }}
+                      className="block h-0.5 rounded-full"
+                      style={{
+                        backgroundColor: theme.text,
+                        transition: 'opacity 0.15s ease-out',
+                        opacity: isOpen ? 0 : 1,
+                      }}
                     />
                     <span
-                      className={`block h-0.5 rounded-full transition-all duration-300 ${
-                        isOpen ? '-rotate-45 -translate-y-[7px]' : ''
-                      }`}
-                      style={{ backgroundColor: theme.text }}
+                      className="block h-0.5 rounded-full origin-center"
+                      style={{
+                        backgroundColor: theme.text,
+                        transition: 'transform 0.25s ease-out',
+                        transform: isOpen ? 'translateY(-7px) rotate(-45deg)' : 'translateY(0) rotate(0)',
+                      }}
                     />
                   </div>
                 </button>
