@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>KevCo - Kevin Moreau's Portfolio</title>
+    <script>
+      // GitHub Pages SPA redirect handling
+      // Store the path the user tried to access
+      sessionStorage.setItem('redirect', window.location.pathname + window.location.search + window.location.hash)
+      // Redirect to the base URL
+      window.location.replace('/')
+    </script>
+  </head>
+  <body>
+    <!-- This page will never be displayed, the script redirects immediately -->
+  </body>
+</html>

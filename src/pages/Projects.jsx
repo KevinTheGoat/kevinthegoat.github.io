@@ -31,31 +31,18 @@ const projects = [
   },
   {
     id: 3,
-    title: 'FinTrack Mobile',
+    title: 'Monexus Logistics',
     description:
-      'A sophisticated personal finance tracking application with real-time analytics, budget management, and investment portfolio tracking.',
-    url: '#',
-    tags: ['Mobile App', 'React Native', 'Finance', 'Analytics'],
-    category: 'Mobile',
-    gradient: 'from-violet-600 via-purple-600 to-fuchsia-700',
-    features: ['Expense Tracking', 'Budget Alerts', 'Investment View', 'Bank Sync'],
-    isDemo: true,
-  },
-  {
-    id: 4,
-    title: 'CloudSync Desktop',
-    description:
-      'A powerful cross-platform desktop application for seamless file synchronization across devices with end-to-end encryption.',
-    url: '#',
-    tags: ['Desktop App', 'Electron', 'Cloud', 'Security'],
-    category: 'Desktop',
-    gradient: 'from-orange-500 via-amber-500 to-yellow-600',
-    features: ['Auto Sync', 'E2E Encryption', 'Version History', 'Selective Sync'],
-    isDemo: true,
+      'A professional logistics and freight forwarding platform providing reliable shipping solutions from Miami to the Bahamas and beyond.',
+    url: 'https://monexuslogistics.com/',
+    tags: ['Web Design', 'Logistics', 'Responsive', 'Business'],
+    category: 'Web',
+    gradient: 'from-cyan-600 via-blue-600 to-indigo-700',
+    features: ['Freight Tracking', 'Quote System', 'Route Planning', 'Client Portal'],
   },
 ]
 
-const categories = ['All', 'Web', 'Web App', 'Mobile', 'Desktop']
+const categories = ['All', 'Web', 'Web App']
 
 export default function Projects() {
   const { theme } = useTheme()
@@ -113,7 +100,7 @@ export default function Projects() {
             Selected <span style={{ color: theme.accent }}>Projects</span>
           </h1>
           <p className="text-xl" style={{ color: theme.muted }}>
-            A showcase of my best work across web, mobile, and desktop platforms.
+            A showcase of my best work across web applications and platforms.
             Each project is crafted with attention to detail and performance.
           </p>
         </div>

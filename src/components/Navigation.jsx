@@ -56,15 +56,21 @@ export default function Navigation() {
 
   useEffect(() => {
     if (isOpen && menuRef.current) {
+      gsap.set(menuRef.current, { willChange: 'clip-path' })
       gsap.fromTo(
         menuRef.current,
         { clipPath: 'circle(0% at calc(100% - 40px) 40px)' },
-        { clipPath: 'circle(150% at calc(100% - 40px) 40px)', duration: 0.6, ease: 'power3.out' }
+        {
+          clipPath: 'circle(150% at calc(100% - 40px) 40px)',
+          duration: 0.5,
+          ease: 'power2.out',
+          onComplete: () => gsap.set(menuRef.current, { willChange: 'auto' })
+        }
       )
       gsap.fromTo(
         menuRef.current.querySelectorAll('.nav-item'),
-        { y: 40, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.5, stagger: 0.08, ease: 'power3.out', delay: 0.2 }
+        { y: 30, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.4, stagger: 0.06, ease: 'power2.out', delay: 0.15 }
       )
     }
   }, [isOpen])
@@ -393,7 +399,7 @@ export default function Navigation() {
             <div
               ref={menuRef}
               className="fixed inset-0 z-40 lg:hidden flex flex-col items-center justify-center"
-              style={{ backgroundColor: theme.surface }}
+              style={{ backgroundColor: theme.surface, backfaceVisibility: 'hidden' }}
             >
               <div className="flex flex-col items-center gap-4">
                 {navLinks.map((link) => (

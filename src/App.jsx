@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { Routes, Route, useLocation } from 'react-router-dom'
+import { Routes, Route, useLocation, useNavigate } from 'react-router-dom'
 import { gsap } from 'gsap'
 import { Icon } from '@iconify/react'
 import { useTheme } from './context/ThemeContext'
@@ -15,8 +15,18 @@ export default function App() {
   const { theme } = useTheme()
   const { isTransitioning, transitionDemo, activeDemo, isInDemoMode } = useDemo()
   const location = useLocation()
+  const navigate = useNavigate()
   const pageRef = useRef(null)
   const transitionRef = useRef(null)
+
+  // Handle redirect from 404.html (GitHub Pages SPA routing)
+  useEffect(() => {
+    const redirect = sessionStorage.getItem('redirect')
+    if (redirect) {
+      sessionStorage.removeItem('redirect')
+      navigate(redirect, { replace: true })
+    }
+  }, [navigate])
 
   // Page transition animation
   useEffect(() => {
