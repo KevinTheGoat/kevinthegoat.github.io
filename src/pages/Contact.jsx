@@ -48,35 +48,83 @@ export default function Contact() {
     project: '',
     message: '',
   })
+  const [formErrors, setFormErrors] = useState({})
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [error, setError] = useState(false)
 
+  const validateForm = () => {
+    const errors = {}
+
+    // Name validation
+    if (!formData.name.trim()) {
+      errors.name = 'Name is required'
+    } else if (formData.name.trim().length < 2) {
+      errors.name = 'Name must be at least 2 characters'
+    }
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!formData.email.trim()) {
+      errors.email = 'Email is required'
+    } else if (!emailRegex.test(formData.email)) {
+      errors.email = 'Please enter a valid email address'
+    }
+
+    // Project type validation
+    if (!formData.project) {
+      errors.project = 'Please select a project type'
+    }
+
+    // Message validation
+    if (!formData.message.trim()) {
+      errors.message = 'Message is required'
+    } else if (formData.message.trim().length < 10) {
+      errors.message = 'Message must be at least 10 characters'
+    }
+
+    setFormErrors(errors)
+    return Object.keys(errors).length === 0
+  }
+
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.fromTo(
-        '.contact-header',
-        { y: 60, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out' }
-      )
+      // Use gsap.from() instead of fromTo() to avoid jitter on mobile
+      gsap.from('.contact-header', {
+        y: 60,
+        opacity: 0,
+        duration: 0.8,
+        ease: 'power3.out',
+        clearProps: 'all',
+      })
 
-      gsap.fromTo(
-        '.contact-card',
-        { y: 40, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.6, stagger: 0.1, delay: 0.2, ease: 'power3.out' }
-      )
+      gsap.from('.contact-card', {
+        y: 40,
+        opacity: 0,
+        duration: 0.6,
+        stagger: 0.1,
+        delay: 0.2,
+        ease: 'power3.out',
+        clearProps: 'all',
+      })
 
-      gsap.fromTo(
-        '.contact-form',
-        { y: 40, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.6, delay: 0.4, ease: 'power3.out' }
-      )
+      gsap.from('.contact-form', {
+        y: 40,
+        opacity: 0,
+        duration: 0.6,
+        delay: 0.4,
+        ease: 'power3.out',
+        clearProps: 'all',
+      })
 
-      gsap.fromTo(
-        '.faq-section',
-        { y: 40, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.6, delay: 0.5, ease: 'power3.out' }
-      )
+      gsap.from('.faq-section', {
+        y: 40,
+        opacity: 0,
+        duration: 0.6,
+        delay: 0.5,
+        ease: 'power3.out',
+        clearProps: 'all',
+      })
     }, pageRef)
 
     return () => ctx.revert()
@@ -84,8 +132,14 @@ export default function Contact() {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    setIsSubmitting(true)
     setError(false)
+
+    // Validate form before submitting
+    if (!validateForm()) {
+      return
+    }
+
+    setIsSubmitting(true)
 
     try {
       const response = await fetch('https://formspree.io/f/mgoolpye', {
@@ -224,18 +278,27 @@ export default function Contact() {
                     </label>
                     <input
                       type="text"
-                      required
                       value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      onChange={(e) => {
+                        setFormData({ ...formData, name: e.target.value })
+                        if (formErrors.name) setFormErrors({ ...formErrors, name: '' })
+                      }}
                       className="w-full px-4 py-3 rounded-xl outline-none transition-all duration-300 focus:ring-2"
                       style={{
                         backgroundColor: theme.elevated,
                         color: theme.text,
-                        border: `1px solid ${theme.border}`,
+                        border: `1px solid ${formErrors.name ? '#ef4444' : theme.border}`,
                         '--tw-ring-color': theme.accent,
                       }}
                       placeholder="John Doe"
+                      aria-invalid={!!formErrors.name}
+                      aria-describedby={formErrors.name ? 'name-error' : undefined}
                     />
+                    {formErrors.name && (
+                      <p id="name-error" className="mt-1 text-sm" style={{ color: '#ef4444' }}>
+                        {formErrors.name}
+                      </p>
+                    )}
                   </div>
                   <div>
                     <label className="block text-sm font-medium mb-2" style={{ color: theme.muted }}>
@@ -243,17 +306,27 @@ export default function Contact() {
                     </label>
                     <input
                       type="email"
-                      required
                       value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      onChange={(e) => {
+                        setFormData({ ...formData, email: e.target.value })
+                        if (formErrors.email) setFormErrors({ ...formErrors, email: '' })
+                      }}
                       className="w-full px-4 py-3 rounded-xl outline-none transition-all duration-300 focus:ring-2"
                       style={{
                         backgroundColor: theme.elevated,
                         color: theme.text,
-                        border: `1px solid ${theme.border}`,
+                        border: `1px solid ${formErrors.email ? '#ef4444' : theme.border}`,
+                        '--tw-ring-color': theme.accent,
                       }}
                       placeholder="john@example.com"
+                      aria-invalid={!!formErrors.email}
+                      aria-describedby={formErrors.email ? 'email-error' : undefined}
                     />
+                    {formErrors.email && (
+                      <p id="email-error" className="mt-1 text-sm" style={{ color: '#ef4444' }}>
+                        {formErrors.email}
+                      </p>
+                    )}
                   </div>
                 </div>
 
@@ -262,15 +335,20 @@ export default function Contact() {
                     Project Type
                   </label>
                   <select
-                    required
                     value={formData.project}
-                    onChange={(e) => setFormData({ ...formData, project: e.target.value })}
+                    onChange={(e) => {
+                      setFormData({ ...formData, project: e.target.value })
+                      if (formErrors.project) setFormErrors({ ...formErrors, project: '' })
+                    }}
                     className="w-full px-4 py-3 rounded-xl outline-none transition-all duration-300 focus:ring-2"
                     style={{
                       backgroundColor: theme.elevated,
                       color: theme.text,
-                      border: `1px solid ${theme.border}`,
+                      border: `1px solid ${formErrors.project ? '#ef4444' : theme.border}`,
+                      '--tw-ring-color': theme.accent,
                     }}
+                    aria-invalid={!!formErrors.project}
+                    aria-describedby={formErrors.project ? 'project-error' : undefined}
                   >
                     <option value="">Select a project type</option>
                     <option value="website">Website Development</option>
@@ -279,6 +357,11 @@ export default function Contact() {
                     <option value="desktop">Desktop Application</option>
                     <option value="other">Other</option>
                   </select>
+                  {formErrors.project && (
+                    <p id="project-error" className="mt-1 text-sm" style={{ color: '#ef4444' }}>
+                      {formErrors.project}
+                    </p>
+                  )}
                 </div>
 
                 <div>
@@ -286,18 +369,28 @@ export default function Contact() {
                     Message
                   </label>
                   <textarea
-                    required
                     rows={5}
                     value={formData.message}
-                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                    onChange={(e) => {
+                      setFormData({ ...formData, message: e.target.value })
+                      if (formErrors.message) setFormErrors({ ...formErrors, message: '' })
+                    }}
                     className="w-full px-4 py-3 rounded-xl outline-none transition-all duration-300 focus:ring-2 resize-none"
                     style={{
                       backgroundColor: theme.elevated,
                       color: theme.text,
-                      border: `1px solid ${theme.border}`,
+                      border: `1px solid ${formErrors.message ? '#ef4444' : theme.border}`,
+                      '--tw-ring-color': theme.accent,
                     }}
                     placeholder="Tell me about your project..."
+                    aria-invalid={!!formErrors.message}
+                    aria-describedby={formErrors.message ? 'message-error' : undefined}
                   />
+                  {formErrors.message && (
+                    <p id="message-error" className="mt-1 text-sm" style={{ color: '#ef4444' }}>
+                      {formErrors.message}
+                    </p>
+                  )}
                 </div>
 
                 <button

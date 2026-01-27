@@ -3,7 +3,7 @@ import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useTheme } from '../context/ThemeContext'
 
-gsap.registerPlugin(ScrollTrigger)
+// ScrollTrigger is registered globally in main.jsx
 
 const mockups = [
   {

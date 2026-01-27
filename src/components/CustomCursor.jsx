@@ -13,6 +13,7 @@ export default function CustomCursor() {
 
   const mousePos = useRef({ x: 0, y: 0 })
   const rafId = useRef(null)
+  const isTabVisible = useRef(true)
 
   const currentTheme = isInDemoMode && activeDemo ? activeDemo.theme : theme
 
@@ -27,8 +28,9 @@ export default function CustomCursor() {
     return () => window.removeEventListener('resize', checkMobile)
   }, [])
 
+  // Continuous animation loop (pauses when tab is hidden)
   const animate = useCallback(() => {
-    if (cursorRef.current) {
+    if (cursorRef.current && isTabVisible.current) {
       cursorRef.current.style.transform = `translate3d(${mousePos.current.x}px, ${mousePos.current.y}px, 0)`
     }
     rafId.current = requestAnimationFrame(animate)
@@ -48,6 +50,12 @@ export default function CustomCursor() {
   useEffect(() => {
     if (isMobile) return
 
+    // Pause animation when tab is not visible
+    const handleVisibilityChange = () => {
+      isTabVisible.current = !document.hidden
+    }
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+
     rafId.current = requestAnimationFrame(animate)
 
     document.addEventListener('mousemove', handleMouseMove, { passive: true })
@@ -58,6 +66,7 @@ export default function CustomCursor() {
 
     return () => {
       if (rafId.current) cancelAnimationFrame(rafId.current)
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
       document.removeEventListener('mousemove', handleMouseMove)
       document.removeEventListener('mouseenter', handleMouseEnter)
       document.removeEventListener('mouseleave', handleMouseLeave)

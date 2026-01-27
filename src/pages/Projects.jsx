@@ -7,7 +7,7 @@ import { useTheme } from '../context/ThemeContext'
 import SEO from '../components/SEO'
 import Footer from '../components/Footer'
 
-gsap.registerPlugin(ScrollTrigger)
+// ScrollTrigger is registered globally in main.jsx
 
 const projects = [
   {
@@ -61,31 +61,40 @@ export default function Projects() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Header animation
-      gsap.fromTo(
-        '.projects-header',
-        { y: 60, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out' }
-      )
+      // Header animation - use gsap.from() to avoid jitter
+      gsap.from('.projects-header', {
+        y: 60,
+        opacity: 0,
+        duration: 0.8,
+        ease: 'power3.out',
+        clearProps: 'all',
+      })
 
-      // Category buttons animation
-      gsap.fromTo(
-        '.category-btn',
-        { y: 20, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.5, stagger: 0.05, delay: 0.3, ease: 'power3.out' }
-      )
+      // Category buttons animation - use gsap.from() to avoid jitter
+      gsap.from('.category-btn', {
+        y: 20,
+        opacity: 0,
+        duration: 0.5,
+        stagger: 0.05,
+        delay: 0.3,
+        ease: 'power3.out',
+        clearProps: 'all',
+      })
     }, pageRef)
 
     return () => ctx.revert()
   }, [])
 
   useEffect(() => {
-    // Animate projects on filter change
-    gsap.fromTo(
-      projectsRef.current,
-      { y: 40, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.6, stagger: 0.1, ease: 'power3.out' }
-    )
+    // Animate projects on filter change - use gsap.from() to avoid jitter
+    gsap.from(projectsRef.current, {
+      y: 40,
+      opacity: 0,
+      duration: 0.6,
+      stagger: 0.1,
+      ease: 'power3.out',
+      clearProps: 'all',
+    })
   }, [activeCategory])
 
   return (

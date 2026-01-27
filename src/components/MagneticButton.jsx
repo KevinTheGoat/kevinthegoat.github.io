@@ -20,15 +20,19 @@ export default function MagneticButton({ children, className = '', style = {}, s
       const deltaX = (e.clientX - centerX) * strength
       const deltaY = (e.clientY - centerY) * strength
 
+      // Kill any existing tweens before creating a new one
+      gsap.killTweensOf(button)
       gsap.to(button, {
         x: deltaX,
         y: deltaY,
         duration: 0.3,
         ease: 'power3.out',
+        overwrite: 'auto',
       })
     }
 
     const handleMouseLeave = () => {
+      gsap.killTweensOf(button)
       gsap.to(button, {
         x: 0,
         y: 0,

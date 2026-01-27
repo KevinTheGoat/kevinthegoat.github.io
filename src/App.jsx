@@ -5,6 +5,7 @@ import { ScrollToPlugin } from 'gsap/ScrollToPlugin'
 import { Icon } from '@iconify/react'
 import { useTheme } from './context/ThemeContext'
 import { useDemo } from './context/DemoContext'
+import ErrorBoundary from './components/ErrorBoundary'
 import Navigation from './components/Navigation'
 import ScrollProgress from './components/ScrollProgress'
 import BackToTop from './components/BackToTop'
@@ -69,18 +70,14 @@ export default function App() {
     if (prevPathRef.current === location.pathname) return
 
     const ctx = gsap.context(() => {
-      // Enter animation
-      gsap.fromTo(
-        pageRef.current,
-        { opacity: 0, y: 30 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.6,
-          ease: 'power3.out',
-          clearProps: 'all'
-        }
-      )
+      // Enter animation - use gsap.from() to avoid jitter
+      gsap.from(pageRef.current, {
+        opacity: 0,
+        y: 30,
+        duration: 0.6,
+        ease: 'power3.out',
+        clearProps: 'all',
+      })
     })
 
     prevPathRef.current = location.pathname
@@ -92,21 +89,29 @@ export default function App() {
   useEffect(() => {
     if (transitionRef.current) {
       if (isTransitioning) {
-        gsap.fromTo(
-          transitionRef.current,
-          { opacity: 0, scale: 1.1 },
-          { opacity: 1, scale: 1, duration: 0.3, ease: 'power3.out' }
-        )
-        gsap.fromTo(
-          transitionRef.current.querySelector('.transition-icon'),
-          { scale: 0, rotate: -180 },
-          { scale: 1, rotate: 0, duration: 0.4, ease: 'back.out(1.7)', delay: 0.1 }
-        )
-        gsap.fromTo(
-          transitionRef.current.querySelector('.transition-text'),
-          { y: 20, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.3, ease: 'power3.out', delay: 0.2 }
-        )
+        gsap.from(transitionRef.current, {
+          opacity: 0,
+          scale: 1.1,
+          duration: 0.3,
+          ease: 'power3.out',
+          clearProps: 'all',
+        })
+        gsap.from(transitionRef.current.querySelector('.transition-icon'), {
+          scale: 0,
+          rotate: -180,
+          duration: 0.4,
+          ease: 'back.out(1.7)',
+          delay: 0.1,
+          clearProps: 'all',
+        })
+        gsap.from(transitionRef.current.querySelector('.transition-text'), {
+          y: 20,
+          opacity: 0,
+          duration: 0.3,
+          ease: 'power3.out',
+          delay: 0.2,
+          clearProps: 'all',
+        })
       } else {
         gsap.to(transitionRef.current, { opacity: 0, duration: 0.3, ease: 'power3.in' })
       }
@@ -193,33 +198,35 @@ export default function App() {
 
       {/* Main content with page transitions */}
       <main ref={pageRef} className="page-transition relative z-10">
-        <Suspense
-          fallback={
-            <div className="min-h-screen flex items-center justify-center">
-              <div className="flex gap-2">
-                {[0, 1, 2].map((i) => (
-                  <div
-                    key={i}
-                    className="w-3 h-3 rounded-full animate-pulse"
-                    style={{
-                      backgroundColor: currentTheme.accent,
-                      animationDelay: `${i * 0.15}s`,
-                    }}
-                  />
-                ))}
+        <ErrorBoundary>
+          <Suspense
+            fallback={
+              <div className="min-h-screen flex items-center justify-center">
+                <div className="flex gap-2">
+                  {[0, 1, 2].map((i) => (
+                    <div
+                      key={i}
+                      className="w-3 h-3 rounded-full animate-pulse"
+                      style={{
+                        backgroundColor: currentTheme.accent,
+                        animationDelay: `${i * 0.15}s`,
+                      }}
+                    />
+                  ))}
+                </div>
               </div>
-            </div>
-          }
-        >
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/skills" element={<Skills />} />
-            <Route path="/projects" element={<Projects />} />
-            <Route path="/demos" element={<Demos />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Suspense>
+            }
+          >
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/skills" element={<Skills />} />
+              <Route path="/projects" element={<Projects />} />
+              <Route path="/demos" element={<Demos />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </Suspense>
+        </ErrorBoundary>
       </main>
 
       {/* Back to Top Button */}

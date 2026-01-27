@@ -12,25 +12,33 @@ export default function NotFound() {
   useEffect(() => {
     const ctx = gsap.context(() => {
       // Animate 404 number
-      gsap.fromTo(
-        '.error-number',
-        { scale: 0, rotation: -10 },
-        { scale: 1, rotation: 0, duration: 0.8, ease: 'back.out(1.7)' }
-      )
+      gsap.from('.error-number', {
+        scale: 0,
+        rotation: -10,
+        duration: 0.8,
+        ease: 'back.out(1.7)',
+        clearProps: 'all',
+      })
 
       // Animate text content
-      gsap.fromTo(
-        '.error-content',
-        { y: 30, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.6, delay: 0.3, ease: 'power3.out' }
-      )
+      gsap.from('.error-content', {
+        y: 30,
+        opacity: 0,
+        duration: 0.6,
+        delay: 0.3,
+        ease: 'power3.out',
+        clearProps: 'all',
+      })
 
       // Animate buttons
-      gsap.fromTo(
-        '.error-buttons',
-        { y: 20, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.6, delay: 0.5, ease: 'power3.out' }
-      )
+      gsap.from('.error-buttons', {
+        y: 20,
+        opacity: 0,
+        duration: 0.6,
+        delay: 0.5,
+        ease: 'power3.out',
+        clearProps: 'all',
+      })
 
       // Floating animation for decorative elements
       gsap.to('.float-element', {

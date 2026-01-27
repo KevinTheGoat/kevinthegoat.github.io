@@ -6,7 +6,7 @@ import Calculator from './Demos/Calculator'
 import AnimationDemo from './Demos/AnimationDemo'
 import ApiDemo from './Demos/ApiDemo'
 
-gsap.registerPlugin(ScrollTrigger)
+// ScrollTrigger is registered globally in main.jsx
 
 const demoTabs = [
   { id: 'calculator', name: 'Calculator', icon: '🧮' },
@@ -22,20 +22,18 @@ export default function Demos() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.fromTo(
-        contentRef.current,
-        { y: 40, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.8,
-          scrollTrigger: {
-            trigger: contentRef.current,
-            start: 'top 80%',
-            toggleActions: 'play none none reverse',
-          },
-        }
-      )
+      gsap.from(contentRef.current, {
+        y: 40,
+        opacity: 0,
+        duration: 0.8,
+        ease: 'power3.out',
+        clearProps: 'all',
+        scrollTrigger: {
+          trigger: contentRef.current,
+          start: 'top 80%',
+          toggleActions: 'play none none reverse',
+        },
+      })
     }, sectionRef)
 
     return () => ctx.revert()

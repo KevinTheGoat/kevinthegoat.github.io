@@ -13,21 +13,21 @@ export default function Hero() {
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
 
-      tl.fromTo(
-        titleRef.current.children,
-        { y: 100, opacity: 0 },
-        { y: 0, opacity: 1, duration: 1, stagger: 0.1 }
-      )
-        .fromTo(
+      tl.from(titleRef.current.children, {
+        y: 100,
+        opacity: 0,
+        duration: 1,
+        stagger: 0.1,
+        clearProps: 'all',
+      })
+        .from(
           subtitleRef.current,
-          { y: 30, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.8 },
+          { y: 30, opacity: 0, duration: 0.8, clearProps: 'all' },
           '-=0.5'
         )
-        .fromTo(
+        .from(
           ctaRef.current.children,
-          { y: 20, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.6, stagger: 0.1 },
+          { y: 20, opacity: 0, duration: 0.6, stagger: 0.1, clearProps: 'all' },
           '-=0.3'
         )
     }, heroRef)

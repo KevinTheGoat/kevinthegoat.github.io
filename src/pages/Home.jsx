@@ -8,7 +8,7 @@ import SEO from '../components/SEO'
 import Footer from '../components/Footer'
 import AnimatedCounter from '../components/AnimatedCounter'
 
-gsap.registerPlugin(ScrollTrigger)
+// ScrollTrigger is registered globally in main.jsx
 
 const stats = [
   { value: '8+', label: 'Years Experience' },
@@ -49,64 +49,66 @@ export default function Home() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Hero title animation
+      // Hero title animation - use gsap.from() to avoid jitter
       const chars = titleRef.current.querySelectorAll('.char')
-      gsap.fromTo(
-        chars,
-        { y: 100, opacity: 0, rotateX: -90 },
-        {
-          y: 0,
-          opacity: 1,
-          rotateX: 0,
-          duration: 1,
-          stagger: 0.03,
-          ease: 'power3.out',
-        }
-      )
+      gsap.from(chars, {
+        y: 100,
+        opacity: 0,
+        rotateX: -90,
+        duration: 1,
+        stagger: 0.03,
+        ease: 'power3.out',
+        clearProps: 'all',
+      })
 
       // Subtitle and CTA animation
-      gsap.fromTo(
-        '.hero-fade',
-        { y: 40, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.8, stagger: 0.15, delay: 0.5, ease: 'power3.out' }
-      )
+      gsap.from('.hero-fade', {
+        y: 40,
+        opacity: 0,
+        duration: 0.8,
+        stagger: 0.15,
+        delay: 0.5,
+        ease: 'power3.out',
+        clearProps: 'all',
+      })
 
       // Stats animation
-      gsap.fromTo(
-        statsRef.current?.children,
-        { y: 30, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.6, stagger: 0.1, delay: 1, ease: 'power3.out' }
-      )
+      gsap.from(statsRef.current?.children, {
+        y: 30,
+        opacity: 0,
+        duration: 0.6,
+        stagger: 0.1,
+        delay: 1,
+        ease: 'power3.out',
+        clearProps: 'all',
+      })
 
       // Services animation with ScrollTrigger
-      gsap.fromTo(
-        servicesRef.current?.children,
-        { y: 60, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.8,
-          stagger: 0.1,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: servicesRef.current,
-            start: 'top 80%',
-          }
-        }
-      )
+      gsap.from(servicesRef.current?.children, {
+        y: 60,
+        opacity: 0,
+        duration: 0.8,
+        stagger: 0.1,
+        ease: 'power3.out',
+        clearProps: 'all',
+        scrollTrigger: {
+          trigger: servicesRef.current,
+          start: 'top 80%',
+        },
+      })
 
-      // Parallax effect for hero shapes
+      // Parallax effect for hero shapes (optimized)
       if (shapesRef.current) {
         const shapes = shapesRef.current.querySelectorAll('.parallax-shape')
         shapes.forEach((shape, index) => {
           gsap.to(shape, {
-            y: (index + 1) * -100,
+            y: (index + 1) * -80,
             ease: 'none',
             scrollTrigger: {
               trigger: heroRef.current,
               start: 'top top',
               end: 'bottom top',
-              scrub: 1,
+              scrub: true, // More performant than scrub: 1
             },
           })
         })

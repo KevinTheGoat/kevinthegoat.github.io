@@ -6,7 +6,7 @@ import { useTheme } from '../context/ThemeContext'
 import SEO from '../components/SEO'
 import Footer from '../components/Footer'
 
-gsap.registerPlugin(ScrollTrigger)
+// ScrollTrigger is registered globally in main.jsx
 
 const skillCategories = [
   {
@@ -88,48 +88,43 @@ export default function Skills() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Header animation
-      gsap.fromTo(
-        '.skills-header',
-        { y: 60, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out' }
-      )
+      // Header animation - use gsap.from() to avoid jitter
+      gsap.from('.skills-header', {
+        y: 60,
+        opacity: 0,
+        duration: 0.8,
+        ease: 'power3.out',
+        clearProps: 'all',
+      })
 
       // Cards animation with scroll trigger
       cardsRef.current.forEach((card, index) => {
-        gsap.fromTo(
-          card,
-          { y: 80, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.8,
-            ease: 'power3.out',
-            scrollTrigger: {
-              trigger: card,
-              start: 'top 85%',
-              toggleActions: 'play none none reverse',
-            },
-          }
-        )
+        gsap.from(card, {
+          y: 80,
+          opacity: 0,
+          duration: 0.8,
+          ease: 'power3.out',
+          clearProps: 'all',
+          scrollTrigger: {
+            trigger: card,
+            start: 'top 85%',
+            toggleActions: 'play none none reverse',
+          },
+        })
 
         // Animate skill bars inside each card
         const bars = card.querySelectorAll('.skill-bar-fill')
         bars.forEach((bar) => {
-          gsap.fromTo(
-            bar,
-            { scaleX: 0 },
-            {
-              scaleX: 1,
-              duration: 1,
-              ease: 'power3.out',
-              scrollTrigger: {
-                trigger: card,
-                start: 'top 80%',
-                toggleActions: 'play none none reverse',
-              },
-            }
-          )
+          gsap.from(bar, {
+            scaleX: 0,
+            duration: 1,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: card,
+              start: 'top 80%',
+              toggleActions: 'play none none reverse',
+            },
+          })
         })
       })
     }, pageRef)

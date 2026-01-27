@@ -75,22 +75,32 @@ export default function Navigation() {
   }, [])
 
   useEffect(() => {
-    if (isOpen && menuRef.current) {
-      // Use transform-based animation for better mobile performance
-      gsap.set(menuRef.current, {
-        visibility: 'visible',
-        opacity: 0,
-      })
-      gsap.to(menuRef.current, {
-        opacity: 1,
-        duration: 0.3,
-        ease: 'power2.out',
-      })
-      gsap.fromTo(
-        menuRef.current.querySelectorAll('.nav-item'),
-        { y: 20, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.3, stagger: 0.05, ease: 'power2.out', delay: 0.1 }
-      )
+    if (menuRef.current) {
+      if (isOpen) {
+        // Animate menu container
+        gsap.to(menuRef.current, {
+          opacity: 1,
+          duration: 0.3,
+          ease: 'power2.out',
+        })
+        // Animate nav items - use gsap.from() to avoid jitter
+        // Items start visible in CSS, we animate FROM hidden state
+        gsap.from(menuRef.current.querySelectorAll('.nav-item'), {
+          y: 20,
+          opacity: 0,
+          duration: 0.3,
+          stagger: 0.05,
+          ease: 'power2.out',
+          delay: 0.1,
+          clearProps: 'all',
+        })
+      } else {
+        gsap.to(menuRef.current, {
+          opacity: 0,
+          duration: 0.2,
+          ease: 'power2.in',
+        })
+      }
     }
   }, [isOpen])
 
@@ -339,12 +349,16 @@ export default function Navigation() {
                           onClick={() => setDemoDropdownOpen(!demoDropdownOpen)}
                           className="relative px-5 py-2.5 rounded-xl font-medium text-sm transition-all duration-300 flex items-center gap-2 hover:bg-white/5"
                           style={{ color: location.pathname === '/demos' ? theme.bg : theme.text, backgroundColor: location.pathname === '/demos' ? theme.accent : 'transparent' }}
+                          aria-expanded={demoDropdownOpen}
+                          aria-haspopup="true"
+                          aria-label="Demos menu"
                         >
-                          <Icon icon={link.icon} className="w-4 h-4" />
+                          <Icon icon={link.icon} className="w-4 h-4" aria-hidden="true" />
                           {link.label}
                           <Icon
                             icon="ph:caret-down-bold"
                             className={`w-3 h-3 transition-transform duration-300 ${demoDropdownOpen ? 'rotate-180' : ''}`}
+                            aria-hidden="true"
                           />
                         </button>
 
@@ -416,7 +430,7 @@ export default function Navigation() {
               {/* Right side: Theme switcher + Mobile menu button */}
               <div className="flex items-center gap-3">
                 {/* Theme Switcher */}
-                <div className="hidden sm:grid grid-cols-5 gap-1 p-1.5 rounded-xl glass">
+                <div className="hidden sm:grid grid-cols-5 gap-1 p-1.5 rounded-xl glass" role="group" aria-label="Theme selector">
                   {Object.entries(themes).map(([key, t]) => (
                     <button
                       key={key}
@@ -426,9 +440,11 @@ export default function Navigation() {
                       }`}
                       style={{ backgroundColor: t.accent }}
                       title={t.name}
+                      aria-label={`${t.name} theme${themeKey === key ? ' (active)' : ''}`}
+                      aria-pressed={themeKey === key}
                     >
                       {themeKey === key && (
-                        <Icon icon="ph:check-bold" className="w-3 h-3" style={{ color: t.bg }} />
+                        <Icon icon="ph:check-bold" className="w-3 h-3" style={{ color: t.bg }} aria-hidden="true" />
                       )}
                     </button>
                   ))}
@@ -472,57 +488,60 @@ export default function Navigation() {
             </div>
           </nav>
 
-          {/* Mobile Menu Overlay */}
-          {isOpen && (
-            <div
-              ref={menuRef}
-              className="fixed inset-0 z-40 lg:hidden flex flex-col items-center justify-center"
-              style={{
-                backgroundColor: theme.surface,
-                backfaceVisibility: 'hidden',
-                WebkitBackfaceVisibility: 'hidden',
-                transform: 'translateZ(0)',
-                WebkitTransform: 'translateZ(0)',
-              }}
-            >
-              <div className="flex flex-col items-center gap-4">
-                {navLinks.map((link) => (
-                  <NavLink
-                    key={link.path}
-                    to={link.path}
-                    className="nav-item flex items-center gap-4 px-8 py-4 rounded-2xl text-2xl font-display font-semibold transition-all duration-300"
-                    style={({ isActive }) =>
-                      isActive
-                        ? { backgroundColor: theme.accent, color: theme.bg }
-                        : { color: theme.text }
-                    }
-                  >
-                    <Icon icon={link.icon} className="w-7 h-7" />
-                    {link.label}
-                  </NavLink>
-                ))}
+          {/* Mobile Menu Overlay - always in DOM, visibility controlled by CSS/GSAP */}
+          <div
+            ref={menuRef}
+            className={`fixed inset-0 z-40 lg:hidden flex flex-col items-center justify-center ${
+              isOpen ? 'pointer-events-auto' : 'pointer-events-none'
+            }`}
+            style={{
+              backgroundColor: theme.surface,
+              opacity: 0,
+              backfaceVisibility: 'hidden',
+              WebkitBackfaceVisibility: 'hidden',
+              transform: 'translateZ(0)',
+              WebkitTransform: 'translateZ(0)',
+            }}
+          >
+            <div className="flex flex-col items-center gap-4">
+              {navLinks.map((link) => (
+                <NavLink
+                  key={link.path}
+                  to={link.path}
+                  className="nav-item flex items-center gap-4 px-8 py-4 rounded-2xl text-2xl font-display font-semibold transition-colors duration-300"
+                  style={({ isActive }) =>
+                    isActive
+                      ? { backgroundColor: theme.accent, color: theme.bg }
+                      : { color: theme.text }
+                  }
+                >
+                  <Icon icon={link.icon} className="w-7 h-7" />
+                  {link.label}
+                </NavLink>
+              ))}
 
-                {/* Mobile Theme Switcher */}
-                <div className="nav-item grid grid-cols-5 gap-2 mt-8 p-3 rounded-xl glass">
-                  {Object.entries(themes).map(([key, t]) => (
-                    <button
-                      key={key}
-                      onClick={() => setTheme(key)}
-                      className={`w-10 h-10 rounded-lg transition-all duration-300 flex items-center justify-center ${
-                        themeKey === key ? 'scale-110 ring-2 ring-white/30' : 'opacity-50'
-                      }`}
-                      style={{ backgroundColor: t.accent }}
-                      title={t.name}
-                    >
-                      {themeKey === key && (
-                        <Icon icon="ph:check-bold" className="w-4 h-4" style={{ color: t.bg }} />
-                      )}
-                    </button>
-                  ))}
-                </div>
+              {/* Mobile Theme Switcher */}
+              <div className="nav-item grid grid-cols-5 gap-2 mt-8 p-3 rounded-xl glass" role="group" aria-label="Theme selector">
+                {Object.entries(themes).map(([key, t]) => (
+                  <button
+                    key={key}
+                    onClick={() => setTheme(key)}
+                    className={`w-10 h-10 rounded-lg transition-all duration-300 flex items-center justify-center ${
+                      themeKey === key ? 'scale-110 ring-2 ring-white/30' : 'opacity-50'
+                    }`}
+                    style={{ backgroundColor: t.accent }}
+                    title={t.name}
+                    aria-label={`${t.name} theme${themeKey === key ? ' (active)' : ''}`}
+                    aria-pressed={themeKey === key}
+                  >
+                    {themeKey === key && (
+                      <Icon icon="ph:check-bold" className="w-4 h-4" style={{ color: t.bg }} aria-hidden="true" />
+                    )}
+                  </button>
+                ))}
               </div>
             </div>
-          )}
+          </div>
         </>
       )}
     </>

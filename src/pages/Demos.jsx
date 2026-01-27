@@ -27,21 +27,33 @@ export default function Demos() {
   useEffect(() => {
     if (!isInDemoMode) {
       const ctx = gsap.context(() => {
-        gsap.fromTo(
-          '.demo-header',
-          { y: 60, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out' }
-        )
-        gsap.fromTo(
-          '.demo-card',
-          { y: 40, opacity: 0, scale: 0.95 },
-          { y: 0, opacity: 1, scale: 1, duration: 0.6, stagger: 0.1, delay: 0.2, ease: 'power3.out' }
-        )
-        gsap.fromTo(
-          '.demo-tab',
-          { y: 20, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.4, stagger: 0.05, delay: 0.4, ease: 'power3.out' }
-        )
+        // Use gsap.from() instead of fromTo() to avoid jitter on mobile
+        gsap.from('.demo-header', {
+          y: 60,
+          opacity: 0,
+          duration: 0.8,
+          ease: 'power3.out',
+          clearProps: 'all',
+        })
+        gsap.from('.demo-card', {
+          y: 40,
+          opacity: 0,
+          scale: 0.95,
+          duration: 0.6,
+          stagger: 0.1,
+          delay: 0.2,
+          ease: 'power3.out',
+          clearProps: 'all',
+        })
+        gsap.from('.demo-tab', {
+          y: 20,
+          opacity: 0,
+          duration: 0.4,
+          stagger: 0.05,
+          delay: 0.4,
+          ease: 'power3.out',
+          clearProps: 'all',
+        })
       }, pageRef)
 
       return () => ctx.revert()
