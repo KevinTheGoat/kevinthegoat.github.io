@@ -16,6 +16,7 @@ const projects = [
     description:
       'A premium auto body and collision repair service website featuring modern design, seamless animations, and an intuitive booking system.',
     url: 'https://stuttgartinternationalcollision.com/',
+    image: '/images/projects/stuttgart-collision.png',
     tags: ['Web Design', 'React', 'Responsive', 'Business'],
     category: 'Web',
     gradient: 'from-blue-600 via-blue-700 to-indigo-800',
@@ -27,6 +28,7 @@ const projects = [
     description:
       'A comprehensive accident assistance platform that connects users with legal and medical professionals through an intelligent matching system.',
     url: 'https://accidentassistnetwork.com/',
+    image: '/images/projects/accident-assist.png',
     tags: ['Web App', 'Healthcare', 'Legal Tech', 'Platform'],
     category: 'Web',
     gradient: 'from-emerald-600 via-teal-600 to-cyan-700',
@@ -38,6 +40,7 @@ const projects = [
     description:
       'A professional logistics and freight forwarding platform providing reliable shipping solutions from Miami to the Bahamas and beyond.',
     url: 'https://monexuslogistics.com/',
+    image: '/images/projects/monexus-logistics.png',
     tags: ['Web Design', 'Logistics', 'Responsive', 'Business'],
     category: 'Web',
     gradient: 'from-cyan-600 via-blue-600 to-indigo-700',
@@ -163,40 +166,36 @@ export default function Projects() {
             >
               {/* Project Preview */}
               <div className={`h-64 lg:h-80 bg-gradient-to-br ${project.gradient} relative overflow-hidden`}>
-                {/* Animated background pattern */}
-                <div className="absolute inset-0 opacity-30">
-                  <div
-                    className="absolute inset-0 transition-transform duration-700 group-hover:scale-110"
-                    style={{
-                      backgroundImage: `radial-gradient(circle at 20% 50%, white 1px, transparent 1px),
-                                       radial-gradient(circle at 80% 50%, white 1px, transparent 1px)`,
-                      backgroundSize: '40px 40px',
-                    }}
+                {/* Project Screenshot */}
+                {project.image ? (
+                  <img
+                    src={project.image}
+                    alt={project.title}
+                    className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
                   />
-                </div>
+                ) : (
+                  /* Fallback pattern if no image */
+                  <div className="absolute inset-0 opacity-30">
+                    <div
+                      className="absolute inset-0 transition-transform duration-700 group-hover:scale-110"
+                      style={{
+                        backgroundImage: `radial-gradient(circle at 20% 50%, white 1px, transparent 1px),
+                                         radial-gradient(circle at 80% 50%, white 1px, transparent 1px)`,
+                        backgroundSize: '40px 40px',
+                      }}
+                    />
+                  </div>
+                )}
 
-                {/* Center icon/content */}
-                <div className="absolute inset-0 flex flex-col items-center justify-center text-white/90">
-                  <Icon
-                    icon={
-                      project.category === 'Mobile'
-                        ? 'ph:device-mobile-bold'
-                        : project.category === 'Desktop'
-                        ? 'ph:desktop-bold'
-                        : 'ph:globe-bold'
-                    }
-                    className="w-16 h-16 mb-4 transition-transform duration-500 group-hover:scale-110"
-                  />
-                  <span className="text-sm font-medium px-4 py-1.5 rounded-full bg-white/20 backdrop-blur-sm">
+                {/* Hover overlay with view button */}
+                <div
+                  className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                  style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}
+                >
+                  <span className="text-sm font-medium px-4 py-2 rounded-full bg-white/20 backdrop-blur-sm text-white">
                     {project.isDemo ? 'Demo Project' : 'View Live Site'}
                   </span>
                 </div>
-
-                {/* Hover overlay */}
-                <div
-                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                  style={{ backgroundColor: 'rgba(0,0,0,0.3)' }}
-                />
               </div>
 
               {/* Project Info */}
