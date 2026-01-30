@@ -197,6 +197,7 @@ export default function Projects() {
                   </span>
                 </div>
               </div>
+              
 
               {/* Project Info */}
               <div className="p-8">
