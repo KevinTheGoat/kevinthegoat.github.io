@@ -8,7 +8,8 @@ export default function SEO({
   canonicalPath = '',
   type = 'website',
   article = null,
-  faqData = null
+  faqData = null,
+  projectsData = null
 }) {
   const canonicalUrl = `https://kevco.co${canonicalPath}`
   const siteName = 'KevCo'
@@ -86,6 +87,29 @@ export default function SEO({
     }))
   } : null
 
+  // Projects/Portfolio Schema for rich snippets
+  const projectsSchema = projectsData ? {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'KevCo Portfolio',
+    description: 'Web development projects by KevCo',
+    itemListElement: projectsData.map((project, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      item: {
+        '@type': 'CreativeWork',
+        name: project.title,
+        description: project.description,
+        url: project.url,
+        image: `https://kevco.co${project.image}`,
+        creator: {
+          '@type': 'Organization',
+          name: 'KevCo'
+        }
+      }
+    }))
+  } : null
+
   const breadcrumbSchema = canonicalPath ? {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
@@ -151,6 +175,11 @@ export default function SEO({
       {faqSchema && (
         <script type="application/ld+json">
           {JSON.stringify(faqSchema)}
+        </script>
+      )}
+      {projectsSchema && (
+        <script type="application/ld+json">
+          {JSON.stringify(projectsSchema)}
         </script>
       )}
     </Helmet>

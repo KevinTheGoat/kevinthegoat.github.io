@@ -107,6 +107,7 @@ export default function Projects() {
         description="View our best web development work including Stuttgart International Collision, Accident Assist Network, and Monexus Logistics. Professional websites and web applications built with React and modern technologies."
         keywords="web development portfolio, React projects, business websites, web applications, professional web design, Stuttgart International Collision, Accident Assist Network, logistics platform"
         canonicalPath="/projects"
+        projectsData={projects}
       />
       <div ref={pageRef} className="min-h-screen pt-32 pb-24 px-6">
       <div className="max-w-7xl mx-auto">
@@ -170,7 +171,8 @@ export default function Projects() {
                 {project.image ? (
                   <img
                     src={project.image}
-                    alt={project.title}
+                    alt={`${project.title} - ${project.description.slice(0, 80)}`}
+                    loading="lazy"
                     className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
                   />
                 ) : (

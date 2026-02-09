@@ -13,7 +13,9 @@ import './index.css'
 // Register GSAP plugins globally (once)
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin)
 
-ReactDOM.createRoot(document.getElementById('root')).render(
+const rootElement = document.getElementById('root')
+
+const app = (
   <React.StrictMode>
     <HelmetProvider>
       <BrowserRouter>
@@ -24,5 +26,12 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         </ThemeProvider>
       </BrowserRouter>
     </HelmetProvider>
-  </React.StrictMode>,
+  </React.StrictMode>
 )
+
+// Use hydrate if pre-rendered HTML exists (react-snap), otherwise createRoot
+if (rootElement.hasChildNodes()) {
+  ReactDOM.hydrateRoot(rootElement, app)
+} else {
+  ReactDOM.createRoot(rootElement).render(app)
+}
