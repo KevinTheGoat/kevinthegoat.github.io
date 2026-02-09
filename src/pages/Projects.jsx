@@ -104,7 +104,7 @@ export default function Projects() {
     <>
       <SEO
         title="Featured Projects | KevCo - Web Development Portfolio"
-        description="View my best web development work including Stuttgart International Collision, Accident Assist Network, and Monexus Logistics. Professional websites and web applications built with React and modern technologies."
+        description="View our best web development work including Stuttgart International Collision, Accident Assist Network, and Monexus Logistics. Professional websites and web applications built with React and modern technologies."
         keywords="web development portfolio, React projects, business websites, web applications, professional web design, Stuttgart International Collision, Accident Assist Network, logistics platform"
         canonicalPath="/projects"
       />
@@ -122,7 +122,7 @@ export default function Projects() {
             Selected <span className="gradient-text">Projects</span>
           </h1>
           <p className="text-xl" style={{ color: theme.muted }}>
-            A showcase of my best work across web applications and platforms.
+            A showcase of our best work across web applications and platforms.
             Each project is crafted with attention to detail and performance.
           </p>
         </div>

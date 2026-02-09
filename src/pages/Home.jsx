@@ -136,7 +136,7 @@ export default function Home() {
     <>
       <SEO
         title="KevCo | Professional Web, Mobile & Desktop Development"
-        description="Expert full-stack developer specializing in React, React Native, and Electron. Building premium web applications, mobile apps, and desktop software. Based in the Bahamas, serving clients worldwide."
+        description="KevCo is a full-stack development agency specializing in React, React Native, and Electron. We build premium web applications, mobile apps, and desktop software. Based in South Florida, serving clients across the United States."
         canonicalPath="/"
       />
       <div ref={heroRef}>
@@ -287,7 +287,7 @@ export default function Home() {
           <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between mb-16">
             <div>
               <h2 className="font-display font-bold text-display-md mb-4">
-                What I <span className="gradient-text">Build</span>
+                What We <span className="gradient-text">Build</span>
               </h2>
               <p className="text-lg max-w-xl" style={{ color: theme.muted }}>
                 Full-stack solutions tailored to your needs, from concept to deployment.

@@ -1,26 +1,44 @@
 import { Helmet } from 'react-helmet-async'
 
 export default function SEO({
-  title = 'KevCo | Professional Web, Mobile & Desktop Development',
-  description = 'Expert full-stack developer specializing in React, React Native, and Electron. Building premium web applications, mobile apps, and desktop software. Based in the Bahamas, serving clients worldwide.',
-  keywords = 'web developer, mobile app developer, full stack developer, React developer, React Native, Electron, Bahamas developer, freelance developer, web design, app development, custom software',
-  ogImage = 'https://kevinthegoat.github.io/images/kevco-logo.png',
+  title = 'KevCo | Professional Web, Mobile & Desktop Development Agency',
+  description = 'KevCo is a full-stack development agency specializing in React, React Native, and Electron. We build premium web applications, mobile apps, and desktop software. Based in South Florida, serving clients across the United States.',
+  keywords = 'KevCo, web development agency, mobile app development, full stack development, React developer, React Native, Electron, Miami web developer, South Florida web developer, Broward web developer, web design agency, app development company, custom software development, website design Miami, professional web development, Node.js developer, UI UX design, Fort Lauderdale web developer',
+  ogImage = 'https://kevco.co/images/kevco-logo.png',
   canonicalPath = '',
   type = 'website',
-  article = null
+  article = null,
+  faqData = null
 }) {
-  const canonicalUrl = `https://kevinthegoat.github.io${canonicalPath}`
+  const canonicalUrl = `https://kevco.co${canonicalPath}`
   const siteName = 'KevCo'
 
-  // JSON-LD Structured Data
-  const personSchema = {
+  // JSON-LD Structured Data - Organization
+  const organizationSchema = {
     '@context': 'https://schema.org',
-    '@type': 'Person',
-    name: 'Kevin Moreau',
-    jobTitle: 'Full-Stack Developer',
-    url: 'https://kevinthegoat.github.io',
+    '@type': 'ProfessionalService',
+    name: 'KevCo',
+    url: 'https://kevco.co',
+    logo: ogImage,
     image: ogImage,
-    sameAs: [],
+    description: 'Full-stack development agency specializing in web applications, mobile apps, and desktop software.',
+    email: 'kevinmoreau@kevco.co',
+    areaServed: {
+      '@type': 'Country',
+      name: 'United States'
+    },
+    priceRange: '$$',
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: 'Miami',
+      addressRegion: 'FL',
+      addressCountry: 'US'
+    },
+    geo: {
+      '@type': 'GeoCoordinates',
+      latitude: '25.7617',
+      longitude: '-80.1918'
+    },
     knowsAbout: [
       'React',
       'React Native',
@@ -30,25 +48,43 @@ export default function SEO({
       'Node.js',
       'Web Development',
       'Mobile App Development',
-      'Desktop App Development'
+      'Desktop App Development',
+      'UI/UX Design'
     ],
-    worksFor: {
-      '@type': 'Organization',
-      name: 'KevCo'
-    }
+    serviceType: [
+      'Web Development',
+      'Mobile App Development',
+      'Desktop App Development',
+      'Backend API Development',
+      'UI/UX Design'
+    ]
   }
 
   const websiteSchema = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     name: siteName,
-    url: 'https://kevinthegoat.github.io',
+    url: 'https://kevco.co',
     description: description,
-    author: {
-      '@type': 'Person',
-      name: 'Kevin Moreau'
+    publisher: {
+      '@type': 'Organization',
+      name: 'KevCo'
     }
   }
+
+  // FAQ Schema for rich snippets
+  const faqSchema = faqData ? {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqData.map(faq => ({
+      '@type': 'Question',
+      name: faq.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: faq.answer
+      }
+    }))
+  } : null
 
   const breadcrumbSchema = canonicalPath ? {
     '@context': 'https://schema.org',
@@ -58,7 +94,7 @@ export default function SEO({
         '@type': 'ListItem',
         position: 1,
         name: 'Home',
-        item: 'https://kevinthegoat.github.io'
+        item: 'https://kevco.co'
       },
       {
         '@type': 'ListItem',
@@ -92,8 +128,6 @@ export default function SEO({
 
       {/* Twitter */}
       <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:site" content="@kevco" />
-      <meta name="twitter:creator" content="@kevco" />
       <meta name="twitter:title" content={title} />
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={ogImage} />
@@ -104,7 +138,7 @@ export default function SEO({
 
       {/* JSON-LD Structured Data */}
       <script type="application/ld+json">
-        {JSON.stringify(personSchema)}
+        {JSON.stringify(organizationSchema)}
       </script>
       <script type="application/ld+json">
         {JSON.stringify(websiteSchema)}
@@ -112,6 +146,11 @@ export default function SEO({
       {breadcrumbSchema && (
         <script type="application/ld+json">
           {JSON.stringify(breadcrumbSchema)}
+        </script>
+      )}
+      {faqSchema && (
+        <script type="application/ld+json">
+          {JSON.stringify(faqSchema)}
         </script>
       )}
     </Helmet>

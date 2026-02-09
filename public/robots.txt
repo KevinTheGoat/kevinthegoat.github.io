@@ -2,5 +2,11 @@
 User-agent: *
 Allow: /
 
+# Disallow demo-only paths that shouldn't be indexed separately
+Disallow: /404
+
 # Sitemap location
-Sitemap: https://kevinthegoat.github.io/sitemap.xml
+Sitemap: https://kevco.co/sitemap.xml
+
+# Host
+Host: https://kevco.co

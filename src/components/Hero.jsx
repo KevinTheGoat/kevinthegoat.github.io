@@ -83,7 +83,7 @@ export default function Hero() {
               color: currentTheme.bg,
             }}
           >
-            View My Work
+            View Our Work
           </a>
           <a
             href="#contact"

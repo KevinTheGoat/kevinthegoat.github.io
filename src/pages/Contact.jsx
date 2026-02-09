@@ -19,22 +19,22 @@ const faqs = [
   {
     question: 'What services do you offer?',
     answer:
-      'I specialize in full-stack development including web applications, mobile apps (iOS/Android), desktop applications, and backend API development. I also offer UI/UX design services.',
+      'We specialize in full-stack development including web applications, mobile apps (iOS/Android), desktop applications, and backend API development. We also offer UI/UX design services.',
   },
   {
     question: 'What is your typical project timeline?',
     answer:
-      'Project timelines vary based on complexity. A simple website might take 2-4 weeks, while a full-featured application could take 2-3 months. I provide detailed estimates after our initial consultation.',
+      'Project timelines vary based on complexity. A simple website might take 2-4 weeks, while a full-featured application could take 2-3 months. We provide detailed estimates after our initial consultation.',
   },
   {
     question: 'Do you offer ongoing maintenance?',
     answer:
-      'Yes! I offer maintenance packages to keep your application secure, updated, and running smoothly. This includes bug fixes, security updates, and minor feature additions.',
+      'Yes! We offer maintenance packages to keep your application secure, updated, and running smoothly. This includes bug fixes, security updates, and minor feature additions.',
   },
   {
     question: 'What is your development process?',
     answer:
-      'I follow an agile approach: Discovery → Design → Development → Testing → Launch. You are involved at every stage with regular updates and opportunities for feedback.',
+      'We follow an agile approach: Discovery → Design → Development → Testing → Launch. You are involved at every stage with regular updates and opportunities for feedback.',
   },
 ]
 
@@ -172,9 +172,10 @@ export default function Contact() {
     <>
       <SEO
         title="Contact KevCo | Get in Touch for Your Next Project"
-        description="Ready to start your web, mobile, or desktop app project? Contact Kevin at kevinmoreau@kevco.co for professional development services. Based in the Bahamas, serving clients worldwide."
-        keywords="contact developer, hire web developer, hire mobile app developer, freelance developer Bahamas, custom software development, project inquiry, web development services"
+        description="Ready to start your web, mobile, or desktop app project? Contact KevCo at kevinmoreau@kevco.co for professional development services. Based in South Florida, serving clients across the United States."
+        keywords="contact KevCo, hire web developer Miami, hire mobile app developer, web development agency South Florida, custom software development, project inquiry, web development services Miami, app development quote"
         canonicalPath="/contact"
+        faqData={faqs}
       />
       <div ref={pageRef} className="min-h-screen pt-32 pb-24 px-6">
       <div className="max-w-7xl mx-auto">
@@ -190,7 +191,7 @@ export default function Contact() {
             Get in <span className="gradient-text">Touch</span>
           </h1>
           <p className="text-lg sm:text-xl mb-6" style={{ color: theme.muted }}>
-            Have a project in mind or just want to chat? I'd love to hear from you.
+            Have a project in mind or just want to chat? We'd love to hear from you.
             Let's create something amazing together.
           </p>
 
@@ -218,7 +219,7 @@ export default function Contact() {
               />
             </div>
             <div className="min-w-0 flex-1">
-              <div className="text-sm mb-1" style={{ color: theme.muted }}>Email me at</div>
+              <div className="text-sm mb-1" style={{ color: theme.muted }}>Email us at</div>
               <div className="font-semibold text-sm sm:text-base truncate" style={{ color: theme.accent }}>kevinmoreau@kevco.co</div>
             </div>
             <Icon icon="ph:arrow-right-bold" className="w-5 h-5 flex-shrink-0" style={{ color: theme.muted }} />
@@ -247,7 +248,7 @@ export default function Contact() {
                 </div>
                 <h3 className="font-display font-semibold text-xl mb-2">Message Sent!</h3>
                 <p style={{ color: theme.muted }}>
-                  Thank you for reaching out. I'll get back to you within 24 hours.
+                  Thank you for reaching out. We'll get back to you within 24 hours.
                 </p>
                 <button
                   onClick={() => setSubmitted(false)}
@@ -266,7 +267,7 @@ export default function Contact() {
                   >
                     <Icon icon="ph:warning-circle-bold" className="w-5 h-5 flex-shrink-0" style={{ color: '#ef4444' }} />
                     <p className="text-sm" style={{ color: '#ef4444' }}>
-                      Failed to send message. Please try again or email me directly.
+                      Failed to send message. Please try again or email us directly.
                     </p>
                   </div>
                 )}
@@ -382,7 +383,7 @@ export default function Contact() {
                       border: `1px solid ${formErrors.message ? '#ef4444' : theme.border}`,
                       '--tw-ring-color': theme.accent,
                     }}
-                    placeholder="Tell me about your project..."
+                    placeholder="Tell us about your project..."
                     aria-invalid={!!formErrors.message}
                     aria-describedby={formErrors.message ? 'message-error' : undefined}
                   />
@@ -469,7 +470,7 @@ export default function Contact() {
                 <span className="font-medium">Currently Available</span>
               </div>
               <p className="text-sm" style={{ color: theme.muted }}>
-                I'm currently accepting new projects. Typical response time is within 24 hours.
+                We're currently accepting new projects. Typical response time is within 24 hours.
               </p>
             </div>
           </div>

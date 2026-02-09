@@ -136,7 +136,7 @@ export default function Skills() {
     <>
       <SEO
         title="Skills & Technologies | KevCo - Full-Stack Development Expertise"
-        description="Expert in React, React Native, Electron, Node.js, and modern web technologies. Frontend, mobile, desktop, backend development, and UI/UX design skills. View my comprehensive technical expertise."
+        description="KevCo's expertise in React, React Native, Electron, Node.js, and modern web technologies. Frontend, mobile, desktop, backend development, and UI/UX design skills. View our comprehensive technical expertise."
         keywords="React developer, React Native, Electron developer, Node.js, full stack skills, frontend development, mobile development, desktop apps, backend APIs, UI/UX design, TypeScript, Tailwind CSS, GSAP animations"
         canonicalPath="/skills"
       />
@@ -246,7 +246,7 @@ export default function Skills() {
             Have a project in mind?
           </h3>
           <p className="text-lg mb-8 max-w-xl mx-auto" style={{ color: theme.muted }}>
-            Let's discuss how my skills can help bring your vision to life.
+            Let's discuss how our skills can help bring your vision to life.
           </p>
           <a
             href="/contact"
