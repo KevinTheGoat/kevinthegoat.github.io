@@ -121,6 +121,8 @@ export default function CustomCursor() {
   return (
     <div
       ref={cursorRef}
+      aria-hidden="true"
+      role="presentation"
       style={{
         position: 'fixed',
         top: 0,

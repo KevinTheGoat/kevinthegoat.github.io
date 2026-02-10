@@ -193,11 +193,20 @@ export default function App() {
       {/* Custom Cursor */}
       <CustomCursor />
 
+      {/* Skip to content link for accessibility */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:rounded-lg focus:font-medium"
+        style={{ backgroundColor: currentTheme.accent, color: currentTheme.bg }}
+      >
+        Skip to content
+      </a>
+
       {/* Navigation */}
       <Navigation />
 
       {/* Main content with page transitions */}
-      <main ref={pageRef} className="page-transition relative z-10">
+      <main id="main-content" ref={pageRef} className="page-transition relative z-10">
         <ErrorBoundary>
           <Suspense
             fallback={
