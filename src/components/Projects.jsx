@@ -76,7 +76,7 @@ export default function Projects() {
               target="_blank"
               rel="noopener noreferrer"
               ref={(el) => (cardsRef.current[index] = el)}
-              className="group block rounded-2xl overflow-hidden transition-all duration-500 hover:scale-[1.02]"
+              className="opacity-0 group block rounded-2xl overflow-hidden transition-all duration-500 hover:scale-[1.02]"
               style={{
                 backgroundColor: currentTheme.surface,
                 border: `1px solid ${currentTheme.accent}22`,

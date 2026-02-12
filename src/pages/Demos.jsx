@@ -68,7 +68,7 @@ export default function Demos() {
       <div ref={pageRef} className="min-h-screen pt-32 pb-24 px-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="demo-header max-w-3xl mb-16">
+        <div className="demo-header opacity-0 max-w-3xl mb-16">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass mb-6">
             <Icon icon="ph:play-circle-bold" className="w-4 h-4" style={{ color: theme.accent }} />
             <span className="text-sm font-medium" style={{ color: theme.muted }}>
@@ -90,7 +90,7 @@ export default function Demos() {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className="demo-tab flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-all duration-300 hover:scale-105"
+              className="demo-tab opacity-0 flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-all duration-300 hover:scale-105"
               style={{
                 backgroundColor: activeTab === tab.id ? theme.accent : theme.elevated,
                 color: activeTab === tab.id ? theme.bg : theme.text,
@@ -112,7 +112,7 @@ export default function Demos() {
                 <button
                   key={demo.id}
                   onClick={() => enterDemo(demo.id)}
-                  className="demo-card group text-left p-6 rounded-3xl transition-all duration-500 hover:scale-[1.02] overflow-hidden relative"
+                  className="demo-card opacity-0 group text-left p-6 rounded-3xl transition-all duration-500 hover:scale-[1.02] overflow-hidden relative"
                   style={{
                     backgroundColor: theme.surface,
                     border: `1px solid ${theme.border}`,

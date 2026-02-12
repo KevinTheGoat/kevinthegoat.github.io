@@ -106,7 +106,7 @@ export default function Home() {
     return text.split(' ').map((word, wordIndex) => (
       <span key={wordIndex} className="inline-block whitespace-nowrap">
         {word.split('').map((char, charIndex) => (
-          <span key={charIndex} className="char inline-block" style={{ transformStyle: 'preserve-3d' }}>
+          <span key={charIndex} className="char inline-block opacity-0" style={{ transformStyle: 'preserve-3d' }}>
             {char}
           </span>
         ))}
@@ -131,7 +131,7 @@ export default function Home() {
             {/* Left: Text content */}
             <div>
               {/* Badge */}
-              <div className="hero-fade inline-flex items-center gap-2 px-4 py-2 rounded-full glass mb-8">
+              <div className="hero-fade opacity-0 inline-flex items-center gap-2 px-4 py-2 rounded-full glass mb-8">
                 <span
                   className="w-2 h-2 rounded-full animate-pulse"
                   style={{ backgroundColor: '#22c55e' }}
@@ -157,7 +157,7 @@ export default function Home() {
 
               {/* Subtitle */}
               <p
-                className="hero-fade text-xl lg:text-2xl mb-10 max-w-xl leading-relaxed"
+                className="hero-fade opacity-0 text-xl lg:text-2xl mb-10 max-w-xl leading-relaxed"
                 style={{ color: theme.muted }}
               >
                 Building exceptional digital experiences across{' '}
@@ -168,7 +168,7 @@ export default function Home() {
               </p>
 
               {/* CTAs */}
-              <div className="hero-fade flex flex-wrap gap-4">
+              <div className="hero-fade opacity-0 flex flex-wrap gap-4">
                 <Link
                   to="/projects"
                   className="group inline-flex items-center gap-3 px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 hover:scale-105"
@@ -199,7 +199,7 @@ export default function Home() {
             </div>
 
             {/* Right: Visual element with parallax */}
-            <div ref={shapesRef} className="hero-fade hidden lg:flex justify-center items-center">
+            <div ref={shapesRef} className="hero-fade opacity-0 hidden lg:flex justify-center items-center">
               <div className="relative">
                 {/* Animated geometric shape with parallax */}
                 <div
@@ -242,7 +242,7 @@ export default function Home() {
               }}
             />
             {stats.map((stat, index) => (
-              <div key={stat.label} className="text-center lg:text-left">
+              <div key={stat.label} className="opacity-0 text-center lg:text-left">
                 <AnimatedCounter
                   value={stat.value}
                   duration={2}
@@ -294,7 +294,7 @@ export default function Home() {
             {services.map((service, index) => (
               <div
                 key={service.title}
-                className="group p-8 rounded-2xl transition-all duration-500 card-hover cursor-default"
+                className="opacity-0 group p-8 rounded-2xl transition-all duration-500 card-hover cursor-default"
                 style={{
                   backgroundColor: theme.elevated,
                   border: `1px solid ${theme.border}`,

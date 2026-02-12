@@ -163,7 +163,7 @@ export default function Contact() {
       <div ref={pageRef} className="min-h-screen pt-32 pb-24 px-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="contact-header max-w-3xl mb-16">
+        <div className="contact-header opacity-0 max-w-3xl mb-16">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass mb-6">
             <Icon icon="ph:chat-circle-bold" className="w-4 h-4" style={{ color: theme.accent }} />
             <span className="text-sm font-medium" style={{ color: theme.muted }}>
@@ -181,7 +181,7 @@ export default function Contact() {
           {/* Email Contact - Integrated */}
           <a
             href="mailto:kevinmoreau@kevco.co"
-            className="contact-card flex items-center gap-3 sm:gap-4 px-4 sm:px-6 py-4 rounded-2xl transition-all duration-300 hover:scale-[1.02] w-full sm:w-auto"
+            className="contact-card opacity-0 flex items-center gap-3 sm:gap-4 px-4 sm:px-6 py-4 rounded-2xl transition-all duration-300 hover:scale-[1.02] w-full sm:w-auto"
             style={{
               backgroundColor: theme.surface,
               border: `1px solid ${theme.border}`,
@@ -213,7 +213,7 @@ export default function Contact() {
         <div className="grid lg:grid-cols-2 gap-12">
           {/* Contact Form */}
           <div
-            className="contact-form p-5 sm:p-8 rounded-2xl sm:rounded-3xl"
+            className="contact-form opacity-0 p-5 sm:p-8 rounded-2xl sm:rounded-3xl"
             style={{
               backgroundColor: theme.surface,
               border: `1px solid ${theme.border}`,
@@ -401,7 +401,7 @@ export default function Contact() {
           </div>
 
           {/* FAQ Section */}
-          <div className="faq-section">
+          <div className="faq-section opacity-0">
             <h2 className="font-display font-bold text-2xl mb-6">
               Frequently Asked <span className="gradient-text">Questions</span>
             </h2>

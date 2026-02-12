@@ -56,7 +56,7 @@ export default function Contact() {
       className="py-24 px-6 theme-transition"
       style={{ backgroundColor: currentTheme.surface }}
     >
-      <div className="max-w-3xl mx-auto text-center" ref={contentRef}>
+      <div className="opacity-0 max-w-3xl mx-auto text-center" ref={contentRef}>
         <h2 className="text-4xl sm:text-5xl font-bold mb-4">
           Let's <span style={{ color: currentTheme.accent }}>Connect</span>
         </h2>

@@ -68,7 +68,7 @@ export default function Demos() {
           </p>
         </div>
 
-        <div ref={contentRef}>
+        <div ref={contentRef} className="opacity-0">
           {/* Demo tabs */}
           <div className="flex flex-wrap justify-center gap-2 mb-8">
             {demoTabs.map((tab) => (

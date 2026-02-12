@@ -72,7 +72,7 @@ export default function NotFound() {
 
         <div className="text-center relative z-10 max-w-2xl">
           {/* 404 Number */}
-          <div className="error-number mb-8">
+          <div className="error-number opacity-0 scale-0 mb-8">
             <span
               className="font-display font-bold text-[12rem] sm:text-[16rem] leading-none"
               style={{
@@ -88,7 +88,7 @@ export default function NotFound() {
           </div>
 
           {/* Content */}
-          <div className="error-content mb-10">
+          <div className="error-content opacity-0 mb-10">
             <h1 className="font-display font-bold text-3xl sm:text-4xl mb-4">
               Oops! Page Not Found
             </h1>
@@ -99,7 +99,7 @@ export default function NotFound() {
           </div>
 
           {/* Buttons */}
-          <div className="error-buttons flex flex-col sm:flex-row items-center justify-center gap-4">
+          <div className="error-buttons opacity-0 flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               to="/"
               className="inline-flex items-center gap-3 px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 hover:scale-105"

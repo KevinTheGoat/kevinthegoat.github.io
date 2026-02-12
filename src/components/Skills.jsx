@@ -78,7 +78,7 @@ export default function Skills() {
             <div
               key={category.title}
               ref={(el) => (cardsRef.current[index] = el)}
-              className="p-6 rounded-2xl transition-all duration-300 hover:scale-105 cursor-default group"
+              className="opacity-0 p-6 rounded-2xl transition-all duration-300 hover:scale-105 cursor-default group"
               style={{
                 backgroundColor: currentTheme.bg,
                 border: `1px solid ${currentTheme.accent}22`,

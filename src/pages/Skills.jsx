@@ -134,7 +134,7 @@ export default function Skills() {
       <div ref={pageRef} className="min-h-screen pt-32 pb-24 px-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="skills-header max-w-3xl mb-20">
+        <div className="skills-header opacity-0 max-w-3xl mb-20">
           <div
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass mb-6"
           >
@@ -158,7 +158,7 @@ export default function Skills() {
             <div
               key={category.title}
               ref={(el) => (cardsRef.current[categoryIndex] = el)}
-              className="p-8 rounded-3xl transition-all duration-500"
+              className="opacity-0 p-8 rounded-3xl transition-all duration-500"
               style={{
                 backgroundColor: theme.surface,
                 border: `1px solid ${theme.border}`,
