@@ -49,53 +49,36 @@ export default function Home() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Hero title animation - use gsap.from() to avoid jitter
+      // Hero title animation
       const chars = titleRef.current.querySelectorAll('.char')
-      gsap.from(chars, {
-        y: 100,
-        opacity: 0,
-        rotateX: -90,
-        duration: 1,
-        stagger: 0.03,
-        ease: 'power3.out',
-        clearProps: 'all',
-      })
+      gsap.fromTo(chars,
+        { y: 100, opacity: 0, rotateX: -90 },
+        { y: 0, opacity: 1, rotateX: 0, duration: 1, stagger: 0.03, ease: 'power3.out', force3D: true }
+      )
 
       // Subtitle and CTA animation
-      gsap.from('.hero-fade', {
-        y: 40,
-        opacity: 0,
-        duration: 0.8,
-        stagger: 0.15,
-        delay: 0.5,
-        ease: 'power3.out',
-        clearProps: 'all',
-      })
+      gsap.fromTo('.hero-fade',
+        { y: 40, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8, stagger: 0.15, delay: 0.5, ease: 'power3.out', force3D: true }
+      )
 
       // Stats animation
-      gsap.from(statsRef.current?.children, {
-        y: 30,
-        opacity: 0,
-        duration: 0.6,
-        stagger: 0.1,
-        delay: 1,
-        ease: 'power3.out',
-        clearProps: 'all',
-      })
+      gsap.fromTo(statsRef.current?.children,
+        { y: 30, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.6, stagger: 0.1, delay: 1, ease: 'power3.out', force3D: true }
+      )
 
       // Services animation with ScrollTrigger
-      gsap.from(servicesRef.current?.children, {
-        y: 60,
-        opacity: 0,
-        duration: 0.8,
-        stagger: 0.1,
-        ease: 'power3.out',
-        clearProps: 'all',
-        scrollTrigger: {
-          trigger: servicesRef.current,
-          start: 'top 80%',
-        },
-      })
+      gsap.fromTo(servicesRef.current?.children,
+        { y: 60, opacity: 0 },
+        {
+          y: 0, opacity: 1, duration: 0.8, stagger: 0.1, ease: 'power3.out', force3D: true,
+          scrollTrigger: {
+            trigger: servicesRef.current,
+            start: 'top 80%',
+          },
+        }
+      )
 
       // Parallax effect for hero shapes (optimized)
       if (shapesRef.current) {

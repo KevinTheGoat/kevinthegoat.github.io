@@ -36,19 +36,20 @@ export default function Projects() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      cardsRef.current.forEach((card, index) => {
-        gsap.from(card, {
-          x: index % 2 === 0 ? -60 : 60,
-          opacity: 0,
-          duration: 0.8,
-          ease: 'power3.out',
-          clearProps: 'all',
-          scrollTrigger: {
-            trigger: card,
-            start: 'top 80%',
-            toggleActions: 'play none none reverse',
-          },
-        })
+      const cards = cardsRef.current.filter(Boolean)
+      // Set initial positions with alternating x-direction
+      cards.forEach((card, index) => {
+        gsap.set(card, { x: index % 2 === 0 ? -60 : 60, opacity: 0 })
+      })
+      ScrollTrigger.batch(cards, {
+        start: 'top 80%',
+        onEnter: (batch) =>
+          gsap.to(batch, { x: 0, opacity: 1, duration: 0.8, stagger: 0.1, ease: 'power3.out', force3D: true }),
+        onLeaveBack: (batch) =>
+          batch.forEach((card) => {
+            const index = cards.indexOf(card)
+            gsap.to(card, { x: index % 2 === 0 ? -60 : 60, opacity: 0, duration: 0.4 })
+          }),
       })
     }, sectionRef)
 

@@ -70,14 +70,11 @@ export default function App() {
     if (prevPathRef.current === location.pathname) return
 
     const ctx = gsap.context(() => {
-      // Enter animation - use gsap.from() to avoid jitter
-      gsap.from(pageRef.current, {
-        opacity: 0,
-        y: 30,
-        duration: 0.6,
-        ease: 'power3.out',
-        clearProps: 'all',
-      })
+      // Enter animation
+      gsap.fromTo(pageRef.current,
+        { opacity: 0, y: 30 },
+        { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out', force3D: true }
+      )
     })
 
     prevPathRef.current = location.pathname
@@ -89,29 +86,18 @@ export default function App() {
   useEffect(() => {
     if (transitionRef.current) {
       if (isTransitioning) {
-        gsap.from(transitionRef.current, {
-          opacity: 0,
-          scale: 1.1,
-          duration: 0.3,
-          ease: 'power3.out',
-          clearProps: 'all',
-        })
-        gsap.from(transitionRef.current.querySelector('.transition-icon'), {
-          scale: 0,
-          rotate: -180,
-          duration: 0.4,
-          ease: 'back.out(1.7)',
-          delay: 0.1,
-          clearProps: 'all',
-        })
-        gsap.from(transitionRef.current.querySelector('.transition-text'), {
-          y: 20,
-          opacity: 0,
-          duration: 0.3,
-          ease: 'power3.out',
-          delay: 0.2,
-          clearProps: 'all',
-        })
+        gsap.fromTo(transitionRef.current,
+          { opacity: 0, scale: 1.1 },
+          { opacity: 1, scale: 1, duration: 0.3, ease: 'power3.out', force3D: true }
+        )
+        gsap.fromTo(transitionRef.current.querySelector('.transition-icon'),
+          { scale: 0, rotate: -180 },
+          { scale: 1, rotate: 0, duration: 0.4, ease: 'back.out(1.7)', delay: 0.1, force3D: true }
+        )
+        gsap.fromTo(transitionRef.current.querySelector('.transition-text'),
+          { y: 20, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.3, ease: 'power3.out', delay: 0.2, force3D: true }
+        )
       } else {
         gsap.to(transitionRef.current, { opacity: 0, duration: 0.3, ease: 'power3.in' })
       }

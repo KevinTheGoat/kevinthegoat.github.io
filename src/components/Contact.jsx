@@ -33,18 +33,17 @@ export default function Contact() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Use gsap.from() instead of fromTo() to avoid jitter on mobile
-      gsap.from(contentRef.current, {
-        y: 40,
-        opacity: 0,
-        duration: 0.8,
-        clearProps: 'all',
-        scrollTrigger: {
-          trigger: contentRef.current,
-          start: 'top 80%',
-          toggleActions: 'play none none reverse',
-        },
-      })
+      gsap.fromTo(contentRef.current,
+        { y: 40, opacity: 0 },
+        {
+          y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', force3D: true,
+          scrollTrigger: {
+            trigger: contentRef.current,
+            start: 'top 80%',
+            toggleActions: 'play none none reverse',
+          },
+        }
+      )
     }, sectionRef)
 
     return () => ctx.revert()

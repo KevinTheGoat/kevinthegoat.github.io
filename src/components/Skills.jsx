@@ -39,20 +39,17 @@ export default function Skills() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      cardsRef.current.forEach((card, index) => {
-        gsap.from(card, {
-          y: 60,
-          opacity: 0,
-          duration: 0.8,
-          delay: index * 0.1,
-          ease: 'power3.out',
-          clearProps: 'all',
-          scrollTrigger: {
-            trigger: card,
-            start: 'top 85%',
-            toggleActions: 'play none none reverse',
-          },
-        })
+      const cards = cardsRef.current.filter(Boolean)
+      gsap.set(cards, { y: 60, opacity: 0 })
+      ScrollTrigger.batch(cards, {
+        start: 'top 85%',
+        onEnter: (batch) =>
+          gsap.fromTo(batch,
+            { y: 60, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.8, stagger: 0.1, ease: 'power3.out', force3D: true }
+          ),
+        onLeaveBack: (batch) =>
+          gsap.to(batch, { y: 60, opacity: 0, duration: 0.4, stagger: 0.05 }),
       })
     }, sectionRef)
 

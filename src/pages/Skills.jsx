@@ -88,44 +88,35 @@ export default function Skills() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Header animation - use gsap.from() to avoid jitter
-      gsap.from('.skills-header', {
-        y: 60,
-        opacity: 0,
-        duration: 0.8,
-        ease: 'power3.out',
-        clearProps: 'all',
+      // Header animation
+      gsap.fromTo('.skills-header',
+        { y: 60, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', force3D: true }
+      )
+
+      // Cards animation with ScrollTrigger.batch (1 listener instead of 6+)
+      const cards = cardsRef.current.filter(Boolean)
+      gsap.set(cards, { y: 80, opacity: 0 })
+      ScrollTrigger.batch(cards, {
+        start: 'top 85%',
+        onEnter: (batch) =>
+          gsap.fromTo(batch,
+            { y: 80, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', stagger: 0.1, force3D: true }
+          ),
+        onLeaveBack: (batch) =>
+          gsap.to(batch, { y: 80, opacity: 0, duration: 0.4, stagger: 0.05 }),
       })
 
-      // Cards animation with scroll trigger
-      cardsRef.current.forEach((card, index) => {
-        gsap.from(card, {
-          y: 80,
-          opacity: 0,
-          duration: 0.8,
-          ease: 'power3.out',
-          clearProps: 'all',
-          scrollTrigger: {
-            trigger: card,
-            start: 'top 85%',
-            toggleActions: 'play none none reverse',
-          },
-        })
-
-        // Animate skill bars inside each card
-        const bars = card.querySelectorAll('.skill-bar-fill')
-        bars.forEach((bar) => {
-          gsap.from(bar, {
-            scaleX: 0,
-            duration: 1,
-            ease: 'power3.out',
-            scrollTrigger: {
-              trigger: card,
-              start: 'top 80%',
-              toggleActions: 'play none none reverse',
-            },
-          })
-        })
+      // Skill bars animation with ScrollTrigger.batch
+      const allBars = pageRef.current.querySelectorAll('.skill-bar-fill')
+      gsap.set(allBars, { scaleX: 0 })
+      ScrollTrigger.batch(allBars, {
+        start: 'top 80%',
+        onEnter: (batch) =>
+          gsap.to(batch, { scaleX: 1, duration: 1, ease: 'power3.out', stagger: 0.05 }),
+        onLeaveBack: (batch) =>
+          gsap.to(batch, { scaleX: 0, duration: 0.4, stagger: 0.03 }),
       })
     }, pageRef)
 
