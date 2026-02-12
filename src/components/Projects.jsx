@@ -9,14 +9,21 @@ const projects = [
   {
     title: 'Stuttgart International Collision',
     description: 'Professional auto body and collision repair service website with modern design and seamless user experience.',
-    url: 'https://stuttgartinternationalcollision.com/',
+    url: 'https://stuttgart-international.pages.dev/',
     tags: ['Web Design', 'Responsive', 'Business'],
     gradient: 'from-blue-600 to-blue-800',
   },
   {
+    title: 'Panda Depot Inc',
+    description: 'Wholesale restaurant supply company website serving South Florida with containers, packaging, and groceries for restaurants.',
+    url: 'https://panda-depot.pages.dev/',
+    tags: ['Web Design', 'Responsive', 'Business'],
+    gradient: 'from-red-600 to-orange-800',
+  },
+  {
     title: 'Accident Assist Network',
     description: 'Comprehensive accident assistance platform connecting users with legal and medical professionals.',
-    url: 'https://accidentassistnetwork.com/',
+    url: 'https://accident-assist.pages.dev/',
     tags: ['Web App', 'Healthcare', 'Legal Tech'],
     gradient: 'from-emerald-600 to-teal-800',
   },

@@ -15,7 +15,7 @@ const projects = [
     title: 'Stuttgart International Collision',
     description:
       'A premium auto body and collision repair service website featuring modern design, seamless animations, and an intuitive booking system.',
-    url: 'https://stuttgartinternationalcollision.com/',
+    url: 'https://stuttgart-international.pages.dev/',
     image: '/images/projects/stuttgart-collision.png',
     tags: ['Web Design', 'React', 'Responsive', 'Business'],
     category: 'Web',
@@ -24,10 +24,22 @@ const projects = [
   },
   {
     id: 2,
+    title: 'Panda Depot Inc',
+    description:
+      'A wholesale restaurant supply company website serving South Florida with containers, packaging, groceries, and more for restaurants.',
+    url: 'https://panda-depot.pages.dev/',
+    image: '/images/projects/panda-depot.png',
+    tags: ['Web Design', 'React', 'Responsive', 'Business'],
+    category: 'Web',
+    gradient: 'from-red-600 via-orange-600 to-yellow-700',
+    features: ['Product Catalog', 'Bilingual Support', 'Mobile Optimized', 'Contact System'],
+  },
+  {
+    id: 3,
     title: 'Accident Assist Network',
     description:
       'A comprehensive accident assistance platform that connects users with legal and medical professionals through an intelligent matching system.',
-    url: 'https://accidentassistnetwork.com/',
+    url: 'https://accident-assist.pages.dev/',
     image: '/images/projects/accident-assist.png',
     tags: ['Web App', 'Healthcare', 'Legal Tech', 'Platform'],
     category: 'Web',
@@ -35,11 +47,11 @@ const projects = [
     features: ['User Dashboard', 'Provider Matching', 'Case Management', 'Secure Portal'],
   },
   {
-    id: 3,
+    id: 4,
     title: 'Monexus Logistics',
     description:
       'A professional logistics and freight forwarding platform providing reliable shipping solutions from Miami to the Bahamas and beyond.',
-    url: 'https://monexuslogistics.com/',
+    url: 'https://harborlink-logistics.pages.dev/',
     image: '/images/projects/monexus-logistics.png',
     tags: ['Web Design', 'Logistics', 'Responsive', 'Business'],
     category: 'Web',
