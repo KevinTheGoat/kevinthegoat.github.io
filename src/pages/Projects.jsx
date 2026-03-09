@@ -36,6 +36,18 @@ const projects = [
   },
   {
     id: 3,
+    title: 'Titan Plumbing',
+    description:
+      'A professional plumbing service website for South Florida\'s trusted plumbing professionals, featuring emergency repairs and full remodeling services.',
+    url: 'https://plumbing-showcase.pages.dev/',
+    image: '/images/projects/titan-plumbing.png',
+    tags: ['Web Design', 'React', 'Responsive', 'Business'],
+    category: 'Web',
+    gradient: 'from-amber-700 via-amber-800 to-slate-900',
+    features: ['Emergency Services', 'Service Catalog', 'Mobile Optimized', 'Contact System'],
+  },
+  {
+    id: 4,
     title: 'Accident Assist Network',
     description:
       'A comprehensive accident assistance platform that connects users with legal and medical professionals through an intelligent matching system.',
@@ -47,7 +59,7 @@ const projects = [
     features: ['User Dashboard', 'Provider Matching', 'Case Management', 'Secure Portal'],
   },
   {
-    id: 4,
+    id: 5,
     title: 'Monexus Logistics',
     description:
       'A professional logistics and freight forwarding platform providing reliable shipping solutions from Miami to the Bahamas and beyond.',
