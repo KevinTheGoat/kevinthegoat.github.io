@@ -1,9 +1,5 @@
-import { useEffect, useRef } from 'react'
-import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useTheme } from '../context/ThemeContext'
-
-// ScrollTrigger is registered globally in main.jsx
+import { useScrollReveal } from '../hooks/useScrollReveal'
 
 const socialLinks = [
   {
@@ -28,26 +24,7 @@ const socialLinks = [
 
 export default function Contact() {
   const { currentTheme } = useTheme()
-  const sectionRef = useRef(null)
-  const contentRef = useRef(null)
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.fromTo(contentRef.current,
-        { y: 40, opacity: 0 },
-        {
-          y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', force3D: true,
-          scrollTrigger: {
-            trigger: contentRef.current,
-            start: 'top 80%',
-            toggleActions: 'play none none reverse',
-          },
-        }
-      )
-    }, sectionRef)
-
-    return () => ctx.revert()
-  }, [])
+  const sectionRef = useScrollReveal()
 
   return (
     <section
@@ -56,7 +33,7 @@ export default function Contact() {
       className="py-24 px-6 theme-transition"
       style={{ backgroundColor: currentTheme.surface }}
     >
-      <div className="opacity-0 max-w-3xl mx-auto text-center" ref={contentRef}>
+      <div data-animate className="max-w-3xl mx-auto text-center">
         <h2 className="text-4xl sm:text-5xl font-bold mb-4">
           Let's <span style={{ color: currentTheme.accent }}>Connect</span>
         </h2>

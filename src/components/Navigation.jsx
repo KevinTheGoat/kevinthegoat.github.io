@@ -39,23 +39,26 @@ export default function Navigation() {
     setDemoDropdownOpen(false)
   }, [location.pathname])
 
-  // Prevent body scroll when mobile menu is open
+  // Prevent body scroll when mobile menu is open (position:fixed pattern)
   useEffect(() => {
-    const scrollY = window.scrollY
     if (isOpen) {
-      document.body.classList.add('menu-open')
+      const scrollY = window.scrollY
+      document.body.style.position = 'fixed'
       document.body.style.top = `-${scrollY}px`
+      document.body.style.width = '100%'
     } else {
-      document.body.classList.remove('menu-open')
       const top = document.body.style.top
+      document.body.style.position = ''
       document.body.style.top = ''
+      document.body.style.width = ''
       if (top) {
         window.scrollTo(0, parseInt(top || '0') * -1)
       }
     }
     return () => {
-      document.body.classList.remove('menu-open')
+      document.body.style.position = ''
       document.body.style.top = ''
+      document.body.style.width = ''
     }
   }, [isOpen])
 
@@ -75,32 +78,12 @@ export default function Navigation() {
   }, [])
 
   useEffect(() => {
-    if (menuRef.current) {
-      if (isOpen) {
-        // Animate menu container
-        gsap.to(menuRef.current, {
-          opacity: 1,
-          duration: 0.3,
-          ease: 'power2.out',
-        })
-        // Animate nav items - use gsap.from() to avoid jitter
-        // Items start visible in CSS, we animate FROM hidden state
-        gsap.from(menuRef.current.querySelectorAll('.nav-item'), {
-          y: 20,
-          opacity: 0,
-          duration: 0.3,
-          stagger: 0.05,
-          ease: 'power2.out',
-          delay: 0.1,
-          clearProps: 'all',
-        })
-      } else {
-        gsap.to(menuRef.current, {
-          opacity: 0,
-          duration: 0.2,
-          ease: 'power2.in',
-        })
-      }
+    if (isOpen && menuRef.current) {
+      // Animate nav items with fromTo (never use from + clearProps)
+      gsap.fromTo(menuRef.current.querySelectorAll('.nav-item'),
+        { y: 20, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.3, stagger: 0.05, ease: 'power2.out', delay: 0.1, force3D: true }
+      )
     }
   }, [isOpen])
 
@@ -488,19 +471,13 @@ export default function Navigation() {
             </div>
           </nav>
 
-          {/* Mobile Menu Overlay - always in DOM, visibility controlled by CSS/GSAP */}
+          {/* Mobile Menu Overlay - conditional render for Safari reliability */}
+          {isOpen && (
           <div
             ref={menuRef}
-            className={`fixed inset-0 z-40 lg:hidden flex flex-col items-center justify-center ${
-              isOpen ? 'pointer-events-auto' : 'pointer-events-none'
-            }`}
+            className="fixed inset-0 z-40 lg:hidden flex flex-col items-center justify-center"
             style={{
               backgroundColor: theme.surface,
-              opacity: 0,
-              backfaceVisibility: 'hidden',
-              WebkitBackfaceVisibility: 'hidden',
-              transform: 'translateZ(0)',
-              WebkitTransform: 'translateZ(0)',
             }}
           >
             <div className="flex flex-col items-center gap-4">
@@ -542,6 +519,7 @@ export default function Navigation() {
               </div>
             </div>
           </div>
+          )}
         </>
       )}
     </>

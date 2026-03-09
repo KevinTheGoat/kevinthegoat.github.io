@@ -2,13 +2,11 @@ import { useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { Icon } from '@iconify/react'
 import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useTheme } from '../context/ThemeContext'
+import { useScrollReveal } from '../hooks/useScrollReveal'
 import SEO from '../components/SEO'
 import Footer from '../components/Footer'
 import AnimatedCounter from '../components/AnimatedCounter'
-
-// ScrollTrigger is registered globally in main.jsx
 
 const stats = [
   { value: '8+', label: 'Years Experience' },
@@ -44,8 +42,8 @@ export default function Home() {
   const heroRef = useRef(null)
   const titleRef = useRef(null)
   const statsRef = useRef(null)
-  const servicesRef = useRef(null)
   const shapesRef = useRef(null)
+  const servicesRevealRef = useScrollReveal()
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -68,20 +66,9 @@ export default function Home() {
         { y: 0, opacity: 1, duration: 0.6, stagger: 0.1, delay: 1, ease: 'power3.out', force3D: true }
       )
 
-      // Services animation with ScrollTrigger
-      gsap.fromTo(servicesRef.current?.children,
-        { y: 60, opacity: 0 },
-        {
-          y: 0, opacity: 1, duration: 0.8, stagger: 0.1, ease: 'power3.out', force3D: true,
-          scrollTrigger: {
-            trigger: servicesRef.current,
-            start: 'top 80%',
-          },
-        }
-      )
-
-      // Parallax effect for hero shapes (optimized)
-      if (shapesRef.current) {
+      // Parallax effect for hero shapes (CSS-based is more reliable on mobile,
+      // but keeping GSAP scrub for desktop as it's hero-only, not scroll-reveal)
+      if (shapesRef.current && window.innerWidth >= 1024) {
         const shapes = shapesRef.current.querySelectorAll('.parallax-shape')
         shapes.forEach((shape, index) => {
           gsap.to(shape, {
@@ -91,7 +78,7 @@ export default function Home() {
               trigger: heroRef.current,
               start: 'top top',
               end: 'bottom top',
-              scrub: true, // More performant than scrub: 1
+              scrub: true,
             },
           })
         })
@@ -290,11 +277,13 @@ export default function Home() {
             </Link>
           </div>
 
-          <div ref={servicesRef} className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div ref={servicesRevealRef} className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {services.map((service, index) => (
               <div
                 key={service.title}
-                className="opacity-0 group p-8 rounded-2xl transition-all duration-500 card-hover cursor-default"
+                data-animate
+                data-animate-delay={`${index * 0.1}s`}
+                className="group p-8 rounded-2xl transition-all duration-500 card-hover cursor-default"
                 style={{
                   backgroundColor: theme.elevated,
                   border: `1px solid ${theme.border}`,

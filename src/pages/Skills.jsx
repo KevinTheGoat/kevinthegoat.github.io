@@ -1,12 +1,10 @@
 import { useEffect, useRef } from 'react'
 import { Icon } from '@iconify/react'
 import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useTheme } from '../context/ThemeContext'
+import { useScrollReveal } from '../hooks/useScrollReveal'
 import SEO from '../components/SEO'
 import Footer from '../components/Footer'
-
-// ScrollTrigger is registered globally in main.jsx
 
 const skillCategories = [
   {
@@ -84,40 +82,15 @@ const skillCategories = [
 export default function Skills() {
   const { theme } = useTheme()
   const pageRef = useRef(null)
-  const cardsRef = useRef([])
+  const cardsRevealRef = useScrollReveal()
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Header animation
+      // Header animation (entrance, not scroll-triggered)
       gsap.fromTo('.skills-header',
         { y: 60, opacity: 0 },
         { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', force3D: true }
       )
-
-      // Cards animation with ScrollTrigger.batch (1 listener instead of 6+)
-      const cards = cardsRef.current.filter(Boolean)
-      gsap.set(cards, { y: 80, opacity: 0 })
-      ScrollTrigger.batch(cards, {
-        start: 'top 85%',
-        onEnter: (batch) =>
-          gsap.fromTo(batch,
-            { y: 80, opacity: 0 },
-            { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', stagger: 0.1, force3D: true }
-          ),
-        onLeaveBack: (batch) =>
-          gsap.to(batch, { y: 80, opacity: 0, duration: 0.4, stagger: 0.05 }),
-      })
-
-      // Skill bars animation with ScrollTrigger.batch
-      const allBars = pageRef.current.querySelectorAll('.skill-bar-fill')
-      gsap.set(allBars, { scaleX: 0 })
-      ScrollTrigger.batch(allBars, {
-        start: 'top 80%',
-        onEnter: (batch) =>
-          gsap.to(batch, { scaleX: 1, duration: 1, ease: 'power3.out', stagger: 0.05 }),
-        onLeaveBack: (batch) =>
-          gsap.to(batch, { scaleX: 0, duration: 0.4, stagger: 0.03 }),
-      })
     }, pageRef)
 
     return () => ctx.revert()
@@ -153,12 +126,13 @@ export default function Skills() {
         </div>
 
         {/* Skills Grid */}
-        <div className="grid lg:grid-cols-2 gap-8">
+        <div ref={cardsRevealRef} className="grid lg:grid-cols-2 gap-8">
           {skillCategories.map((category, categoryIndex) => (
             <div
               key={category.title}
-              ref={(el) => (cardsRef.current[categoryIndex] = el)}
-              className="opacity-0 p-8 rounded-3xl transition-all duration-500"
+              data-animate
+              data-animate-delay={`${categoryIndex * 0.1}s`}
+              className="p-8 rounded-3xl transition-all duration-500"
               style={{
                 backgroundColor: theme.surface,
                 border: `1px solid ${theme.border}`,

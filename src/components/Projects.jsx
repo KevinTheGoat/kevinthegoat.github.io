@@ -1,9 +1,5 @@
-import { useEffect, useRef } from 'react'
-import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useTheme } from '../context/ThemeContext'
-
-// ScrollTrigger is registered globally in main.jsx
+import { useScrollReveal } from '../hooks/useScrollReveal'
 
 const projects = [
   {
@@ -39,30 +35,7 @@ const projects = [
 
 export default function Projects() {
   const { currentTheme } = useTheme()
-  const sectionRef = useRef(null)
-  const cardsRef = useRef([])
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      const cards = cardsRef.current.filter(Boolean)
-      // Set initial positions with alternating x-direction
-      cards.forEach((card, index) => {
-        gsap.set(card, { x: index % 2 === 0 ? -60 : 60, opacity: 0 })
-      })
-      ScrollTrigger.batch(cards, {
-        start: 'top 80%',
-        onEnter: (batch) =>
-          gsap.to(batch, { x: 0, opacity: 1, duration: 0.8, stagger: 0.1, ease: 'power3.out', force3D: true }),
-        onLeaveBack: (batch) =>
-          batch.forEach((card) => {
-            const index = cards.indexOf(card)
-            gsap.to(card, { x: index % 2 === 0 ? -60 : 60, opacity: 0, duration: 0.4 })
-          }),
-      })
-    }, sectionRef)
-
-    return () => ctx.revert()
-  }, [])
+  const sectionRef = useScrollReveal()
 
   return (
     <section id="projects" ref={sectionRef} className="py-24 px-6">
@@ -83,8 +56,10 @@ export default function Projects() {
               href={project.url}
               target="_blank"
               rel="noopener noreferrer"
-              ref={(el) => (cardsRef.current[index] = el)}
-              className="opacity-0 group block rounded-2xl overflow-hidden transition-all duration-500 hover:scale-[1.02]"
+              data-animate
+              data-animate-direction={index % 2 === 0 ? 'left' : 'right'}
+              data-animate-delay={`${index * 0.1}s`}
+              className="group block rounded-2xl overflow-hidden transition-all duration-500 hover:scale-[1.02]"
               style={{
                 backgroundColor: currentTheme.surface,
                 border: `1px solid ${currentTheme.accent}22`,

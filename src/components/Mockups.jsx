@@ -1,22 +1,18 @@
-import { useEffect, useRef } from 'react'
-import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useTheme } from '../context/ThemeContext'
-
-// ScrollTrigger is registered globally in main.jsx
+import { useScrollReveal } from '../hooks/useScrollReveal'
 
 const mockups = [
   {
     title: 'Mobile App',
     type: 'iOS / Android',
-    icon: '📱',
+    icon: '\u{1F4F1}',
     gradient: 'from-violet-600 to-purple-700',
     features: ['Push Notifications', 'Offline Mode', 'Touch ID'],
     mockupContent: (
       <div className="flex flex-col h-full">
         <div className="bg-black/20 px-3 py-1 flex justify-between text-xs">
           <span>9:41</span>
-          <span>📶 100%</span>
+          <span>\u{1F4F6} 100%</span>
         </div>
         <div className="flex-1 p-4 flex flex-col gap-3">
           <div className="h-8 bg-white/20 rounded-lg w-3/4" />
@@ -25,9 +21,9 @@ const mockups = [
           <div className="h-12 bg-white/20 rounded-lg" />
         </div>
         <div className="h-14 bg-black/20 flex justify-around items-center">
-          <span>🏠</span>
-          <span>🔍</span>
-          <span>👤</span>
+          <span>\u{1F3E0}</span>
+          <span>\u{1F50D}</span>
+          <span>\u{1F464}</span>
         </div>
       </div>
     ),
@@ -35,7 +31,7 @@ const mockups = [
   {
     title: 'Desktop App',
     type: 'Electron / Tauri',
-    icon: '🖥️',
+    icon: '\u{1F5A5}\uFE0F',
     gradient: 'from-cyan-600 to-blue-700',
     features: ['Native APIs', 'Auto Updates', 'System Tray'],
     mockupContent: (
@@ -65,7 +61,7 @@ const mockups = [
   {
     title: 'Admin Dashboard',
     type: 'Web Application',
-    icon: '📊',
+    icon: '\u{1F4CA}',
     gradient: 'from-emerald-600 to-teal-700',
     features: ['Real-time Data', 'Analytics', 'User Management'],
     mockupContent: (
@@ -103,33 +99,7 @@ const mockups = [
 
 export default function Mockups() {
   const { currentTheme } = useTheme()
-  const sectionRef = useRef(null)
-  const cardsRef = useRef([])
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      cardsRef.current.forEach((card, index) => {
-        gsap.fromTo(
-          card,
-          { y: 60, opacity: 0, rotateY: -10 },
-          {
-            y: 0,
-            opacity: 1,
-            rotateY: 0,
-            duration: 0.8,
-            delay: index * 0.15,
-            scrollTrigger: {
-              trigger: card,
-              start: 'top 85%',
-              toggleActions: 'play none none reverse',
-            },
-          }
-        )
-      })
-    }, sectionRef)
-
-    return () => ctx.revert()
-  }, [])
+  const sectionRef = useScrollReveal()
 
   return (
     <section id="mockups" ref={sectionRef} className="py-24 px-6">
@@ -147,7 +117,8 @@ export default function Mockups() {
           {mockups.map((mockup, index) => (
             <div
               key={mockup.title}
-              ref={(el) => (cardsRef.current[index] = el)}
+              data-animate
+              data-animate-delay={`${index * 0.15}s`}
               className="group"
             >
               {/* Mockup preview */}

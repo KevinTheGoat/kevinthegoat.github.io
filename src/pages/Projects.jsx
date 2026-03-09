@@ -2,12 +2,10 @@ import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Icon } from '@iconify/react'
 import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useTheme } from '../context/ThemeContext'
+import { useScrollReveal } from '../hooks/useScrollReveal'
 import SEO from '../components/SEO'
 import Footer from '../components/Footer'
-
-// ScrollTrigger is registered globally in main.jsx
 
 const projects = [
   {
@@ -77,9 +75,9 @@ const categories = ['All', 'Web']
 export default function Projects() {
   const { theme } = useTheme()
   const pageRef = useRef(null)
-  const projectsRef = useRef([])
   const [activeCategory, setActiveCategory] = useState('All')
   const [hoveredProject, setHoveredProject] = useState(null)
+  const projectsRevealRef = useScrollReveal()
 
   const filteredProjects =
     activeCategory === 'All'
@@ -88,7 +86,7 @@ export default function Projects() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Header animation
+      // Header animation (entrance, not scroll-triggered)
       gsap.fromTo('.projects-header',
         { y: 60, opacity: 0 },
         { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', force3D: true }
@@ -103,15 +101,6 @@ export default function Projects() {
 
     return () => ctx.revert()
   }, [])
-
-  useEffect(() => {
-    // Animate projects on filter change
-    const refs = projectsRef.current.filter(Boolean)
-    gsap.fromTo(refs,
-      { y: 40, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.6, stagger: 0.1, ease: 'power3.out', force3D: true }
-    )
-  }, [activeCategory])
 
   return (
     <>
@@ -162,15 +151,16 @@ export default function Projects() {
         </div>
 
         {/* Projects Grid */}
-        <div className="grid lg:grid-cols-2 gap-8">
+        <div ref={projectsRevealRef} className="grid lg:grid-cols-2 gap-8">
           {filteredProjects.map((project, index) => (
             <a
               key={project.id}
               href={project.url}
               target={project.isDemo ? undefined : '_blank'}
               rel={project.isDemo ? undefined : 'noopener noreferrer'}
-              ref={(el) => (projectsRef.current[index] = el)}
-              className="opacity-0 group block rounded-3xl overflow-hidden transition-all duration-500 card-hover"
+              data-animate
+              data-animate-delay={`${index * 0.1}s`}
+              className="group block rounded-3xl overflow-hidden transition-all duration-500 card-hover"
               style={{
                 backgroundColor: theme.surface,
                 border: `1px solid ${theme.border}`,

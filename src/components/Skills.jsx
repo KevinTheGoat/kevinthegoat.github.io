@@ -1,32 +1,28 @@
-import { useEffect, useRef } from 'react'
-import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useTheme } from '../context/ThemeContext'
-
-// ScrollTrigger is registered globally in main.jsx
+import { useScrollReveal } from '../hooks/useScrollReveal'
 
 const skillCategories = [
   {
     title: 'Web Development',
-    icon: '🌐',
+    icon: '\u{1F310}',
     skills: ['React', 'Vue.js', 'Next.js', 'TypeScript', 'Tailwind CSS', 'GSAP'],
     description: 'Modern, responsive web applications with cutting-edge frameworks',
   },
   {
     title: 'Mobile Apps',
-    icon: '📱',
+    icon: '\u{1F4F1}',
     skills: ['React Native', 'iOS', 'Android', 'Cross-Platform', 'App Store', 'Play Store'],
     description: 'Native and cross-platform mobile experiences for iOS & Android',
   },
   {
     title: 'Desktop Apps',
-    icon: '🖥️',
+    icon: '\u{1F5A5}\uFE0F',
     skills: ['Electron', 'Tauri', 'Windows', 'macOS', 'Linux', 'Native APIs'],
     description: 'Powerful desktop applications with native performance',
   },
   {
     title: 'Backend & APIs',
-    icon: '⚡',
+    icon: '\u26A1',
     skills: ['Node.js', 'Python', 'PostgreSQL', 'MongoDB', 'REST', 'GraphQL'],
     description: 'Scalable backend systems and robust API architectures',
   },
@@ -34,27 +30,7 @@ const skillCategories = [
 
 export default function Skills() {
   const { currentTheme } = useTheme()
-  const sectionRef = useRef(null)
-  const cardsRef = useRef([])
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      const cards = cardsRef.current.filter(Boolean)
-      gsap.set(cards, { y: 60, opacity: 0 })
-      ScrollTrigger.batch(cards, {
-        start: 'top 85%',
-        onEnter: (batch) =>
-          gsap.fromTo(batch,
-            { y: 60, opacity: 0 },
-            { y: 0, opacity: 1, duration: 0.8, stagger: 0.1, ease: 'power3.out', force3D: true }
-          ),
-        onLeaveBack: (batch) =>
-          gsap.to(batch, { y: 60, opacity: 0, duration: 0.4, stagger: 0.05 }),
-      })
-    }, sectionRef)
-
-    return () => ctx.revert()
-  }, [])
+  const sectionRef = useScrollReveal()
 
   return (
     <section
@@ -77,8 +53,9 @@ export default function Skills() {
           {skillCategories.map((category, index) => (
             <div
               key={category.title}
-              ref={(el) => (cardsRef.current[index] = el)}
-              className="opacity-0 p-6 rounded-2xl transition-all duration-300 hover:scale-105 cursor-default group"
+              data-animate
+              data-animate-delay={`${index * 0.1}s`}
+              className="p-6 rounded-2xl transition-all duration-300 hover:scale-105 cursor-default group"
               style={{
                 backgroundColor: currentTheme.bg,
                 border: `1px solid ${currentTheme.accent}22`,

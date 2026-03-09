@@ -1,8 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
 import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
-
-// ScrollTrigger is registered globally in main.jsx
 
 export default function AnimatedCounter({
   value,
@@ -27,26 +24,29 @@ export default function AnimatedCounter({
     const element = counterRef.current
     if (!element || hasAnimated || isSpecialFormat) return
 
-    const trigger = ScrollTrigger.create({
-      trigger: element,
-      start: 'top 85%',
-      onEnter: () => {
-        if (hasAnimated) return
-        setHasAnimated(true)
-
-        const obj = { val: 0 }
-        gsap.to(obj, {
-          val: numericValue,
-          duration: duration,
-          ease: 'power2.out',
-          onUpdate: () => {
-            setDisplayValue(Math.floor(obj.val))
-          },
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting && !hasAnimated) {
+            setHasAnimated(true)
+            const obj = { val: 0 }
+            gsap.to(obj, {
+              val: numericValue,
+              duration: duration,
+              ease: 'power2.out',
+              onUpdate: () => {
+                setDisplayValue(Math.floor(obj.val))
+              },
+            })
+            observer.unobserve(element)
+          }
         })
       },
-    })
+      { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
+    )
 
-    return () => trigger.kill()
+    observer.observe(element)
+    return () => observer.disconnect()
   }, [numericValue, duration, hasAnimated, isSpecialFormat])
 
   // For special formats, just display the value as-is
