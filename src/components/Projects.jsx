@@ -21,6 +21,14 @@ const projects = [
     gradient: 'from-red-600 to-orange-800',
   },
   {
+    title: 'Titan Plumbing',
+    description: 'Professional plumbing service website for South Florida\'s trusted plumbing professionals, featuring emergency repairs and full remodeling services.',
+    url: 'https://plumbing-showcase.pages.dev/',
+    tags: ['Web Design', 'Responsive', 'Business'],
+    gradient: 'from-amber-700 to-slate-900',
+    image: '/projects/titan-plumbing.png',
+  },
+  {
     title: 'Accident Assist Network',
     description: 'Comprehensive accident assistance platform connecting users with legal and medical professionals.',
     url: 'https://accident-assist.pages.dev/',
@@ -82,29 +90,42 @@ export default function Projects() {
                 border: `1px solid ${currentTheme.accent}22`,
               }}
             >
-              {/* Preview gradient placeholder */}
+              {/* Preview */}
               <div
                 className={`h-48 sm:h-64 bg-gradient-to-br ${project.gradient} relative overflow-hidden`}
               >
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-white/80 text-center">
-                    <svg
-                      className="w-12 h-12 mx-auto mb-2 group-hover:scale-110 transition-transform"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={1.5}
-                        d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"
-                      />
-                    </svg>
-                    <span className="text-sm">Visit Live Site</span>
-                  </div>
-                </div>
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors" />
+                {project.image ? (
+                  <>
+                    <img
+                      src={project.image}
+                      alt={project.title}
+                      className="w-full h-full object-cover object-top"
+                    />
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors" />
+                  </>
+                ) : (
+                  <>
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="text-white/80 text-center">
+                        <svg
+                          className="w-12 h-12 mx-auto mb-2 group-hover:scale-110 transition-transform"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={1.5}
+                            d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"
+                          />
+                        </svg>
+                        <span className="text-sm">Visit Live Site</span>
+                      </div>
+                    </div>
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors" />
+                  </>
+                )}
               </div>
 
               <div className="p-6">
