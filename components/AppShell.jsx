@@ -1,0 +1,215 @@
+'use client'
+
+import { useEffect, useLayoutEffect, useRef, useState, Suspense } from 'react'
+import { usePathname } from 'next/navigation'
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { ScrollToPlugin } from 'gsap/ScrollToPlugin'
+import { Icon } from '@iconify/react'
+import { useTheme } from '../context/ThemeContext'
+import { useDemo } from '../context/DemoContext'
+import ErrorBoundary from './ErrorBoundary'
+import Navigation from './Navigation'
+import ScrollProgress from './ScrollProgress'
+import BackToTop from './BackToTop'
+import CustomCursor from './CustomCursor'
+import IntroAnimation from './IntroAnimation'
+
+// Register GSAP plugins globally (once)
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger, ScrollToPlugin)
+}
+
+// Check if this is the first visit
+const INTRO_STORAGE_KEY = 'kevco_intro_seen'
+
+export default function AppShell({ children }) {
+  const { theme, isTransitioning: isThemeTransitioning } = useTheme()
+  const { isTransitioning, transitionDemo, activeDemo, isInDemoMode } = useDemo()
+  const pathname = usePathname()
+  const pageRef = useRef(null)
+  const transitionRef = useRef(null)
+  const [isExiting, setIsExiting] = useState(false)
+  const prevPathRef = useRef(pathname)
+
+  // Intro animation state - only show on first visit
+  // Defer localStorage check to useEffect to avoid hydration mismatch
+  const [showIntro, setShowIntro] = useState(false)
+
+  useEffect(() => {
+    if (!localStorage.getItem(INTRO_STORAGE_KEY)) {
+      setShowIntro(true)
+    }
+  }, [])
+
+  const handleIntroComplete = () => {
+    setShowIntro(false)
+    localStorage.setItem(INTRO_STORAGE_KEY, 'true')
+  }
+
+  // Scroll to top on route change - useLayoutEffect for immediate execution
+  useLayoutEffect(() => {
+    window.scrollTo(0, 0)
+  }, [pathname])
+
+  // Page transition animation with exit
+  useEffect(() => {
+    // Skip animation on initial load
+    if (prevPathRef.current === pathname) return
+
+    const ctx = gsap.context(() => {
+      // Enter animation
+      gsap.fromTo(pageRef.current,
+        { opacity: 0, y: 30 },
+        { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out', force3D: true }
+      )
+    })
+
+    prevPathRef.current = pathname
+
+    return () => ctx.revert()
+  }, [pathname])
+
+  // Demo transition animation
+  useEffect(() => {
+    if (transitionRef.current) {
+      if (isTransitioning) {
+        gsap.fromTo(transitionRef.current,
+          { opacity: 0, scale: 1.1 },
+          { opacity: 1, scale: 1, duration: 0.3, ease: 'power3.out', force3D: true }
+        )
+        gsap.fromTo(transitionRef.current.querySelector('.transition-icon'),
+          { scale: 0, rotate: -180 },
+          { scale: 1, rotate: 0, duration: 0.4, ease: 'back.out(1.7)', delay: 0.1, force3D: true }
+        )
+        gsap.fromTo(transitionRef.current.querySelector('.transition-text'),
+          { y: 20, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.3, ease: 'power3.out', delay: 0.2, force3D: true }
+        )
+      } else {
+        gsap.to(transitionRef.current, { opacity: 0, duration: 0.3, ease: 'power3.in' })
+      }
+    }
+  }, [isTransitioning])
+
+  // Get the theme to use for the background
+  const currentTheme = isInDemoMode && activeDemo ? activeDemo.theme : theme
+
+  return (
+    <div
+      className="min-h-screen transition-colors duration-500"
+      style={{ backgroundColor: currentTheme.bg, color: currentTheme.text }}
+    >
+      {/* Noise overlay for texture */}
+      <div className="noise-overlay" />
+
+      {/* Background gradient orbs - hide during demo mode for cleaner look */}
+      {!isInDemoMode && (
+        <div className="fixed inset-0 overflow-hidden pointer-events-none">
+          <div
+            className="absolute -top-[10%] -left-[10%] w-[70%] h-[70%] rounded-full blur-[140px] opacity-25 animate-float"
+            style={{ backgroundColor: theme.accent }}
+          />
+          <div
+            className="absolute -bottom-1/4 -right-1/4 w-1/2 h-1/2 rounded-full blur-[120px] opacity-15 animate-float"
+            style={{ backgroundColor: theme.accentAlt, animationDelay: '-3s' }}
+          />
+        </div>
+      )}
+
+      {/* Demo Transition Overlay */}
+      {isTransitioning && (
+        <div
+          ref={transitionRef}
+          className="fixed inset-0 z-[100] flex flex-col items-center justify-center"
+          style={{ backgroundColor: transitionDemo?.theme.bg || currentTheme.bg }}
+        >
+          <div
+            className="transition-icon w-24 h-24 rounded-3xl flex items-center justify-center mb-6"
+            style={{ backgroundColor: transitionDemo?.theme.accent || currentTheme.accent }}
+          >
+            <Icon
+              icon={transitionDemo?.icon || 'ph:rocket-bold'}
+              className="w-12 h-12"
+              style={{ color: transitionDemo?.theme.bg || currentTheme.bg }}
+            />
+          </div>
+          <div className="transition-text text-center">
+            <h2
+              className="text-2xl font-display font-bold mb-2"
+              style={{ color: transitionDemo?.theme.text || currentTheme.text }}
+            >
+              {transitionDemo ? `Loading ${transitionDemo.name}` : 'Returning to Portfolio'}
+            </h2>
+            <p style={{ color: transitionDemo?.theme.muted || currentTheme.muted }}>
+              {transitionDemo?.category || 'KevCo'}
+            </p>
+          </div>
+          {/* Loading dots animation */}
+          <div className="flex gap-2 mt-8">
+            {[0, 1, 2].map((i) => (
+              <div
+                key={i}
+                className="w-2 h-2 rounded-full animate-pulse"
+                style={{
+                  backgroundColor: transitionDemo?.theme.accent || currentTheme.accent,
+                  animationDelay: `${i * 0.15}s`,
+                }}
+              />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Scroll Progress Indicator */}
+      <ScrollProgress />
+
+      {/* Custom Cursor */}
+      <CustomCursor />
+
+      {/* Skip to content link for accessibility */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:rounded-lg focus:font-medium"
+        style={{ backgroundColor: currentTheme.accent, color: currentTheme.bg }}
+      >
+        Skip to content
+      </a>
+
+      {/* Navigation */}
+      <Navigation />
+
+      {/* Main content with page transitions */}
+      <main id="main-content" ref={pageRef} className="page-transition relative z-10">
+        <ErrorBoundary>
+          <Suspense
+            fallback={
+              <div className="min-h-screen flex items-center justify-center">
+                <div className="flex gap-2">
+                  {[0, 1, 2].map((i) => (
+                    <div
+                      key={i}
+                      className="w-3 h-3 rounded-full animate-pulse"
+                      style={{
+                        backgroundColor: currentTheme.accent,
+                        animationDelay: `${i * 0.15}s`,
+                      }}
+                    />
+                  ))}
+                </div>
+              </div>
+            }
+          >
+            {children}
+          </Suspense>
+        </ErrorBoundary>
+      </main>
+
+      {/* Back to Top Button */}
+      <BackToTop />
+
+      {/* Intro Animation - only on first visit */}
+      {showIntro && <IntroAnimation onComplete={handleIntroComplete} />}
+    </div>
+  )
+}
