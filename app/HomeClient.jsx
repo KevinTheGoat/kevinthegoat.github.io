@@ -138,7 +138,7 @@ export default function HomeClient() {
 
               {/* Subtitle */}
               <p
-                className="hero-fade opacity-0 text-xl lg:text-2xl mb-10 max-w-xl leading-relaxed"
+                className="hero-fade text-xl lg:text-2xl mb-10 max-w-xl leading-relaxed"
                 style={{ color: theme.muted }}
               >
                 Building exceptional digital experiences across{' '}

@@ -33,6 +33,8 @@ export default function Footer() {
               <img
                 src="/images/kevco-logo4.svg"
                 alt="KevCo"
+                width={80}
+                height={32}
                 className="h-8"
                 style={{ filter: 'drop-shadow(0 0 8px rgba(197, 160, 89, 0.3))' }}
               />

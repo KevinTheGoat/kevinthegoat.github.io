@@ -17,6 +17,8 @@ const organizationSchema = {
   image: 'https://kevco.co/images/kevco-logo.png',
   description: 'Full-stack development agency specializing in web applications, mobile apps, and desktop software.',
   email: 'kevinmoreau@kevco.co',
+  foundingDate: '2026-02',
+  paymentAccepted: 'Zelle',
   areaServed: {
     '@type': 'Country',
     name: 'United States'

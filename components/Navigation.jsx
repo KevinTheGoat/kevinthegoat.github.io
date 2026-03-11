@@ -315,6 +315,8 @@ export default function Navigation() {
                   <img
                     src="/images/kevco-logo4.svg"
                     alt="KevCo"
+                    width={120}
+                    height={48}
                     className="h-10 md:h-12 transition-transform duration-300 group-hover:scale-105"
                     style={{ filter: 'drop-shadow(0 0 8px rgba(197, 160, 89, 0.3))' }}
                   />

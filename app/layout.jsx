@@ -73,8 +73,16 @@ export default function RootLayout({ children }) {
         {/* Web App Manifest */}
         <link rel="manifest" href="/manifest.json" />
 
-        {/* Fonts with display=swap for better performance */}
-        <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+        {/* Fonts - loaded async to avoid render blocking */}
+        <link
+          href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Syne:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet"
+          media="print"
+          onLoad="this.media='all'"
+        />
+        <noscript>
+          <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+        </noscript>
       </head>
       <body>
         {/* Google Analytics */}
