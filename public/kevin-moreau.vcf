@@ -1,0 +1,10 @@
+BEGIN:VCARD
+VERSION:3.0
+N:Moreau;Kevin;;;
+FN:Kevin Moreau
+ORG:KevCo
+TITLE:Software Engineer / Architect
+TEL;TYPE=CELL:+17865414691
+EMAIL;TYPE=INTERNET:kevinmoreau@kevco.co
+URL:https://kevco.co
+END:VCARD
