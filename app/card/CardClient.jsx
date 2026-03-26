@@ -1,9 +1,10 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
+import { useRouter } from 'next/navigation'
 import { Icon } from '@iconify/react'
 import { gsap } from 'gsap'
-import Link from 'next/link'
 
 const BRAND = {
   bg: '#000000',
@@ -33,6 +34,8 @@ const actions = [
 ]
 
 export default function CardClient() {
+  const router = useRouter()
+  const [mounted, setMounted] = useState(false)
   const containerRef = useRef(null)
   const logoRef = useRef(null)
   const nameRef = useRef(null)
@@ -43,6 +46,12 @@ export default function CardClient() {
   const portfolioRef = useRef(null)
 
   useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  useEffect(() => {
+    if (!mounted || !containerRef.current) return
+
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({ defaults: { ease: 'power3.out', force3D: true } })
 
@@ -62,11 +71,11 @@ export default function CardClient() {
     })
 
     return () => ctx.revert()
-  }, [])
+  }, [mounted])
 
   // Auto-download attempt for Android
   useEffect(() => {
-    const timer = setTimeout(() => {
+    const downloadTimer = setTimeout(() => {
       try {
         const blob = new Blob([VCARD_STRING], { type: 'text/vcard' })
         const url = URL.createObjectURL(blob)
@@ -83,14 +92,24 @@ export default function CardClient() {
       }
     }, 600)
 
-    return () => clearTimeout(timer)
+    // Auto-redirect to portfolio after 4 seconds
+    const redirectTimer = setTimeout(() => {
+      router.push('/')
+    }, 2000)
+
+    return () => {
+      clearTimeout(downloadTimer)
+      clearTimeout(redirectTimer)
+    }
   }, [])
 
-  return (
+  if (!mounted) return null
+
+  const overlay = (
     <div
       ref={containerRef}
-      className="fixed inset-0 z-50 flex items-center justify-center opacity-0"
-      style={{ backgroundColor: BRAND.bg }}
+      className="fixed inset-0 flex items-center justify-center opacity-0"
+      style={{ backgroundColor: BRAND.bg, zIndex: 9999 }}
     >
       <div className="flex flex-col items-center px-6 w-full max-w-sm text-center">
         {/* Logo */}
@@ -162,17 +181,19 @@ export default function CardClient() {
         </div>
 
         {/* View Portfolio Link */}
-        <Link
+        <button
           ref={portfolioRef}
-          href="/"
-          className="text-sm tracking-wide transition-colors duration-200 opacity-0"
+          onClick={() => router.push('/')}
+          className="text-sm tracking-wide transition-colors duration-200 opacity-0 bg-transparent border-none cursor-pointer"
           style={{ color: BRAND.muted }}
           onMouseEnter={(e) => (e.currentTarget.style.color = BRAND.accent)}
           onMouseLeave={(e) => (e.currentTarget.style.color = BRAND.muted)}
         >
           View Portfolio &rarr;
-        </Link>
+        </button>
       </div>
     </div>
   )
+
+  return createPortal(overlay, document.body)
 }
