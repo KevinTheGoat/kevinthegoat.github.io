@@ -6,8 +6,9 @@ import { useTheme } from '../context/ThemeContext'
 
 const footerLinks = [
   { label: 'Home', path: '/' },
-  { label: 'Skills', path: '/skills' },
+  { label: 'Services', path: '/services' },
   { label: 'Projects', path: '/projects' },
+  { label: 'Toolkit', path: '/skills' },
   { label: 'Demos', path: '/demos' },
   { label: 'Contact', path: '/contact' },
 ]
@@ -40,7 +41,7 @@ export default function Footer() {
               />
             </Link>
             <p className="text-sm max-w-xs" style={{ color: theme.muted }}>
-              Building exceptional digital experiences across Web, Mobile, Desktop & Backend.
+              Your digital partner. Websites, apps, AI, and integrations, built and looked after.
             </p>
           </div>
 

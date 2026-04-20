@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, useContext, useState, useCallback } from 'react'
+import { createContext, useContext, useEffect, useState, useCallback, useRef } from 'react'
 
 // Demo site configurations with unique themes
 export const demoSites = [
@@ -94,6 +94,24 @@ export const demoSites = [
     },
     navItems: ['Work', 'Services', 'Studio', 'Journal', 'Contact'],
   },
+  {
+    id: 'ai-assistant',
+    name: 'Lumen Assistant',
+    category: 'AI Chatbot',
+    description: 'Smart business assistant chatbot',
+    icon: 'ph:sparkle-bold',
+    theme: {
+      bg: '#0b0f1a',
+      surface: '#111827',
+      elevated: '#1f2937',
+      text: '#f9fafb',
+      muted: '#9ca3af',
+      accent: '#06b6d4',
+      accentAlt: '#a78bfa',
+      border: '#374151',
+    },
+    navItems: ['Chat', 'Knowledge', 'History', 'Settings'],
+  },
 ]
 
 const DemoContext = createContext()
@@ -106,21 +124,40 @@ export function DemoProvider({ children }) {
 
   const enterDemo = useCallback((demoId) => {
     const demo = demoSites.find(d => d.id === demoId)
-    if (demo) {
-      setTransitionDemo(demo)
-      setIsTransitioning(true)
-      setTimeout(() => {
-        setActiveDemo(demo)
-        setIsInDemoMode(true)
-        setTimeout(() => {
-          setIsTransitioning(false)
-          setTransitionDemo(null)
-        }, 400)
-      }, 300)
+    if (!demo) return
+
+    // Only push a back-button marker when we're already on /demos (user clicked a
+    // demo card on the grid). When entering from another route, the caller's
+    // router.push('/demos') owns the history entry — pressing back takes them to
+    // the origin route, which our popstate listener treats as "exit demo."
+    if (typeof window !== 'undefined' && window.location.pathname === '/demos') {
+      window.history.pushState({ kevcoDemo: demoId }, '', `/demos#${demoId}`)
     }
+
+    setTransitionDemo(demo)
+    setIsTransitioning(true)
+    setTimeout(() => {
+      setActiveDemo(demo)
+      setIsInDemoMode(true)
+      setTimeout(() => {
+        setIsTransitioning(false)
+        setTransitionDemo(null)
+      }, 400)
+    }, 300)
   }, [])
 
-  const exitDemo = useCallback(() => {
+  const exitDemo = useCallback((opts = {}) => {
+    // Pop the marker entry only if we pushed one (i.e. we're on /demos#<id>).
+    // Don't call history.back when triggered by popstate — browser already moved.
+    if (
+      !opts.fromPopState &&
+      typeof window !== 'undefined' &&
+      window.history.state?.kevcoDemo &&
+      window.location.pathname === '/demos'
+    ) {
+      window.history.back()
+    }
+
     setIsTransitioning(true)
     setTimeout(() => {
       setActiveDemo(null)
@@ -133,18 +170,39 @@ export function DemoProvider({ children }) {
 
   const switchDemo = useCallback((demoId) => {
     const demo = demoSites.find(d => d.id === demoId)
-    if (demo && demo.id !== activeDemo?.id) {
-      setTransitionDemo(demo)
-      setIsTransitioning(true)
-      setTimeout(() => {
-        setActiveDemo(demo)
-        setTimeout(() => {
-          setIsTransitioning(false)
-          setTransitionDemo(null)
-        }, 400)
-      }, 300)
+    if (!demo || demo.id === activeDemo?.id) return
+
+    // Replace (not push) so browser-back still goes to the grid, not the previous demo.
+    if (typeof window !== 'undefined' && window.location.pathname === '/demos') {
+      window.history.replaceState({ kevcoDemo: demoId }, '', `/demos#${demoId}`)
     }
+
+    setTransitionDemo(demo)
+    setIsTransitioning(true)
+    setTimeout(() => {
+      setActiveDemo(demo)
+      setTimeout(() => {
+        setIsTransitioning(false)
+        setTransitionDemo(null)
+      }, 400)
+    }, 300)
   }, [activeDemo])
+
+  // Listen for back/forward navigation. Exit demo whenever the user lands somewhere
+  // that isn't a live demo state (either not on /demos, or on /demos without our
+  // kevcoDemo marker — i.e. they backed out to the grid).
+  useEffect(() => {
+    const onPopState = () => {
+      if (!isInDemoMode) return
+      const onDemosPath = window.location.pathname === '/demos'
+      const hasMarker = window.history.state?.kevcoDemo
+      if (!onDemosPath || !hasMarker) {
+        exitDemo({ fromPopState: true })
+      }
+    }
+    window.addEventListener('popstate', onPopState)
+    return () => window.removeEventListener('popstate', onPopState)
+  }, [isInDemoMode, exitDemo])
 
   return (
     <DemoContext.Provider value={{

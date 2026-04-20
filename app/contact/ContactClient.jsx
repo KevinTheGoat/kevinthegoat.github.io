@@ -76,25 +76,30 @@ export default function ContactClient() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.fromTo('.contact-header',
-        { y: 60, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', force3D: true }
-      )
-
-      gsap.fromTo('.contact-card',
+      const tl = gsap.timeline({ delay: 0.2 })
+      tl.fromTo(
+        '.contact-header',
         { y: 40, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.6, stagger: 0.1, delay: 0.2, ease: 'power3.out', force3D: true }
+        { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out', force3D: true }
       )
-
-      gsap.fromTo('.contact-form',
-        { y: 40, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.6, delay: 0.4, ease: 'power3.out', force3D: true }
-      )
-
-      gsap.fromTo('.faq-section',
-        { y: 40, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.6, delay: 0.5, ease: 'power3.out', force3D: true }
-      )
+        .fromTo(
+          '.contact-card',
+          { y: 30, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.5, stagger: 0.08, ease: 'power3.out', force3D: true },
+          '-=0.3'
+        )
+        .fromTo(
+          '.contact-form',
+          { y: 30, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.5, ease: 'power3.out', force3D: true },
+          '-=0.3'
+        )
+        .fromTo(
+          '.faq-section',
+          { y: 30, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.5, ease: 'power3.out', force3D: true },
+          '-=0.3'
+        )
     }, pageRef)
 
     return () => ctx.revert()

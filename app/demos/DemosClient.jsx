@@ -5,7 +5,7 @@ import { Icon } from '@iconify/react'
 import { gsap } from 'gsap'
 import { useTheme } from '../../context/ThemeContext'
 import { useDemo, demoSites } from '../../context/DemoContext'
-import { EcommerceSite, SaasSite, RestaurantSite, FitnessSite, AgencySite } from '../../components/DemoSites'
+import { EcommerceSite, SaasSite, RestaurantSite, FitnessSite, AgencySite, AiAssistantSite } from '../../components/DemoSites'
 import MobileAppMockup from '../../components/Mockups/MobileAppMockup'
 import DesktopAppMockup from '../../components/Mockups/DesktopAppMockup'
 import Footer from '../../components/Footer'
@@ -17,6 +17,7 @@ const demoComponents = {
   restaurant: RestaurantSite,
   fitness: FitnessSite,
   agency: AgencySite,
+  'ai-assistant': AiAssistantSite,
 }
 
 export default function DemosClient() {
@@ -28,18 +29,24 @@ export default function DemosClient() {
   useEffect(() => {
     if (!isInDemoMode) {
       const ctx = gsap.context(() => {
-        gsap.fromTo('.demo-header',
-          { y: 60, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', force3D: true }
+        const tl = gsap.timeline({ delay: 0.2 })
+        tl.fromTo(
+          '.demo-header',
+          { y: 40, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out', force3D: true }
         )
-        gsap.fromTo('.demo-card',
-          { y: 40, opacity: 0, scale: 0.95 },
-          { y: 0, opacity: 1, scale: 1, duration: 0.6, stagger: 0.1, delay: 0.2, ease: 'power3.out', force3D: true }
-        )
-        gsap.fromTo('.demo-tab',
-          { y: 20, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.4, stagger: 0.05, delay: 0.4, ease: 'power3.out', force3D: true }
-        )
+          .fromTo(
+            '.demo-tab',
+            { y: 16, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.4, stagger: 0.05, ease: 'power3.out', force3D: true },
+            '-=0.3'
+          )
+          .fromTo(
+            '.demo-card',
+            { y: 24, opacity: 0, scale: 0.97 },
+            { y: 0, opacity: 1, scale: 1, duration: 0.5, stagger: 0.08, ease: 'power3.out', force3D: true },
+            '-=0.2'
+          )
       }, pageRef)
 
       return () => ctx.revert()

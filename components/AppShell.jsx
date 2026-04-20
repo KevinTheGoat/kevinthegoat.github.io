@@ -29,8 +29,6 @@ export default function AppShell({ children }) {
   const pathname = usePathname()
   const pageRef = useRef(null)
   const transitionRef = useRef(null)
-  const [isExiting, setIsExiting] = useState(false)
-  const prevPathRef = useRef(pathname)
 
   // Intro animation state - only show on first visit
   // Defer localStorage check to useEffect to avoid hydration mismatch
@@ -50,24 +48,6 @@ export default function AppShell({ children }) {
   // Scroll to top on route change - useLayoutEffect for immediate execution
   useLayoutEffect(() => {
     window.scrollTo(0, 0)
-  }, [pathname])
-
-  // Page transition animation with exit
-  useEffect(() => {
-    // Skip animation on initial load
-    if (prevPathRef.current === pathname) return
-
-    const ctx = gsap.context(() => {
-      // Enter animation
-      gsap.fromTo(pageRef.current,
-        { opacity: 0, y: 30 },
-        { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out', force3D: true }
-      )
-    })
-
-    prevPathRef.current = pathname
-
-    return () => ctx.revert()
   }, [pathname])
 
   // Demo transition animation

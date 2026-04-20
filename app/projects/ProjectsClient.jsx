@@ -17,7 +17,7 @@ const projects = [
     url: 'https://stuttgart-international.pages.dev/',
     image: '/images/projects/stuttgart-collision.png',
     tags: ['Web Design', 'React', 'Responsive', 'Business'],
-    category: 'Web',
+    industry: 'Auto Body',
     gradient: 'from-blue-600 via-blue-700 to-indigo-800',
     features: ['Custom Animations', 'Booking System', 'Mobile Optimized', 'SEO Ready'],
   },
@@ -29,7 +29,7 @@ const projects = [
     url: 'https://panda-depot.pages.dev/',
     image: '/images/projects/panda-depot.png',
     tags: ['Web Design', 'React', 'Responsive', 'Business'],
-    category: 'Web',
+    industry: 'E-commerce',
     gradient: 'from-red-600 via-orange-600 to-yellow-700',
     features: ['Product Catalog', 'Bilingual Support', 'Mobile Optimized', 'Contact System'],
   },
@@ -41,7 +41,7 @@ const projects = [
     url: 'https://plumbing-showcase.pages.dev/',
     image: '/images/projects/titan-plumbing.png',
     tags: ['Web Design', 'React', 'Responsive', 'Business'],
-    category: 'Web',
+    industry: 'Trades',
     gradient: 'from-amber-700 via-amber-800 to-slate-900',
     features: ['Emergency Services', 'Service Catalog', 'Mobile Optimized', 'Contact System'],
   },
@@ -53,7 +53,7 @@ const projects = [
     url: 'https://accident-assist.pages.dev/',
     image: '/images/projects/accident-assist.png',
     tags: ['Web App', 'Healthcare', 'Legal Tech', 'Platform'],
-    category: 'Web',
+    industry: 'Healthcare & Legal',
     gradient: 'from-emerald-600 via-teal-600 to-cyan-700',
     features: ['User Dashboard', 'Provider Matching', 'Case Management', 'Secure Portal'],
   },
@@ -65,37 +65,40 @@ const projects = [
     url: 'https://harborlink-logistics.pages.dev/',
     image: '/images/projects/monexus-logistics.png',
     tags: ['Web Design', 'Logistics', 'Responsive', 'Business'],
-    category: 'Web',
+    industry: 'Logistics',
     gradient: 'from-cyan-600 via-blue-600 to-indigo-700',
     features: ['Freight Tracking', 'Quote System', 'Route Planning', 'Client Portal'],
   },
 ]
 
-const categories = ['All', 'Web']
+const industries = ['All', 'Auto Body', 'E-commerce', 'Trades', 'Healthcare & Legal', 'Logistics']
 
 export default function ProjectsClient() {
   const { theme } = useTheme()
   const pageRef = useRef(null)
-  const [activeCategory, setActiveCategory] = useState('All')
+  const [activeIndustry, setActiveIndustry] = useState('All')
   const [hoveredProject, setHoveredProject] = useState(null)
   const projectsRevealRef = useScrollReveal()
 
   const filteredProjects =
-    activeCategory === 'All'
+    activeIndustry === 'All'
       ? projects
-      : projects.filter((p) => p.category === activeCategory)
+      : projects.filter((p) => p.industry === activeIndustry)
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.fromTo('.projects-header',
-        { y: 60, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', force3D: true }
+      const tl = gsap.timeline({ delay: 0.2 })
+      tl.fromTo(
+        '.projects-header',
+        { y: 40, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out', force3D: true }
       )
-
-      gsap.fromTo('.category-btn',
-        { y: 20, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.5, stagger: 0.05, delay: 0.3, ease: 'power3.out', force3D: true }
-      )
+        .fromTo(
+          '.category-btn',
+          { y: 16, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.4, stagger: 0.05, ease: 'power3.out', force3D: true },
+          '-=0.3'
+        )
     }, pageRef)
 
     return () => ctx.revert()
@@ -117,24 +120,23 @@ export default function ProjectsClient() {
             Selected <span className="gradient-text">Projects</span>
           </h1>
           <p className="text-xl" style={{ color: theme.muted }}>
-            A showcase of our best work across web applications and platforms.
-            Each project is crafted with attention to detail and performance.
+            Real work for real businesses across auto body, e-commerce, trades, healthcare, and logistics. Pick an industry to see how we've shipped in yours.
           </p>
         </div>
 
-        {/* Category Filter */}
+        {/* Industry Filter */}
         <div className="flex flex-wrap gap-2 mb-12">
-          {categories.map((cat) => (
+          {industries.map((cat) => (
             <button
               key={cat}
-              onClick={() => setActiveCategory(cat)}
-              className={`category-btn opacity-0 px-6 py-3 rounded-xl font-medium transition-all duration-300 ${
-                activeCategory === cat ? '' : 'hover:bg-white/5'
+              onClick={() => setActiveIndustry(cat)}
+              className={`category-btn opacity-0 px-5 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 ${
+                activeIndustry === cat ? '' : 'hover:bg-white/5'
               }`}
               style={{
-                backgroundColor: activeCategory === cat ? theme.accent : 'transparent',
-                color: activeCategory === cat ? theme.bg : theme.text,
-                border: `1px solid ${activeCategory === cat ? theme.accent : theme.border}`,
+                backgroundColor: activeIndustry === cat ? theme.accent : 'transparent',
+                color: activeIndustry === cat ? theme.bg : theme.text,
+                border: `1px solid ${activeIndustry === cat ? theme.accent : theme.border}`,
               }}
             >
               {cat}
@@ -195,6 +197,19 @@ export default function ProjectsClient() {
 
               {/* Project Info */}
               <div className="p-8">
+                <div className="flex items-center gap-2 mb-3">
+                  <span
+                    className="inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider px-2.5 py-1 rounded-md"
+                    style={{
+                      backgroundColor: `${theme.accent}15`,
+                      color: theme.accent,
+                      border: `1px solid ${theme.accent}33`,
+                    }}
+                  >
+                    <Icon icon="ph:buildings-bold" className="w-3 h-3" />
+                    {project.industry}
+                  </span>
+                </div>
                 <div className="flex items-start justify-between mb-4">
                   <h3 className="font-display font-bold text-2xl group-hover:translate-x-1 transition-transform duration-300">
                     {project.title}

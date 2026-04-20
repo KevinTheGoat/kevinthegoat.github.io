@@ -10,8 +10,9 @@ import { useDemo, demoSites } from '../context/DemoContext'
 
 const navLinks = [
   { path: '/', label: 'Home', icon: 'ph:house-bold' },
-  { path: '/skills', label: 'Skills', icon: 'ph:lightning-bold' },
+  { path: '/services', label: 'Services', icon: 'ph:compass-bold' },
   { path: '/projects', label: 'Projects', icon: 'ph:folders-bold' },
+  { path: '/skills', label: 'Toolkit', icon: 'ph:toolbox-bold' },
   { path: '/demos', label: 'Demos', icon: 'ph:play-circle-bold', hasDropdown: true },
   { path: '/contact', label: 'Contact', icon: 'ph:envelope-bold' },
 ]
