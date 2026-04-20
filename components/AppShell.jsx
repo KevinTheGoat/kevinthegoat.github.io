@@ -107,12 +107,12 @@ export default function AppShell({ children }) {
       {!isInDemoMode && (
         <div className="fixed inset-0 overflow-hidden pointer-events-none">
           <div
-            className="absolute -top-[10%] -left-[10%] w-[70%] h-[70%] rounded-full blur-[140px] opacity-25 animate-float"
+            className="absolute -top-[10%] -left-[10%] w-[70%] h-[70%] rounded-full blur-[140px] opacity-25"
             style={{ backgroundColor: theme.accent }}
           />
           <div
-            className="absolute -bottom-1/4 -right-1/4 w-1/2 h-1/2 rounded-full blur-[120px] opacity-15 animate-float"
-            style={{ backgroundColor: theme.accentAlt, animationDelay: '-3s' }}
+            className="absolute -bottom-1/4 -right-1/4 w-1/2 h-1/2 rounded-full blur-[120px] opacity-15"
+            style={{ backgroundColor: theme.accentAlt }}
           />
         </div>
       )}
